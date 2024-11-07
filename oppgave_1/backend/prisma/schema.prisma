@@ -38,7 +38,7 @@ model Lesson {
   title    String
   slug     String    @unique
   preAmble String
-  text     String
+  text     String  //Dette er en liste
   course   Course    @relation(fields: [courseId], references: [id])
   courseId String
   Comment  Comment[]
