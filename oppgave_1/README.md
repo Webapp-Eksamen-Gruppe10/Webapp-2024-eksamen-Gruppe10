@@ -69,17 +69,17 @@ for å oppdatere en kurs, samt oppdatere leksjoner: fetch (`/api/v1/courses/{id}
 ### API Dokumentasjon (W.I.P - Jørgen)
 | Endepunkt | Beskrivelse | Verb | Respons | Statuskode |  Returdata | URL |
 |--|--|--|--|--|--|--|
-| /kurs | Oppretter et nytt kurs | POST | | 201, 400, 500 |
-| /kurs | Henter alle kurs | GET | | 200, 400, 500 | 
-| /kurs/:id | Henter et spesifikt kurs | GET | | 200, 400, 500 |
-| /kurs/:id | Sletter et spesifikt kurs | DELETE | | 204, 400, 500 |
-| /kurs/:id | Oppdaterer et spesifikt kurs| PATCH | | 200, 400, 500 | 
-| /kurs/:id/leksjoner | Henter alle leksjoner til et spesifikt kurs| GET | | 200, 400, 500 | 
-| /kurs/:id/leksjoner |  Sletter alle leksjoner til et spesifikt kurs | DELETE | | 204, 400, 500 | 
-| /leksjon | Oppretter en ny leksjon | POST | | 201, 400, 500
-| /leksjon/:id | Henter en spesifikk leksjon | GET | | 200, 400, 500 | 
-| /leksjon/:id | Sletter en spesifikk leksjon | DELETE | | 204, 400, 500 | 
-| /leksjon/:id/kommentarer | Sletter alle kommentarer til en spesifikk leksjon | DELETE | | 204, 400, 500 | 
-| /leksjon/:id/kommentarer | Henter alle kommentarer til en spesifikk leksjon | GET | | 200, 400, 500 | 
-| /kommentar | Oppretter ny kommentar | POST |  | 201, 400, 500
-| /kommentar/:id | Sletter en spesifikk kommentar | DELETE | | 204, 400, 500
+| /kurs | Oppretter et nytt kurs | POST | Kursdetaljer | 201, 400, 500 |
+| /kurs | Henter alle kurs | GET | Liste med kursdetaljer | 200, 400, 404, 500 | 
+| /kurs/:id | Henter et spesifikt kurs | GET | Kursdetaljer | 200, 400, 404, 500 |
+| /kurs/:id | Sletter et spesifikt kurs | DELETE | Suksessmelding| 204, 400, 404, 500 |
+| /kurs/:id | Oppdaterer et spesifikt kurs| PATCH | Oppdaterte kursdetaljer | 200, 400, 404, 500 | 
+| /kurs/:id/leksjoner | Henter alle leksjoner til et spesifikt kurs| GET | Liste med leksjonsdetaljer | 200, 400, 404, 500 | 
+| /kurs/:id/leksjoner |  Sletter alle leksjoner til et spesifikt kurs | DELETE | Suksessmelding | 204, 400, 404, 500 | 
+| /leksjon | Oppretter en ny leksjon | POST | Leksjonsdetaljer| 201, 400, 404, 500
+| /leksjon/:id | Henter en spesifikk leksjon | GET | Leksjonsdetaljer | 200, 400, 404, 500 | 
+| /leksjon/:id | Sletter en spesifikk leksjon | DELETE | Suksessmelding | 204, 400, 404, 500 | 
+| /leksjon/:id/kommentarer | Sletter alle kommentarer til en spesifikk leksjon | DELETE | Suksessmelding | 204, 400, 404, 500 | 
+| /leksjon/:id/kommentarer | Henter alle kommentarer til en spesifikk leksjon | GET | Liste med kommentarer | 200, 400, 404, 500 | 
+| /kommentar | Oppretter ny kommentar | POST | Kommentardetaljer | 201, 400, 404, 500
+| /kommentar/:id | Sletter en spesifikk kommentar | DELETE | Suksessmelding | 204, 400, 404, 500
