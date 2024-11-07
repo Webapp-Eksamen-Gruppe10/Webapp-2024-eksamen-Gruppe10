@@ -1,5 +1,5 @@
 # Eksamen: Oppgave 1
-## API-endepunkter (3 features)
+## API-endepunkter (3 + 1? features)
 ### User-ressurs
 
 | HTTP Metode | Endepunkt             | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
@@ -20,7 +20,7 @@
 | `PATCH`     | `/api/v1/courses/{id}`   | Oppdater deler av kurset.                     | `200 OK`, Oppdatert kurs-JSON      | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
 | `DELETE`    | `/api/v1/courses/{id}`   | Slett et kurs.                                | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
 
-### Lesson-ressurs?
+### Lesson-ressurs? (Det kan hende vi ikke skal bruke endepunktene, da course-endepunktene allerede kan hente/lage alle leksjoner)
 
 | HTTP Metode | Endepunkt                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|-----------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
