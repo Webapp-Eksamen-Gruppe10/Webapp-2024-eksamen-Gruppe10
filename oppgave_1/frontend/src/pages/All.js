@@ -11,16 +11,16 @@ import {
 
 import { useParams, useRouter } from "next/navigation";
 
-const getCourse = async (slug) => {
+/*const getCourse = async (slug) => {
   const data = await courses.filter((course) => course.slug === slug);
   return data?.[0];
-};
+};*/
 
-const createCourse = async (data) => {
+/*const createCourse = async (data) => {
   await courses.push(data);
-};
+};*/
 
-const getLesson = async (courseSlug, lessonSlug) => {
+/*const getLesson = async (courseSlug, lessonSlug) => {
   const data = await courses
     .flatMap(
       (course) =>
@@ -29,20 +29,20 @@ const getLesson = async (courseSlug, lessonSlug) => {
     )
     .filter(Boolean);
   return data?.[0];
-};
+};*/
 
-const getComments = async (lessonSlug) => {
+/*const getComments = async (lessonSlug) => {
   const data = await comments.filter(
     (comment) => comment.lesson.slug === lessonSlug
   );
   return data;
-};
+};*/
 
-const createComment = async (data) => {
+/*const createComment = async (data) => {
   await comments.push(data);
-};
+};*/
 
-function Course() {
+/*function Course() {
   const [content, setContent] = useState(null);
 
   const courseSlug = "javascript-101";
@@ -115,7 +115,8 @@ function Course() {
     </div>
   );
 }
-
+*/
+/*
 function Courses() {
   const [value, setValue] = useState("");
   const [data, setData] = useState(courses);
@@ -197,8 +198,8 @@ function Courses() {
     </>
   );
 }
-
-function Lesson() {
+*/
+/*function Lesson() {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
   const [lessonComments, setComments] = useState([]);
@@ -354,7 +355,7 @@ function Lesson() {
     </div>
   );
 }
-
+*/
 function SignUp() {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
