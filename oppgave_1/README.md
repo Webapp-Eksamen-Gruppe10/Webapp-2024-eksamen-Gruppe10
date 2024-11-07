@@ -20,7 +20,7 @@
 | `PATCH`     | `/api/v1/courses/{id}`   | Oppdater deler av kurset.                     | `200 OK`, Oppdatert kurs-JSON      | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
 | `DELETE`    | `/api/v1/courses/{id}`   | Slett et kurs.                                | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
 
-### Lesson-ressurs
+### Lesson-ressurs?
 
 | HTTP Metode | Endepunkt                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|-----------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
@@ -34,7 +34,7 @@
 
 | HTTP Metode | Endepunkt                                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|-----------------------------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
-| `GET`       | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments`  | Hent alle kommentarer pÃ¥ en leksjon.          | `200 OK`, JSON-liste av kommentarer| `404 Not Found`, `500 Internal Server Error` |
+| `GET`       | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments`  | Hent alle kommentarer på en leksjon.          | `200 OK`, JSON-liste av kommentarer| `404 Not Found`, `500 Internal Server Error` |
 | `POST`      | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments`  | Legg til en kommentar til en leksjon.         | `201 Created`, Ny kommentar-JSON   | `400 Bad Request`, `500 Internal Server Error` |
 | `GET`       | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments/{id}` | Hent en spesifikk kommentar.             | `200 OK`, JSON av kommentar        | `404 Not Found`, `500 Internal Server Error` |
 | `PATCH`     | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments/{id}` | Oppdater deler av kommentaren.           | `200 OK`, Oppdatert kommentar-JSON | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
@@ -56,6 +56,13 @@ for å hente alle leksjoner innenfor kurset: fetch(`pi/v1/courses/{courseId}/les
 
 ### LessonPage 
 for å hente valgt lesson: fetch(`pi/v1/courses/{courseId}/lessons/{lessonId}`): METODE GET 
-for å hente alle kommentarer for denne leksjonen 
+
+### CommentPage
+for å hente ut alle kommentar for en leksjon: fetch(`/api/v1/courses/{courseId}/lessons/{lessonId}/comments`): METODE GET
+for å legge til kommentar til en leksjon: fetch (`/api/v1/courses/{courseId}/lessons/{lessonId}/comments`): METODE POST
+
+### CreateUpdateCoursePage
+for å opprette en kurs med leksjoner: fetch( `/api/v1/courses`): METODE POST
+for å oppdatere en kurs, samt oppdatere leksjoner: fetch (`/api/v1/courses/{id}`): METODE PATCH
 
 
