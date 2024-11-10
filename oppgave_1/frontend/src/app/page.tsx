@@ -3,7 +3,7 @@ import All from "@/pages/All";
 export default function Home() {
   return (
     <main className="h-full">
-      <All />
+      {/*DENNE KAN KOMMENTERES UT ETTERSOM LAYOUT ER IMPLEMENTERT, SAMT NEXTROUTING : <All />*/}
     </main>
   );
 }

@@ -33,9 +33,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+         <div
+      className="mx-auto grid min-h-screen w-full max-w-7xl grid-rows-[auto_minmax(900px,_1fr)_30px]"
+      data-testid="layout"> 
+
+        <Navigation/>
+        <main className="h-full">
+            {children}
+          </main>
+        <Footer/>
+        </div>
       </body>
     </html>
   );
 }
-import React from "react";
+import React from "react";import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+

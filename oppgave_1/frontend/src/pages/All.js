@@ -921,7 +921,7 @@ export default function All() {
     <div
       className="mx-auto grid min-h-screen w-full max-w-7xl grid-rows-[auto_minmax(900px,_1fr)_30px]"
       data-testid="layout"
-    >
+    > 
       <nav className="mt-6 mb-12 flex justify-between">
         <h1 className="text-lg font-bold uppercase" data-testid="logo">
           <a href="/">Mikro LMS</a>
@@ -938,7 +938,7 @@ export default function All() {
       <main className="h-full">
         <p>Siden er tom</p>
       </main>
-      <footer className="flex justify-between" data-testid="footer">
+      <footer className="flex justify-between" data-testid="footer"> 
         <p>Mikro LMS AS, 2024</p>
         <p>99 00 00 00, mail@lms.no</p>
       </footer>
