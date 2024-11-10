@@ -25,4 +25,6 @@ const LessonList = ({ lessons, courseSlug, lessonSlug }) => (
   </aside>
 );
 
+
+
 export default LessonList;

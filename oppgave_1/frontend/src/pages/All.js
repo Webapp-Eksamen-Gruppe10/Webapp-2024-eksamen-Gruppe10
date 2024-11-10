@@ -356,6 +356,7 @@ function Courses() {
   );
 }
 */
+/*
 function SignUp() {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
@@ -453,7 +454,8 @@ function SignUp() {
     </section>
   );
 }
-
+*/
+/*
 const isValid = (items) => {
   const invalidFields = [];
   // eslint-disable-next-line no-shadow
@@ -482,7 +484,8 @@ const isValid = (items) => {
   validate(items);
   return invalidFields.length === 0;
 };
-
+*/
+/*
 function Create() {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
@@ -653,7 +656,7 @@ function Create() {
       <form className="mt-8 max-w-4xl" data-testid="form" noValidate>
         {current === 0 ? (
           <div data-testid="course_step" className="max-w-lg">
-            {/* {JSON.stringify(courseFields)} */}
+            { {JSON.stringify(courseFields)} }
             <label className="mb-4 flex flex-col" htmlFor="title">
               <span className="mb-1 font-semibold">Tittel*</span>
               <input
@@ -915,8 +918,7 @@ function Create() {
       </form>
     </>
   );
-}
-
+}*/
 export default function All() {
   return (
     <div
