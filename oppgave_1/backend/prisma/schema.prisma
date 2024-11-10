@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String    @id @default(cuid())
+  name    String
+  email   String
+  admin   Boolean   @default(false)
+  Course  Course[] // Dette viser bare en til mange forholdet user mellom course 
+  Comment Comment[] // Dette viser bare en til mange forholdet user mellom comment
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  lessons     Lesson[]
+  category    String
+  createdBy   User?    @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+model Lesson {
+  id       String    @id @default(cuid())
+  title    String
+  slug     String    @unique
+  preAmble String
+  text     String  //Dette er en liste
+  course   Course    @relation(fields: [courseId], references: [id])
+  courseId String
+  Comment  Comment[]
+}
+
+model Comment {
+  id         String @id @default(cuid())
+  createdBy  User?  @relation(fields: [userId], references: [id])
+  userId     String
+  comment    String
+  lesson     Lesson @relation(fields: [lessonSlug], references: [slug])
+  lessonSlug String
+}
