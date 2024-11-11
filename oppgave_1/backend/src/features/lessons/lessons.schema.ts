@@ -19,5 +19,6 @@ export const lessonDbSchema = z.object({
     courseId: z.string()
 })
 
+
 export type Lesson = z.infer<typeof lessonSchema>;
-export type LessonDb = z.infer<typeof lessonSchema>;
+export type LessonDb = z.infer<typeof lessonDbSchema>;
