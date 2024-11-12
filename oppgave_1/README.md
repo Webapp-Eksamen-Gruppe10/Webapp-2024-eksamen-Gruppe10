@@ -11,15 +11,6 @@
 | `PATCH`     | `/api/v1/courses/{id}`   | Oppdater deler av kurset.                     | `200 OK`, Oppdatert kurs-JSON      | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
 | `DELETE`    | `/api/v1/courses/{id}`   | Slett et kurs.                                | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
 
-### Lesson-ressurs? (Det kan hende vi ikke skal bruke endepunktene, da course-endepunktene allerede kan hente/lage alle leksjoner)
-
-| HTTP Metode | Endepunkt                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
-|-------------|-----------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
-| `GET`       | `/api/v1/courses/{courseId}/lessons`    | Hent alle leksjoner i et bestemt kurs.        | `200 OK`, JSON-liste av leksjoner  | `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/courses/{courseId}/lessons`    | Opprett en ny leksjon i et kurs.              | `201 Created`, Ny leksjon-JSON     | `400 Bad Request`, `500 Internal Server Error` |
-| `GET`       | `/api/v1/courses/{courseId}/lessons/{id}` | Hent detaljer om en spesifikk leksjon.     | `200 OK`, JSON av leksjon          | `404 Not Found`, `500 Internal Server Error` |
-| `PATCH`     | `/api/v1/courses/{courseId}/lessons/{id}` | Oppdater deler av leksjonen.                | `200 OK`, Oppdatert leksjon-JSON   | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
-| `DELETE`    | `/api/v1/courses/{courseId}/lessons/{id}` | Slett en leksjon.                           | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
 
 ### Comment-ressurs
 
