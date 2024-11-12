@@ -1,8 +1,9 @@
 // app/courses/page.tsx
 
+import { useEffect, useState } from "react";
 
-//chatGPT dummy-side 
-import React from 'react';
+//chatGPT dummy-side
+import React from "react";
 
 // Komponent for kursoversiktssiden
 const CoursesPage: React.FC = () => {
