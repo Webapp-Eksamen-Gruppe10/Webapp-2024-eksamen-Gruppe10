@@ -1,14 +1,5 @@
 # Eksamen: Oppgave 1
 ## API-endepunkter (3 + 1? features)
-### User-ressurs
-
-| HTTP Metode | Endepunkt             | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
-|-------------|------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
-| `GET`       | `/api/v1/users`        | Hent en liste over alle brukere.              | `200 OK`, JSON-liste av brukere    | `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/users`        | Opprett en ny bruker.                         | `201 Created`, Ny bruker-JSON      | `400 Bad Request`, `500 Internal Server Error` |
-| `GET`       | `/api/v1/users/{id}`   | Hent detaljene til en spesifikk bruker.       | `200 OK`, JSON av bruker           | `404 Not Found`, `500 Internal Server Error` |
-| `PATCH`     | `/api/v1/users/{id}`   | Oppdater deler av brukerens informasjon.      | `200 OK`, Oppdatert bruker-JSON    | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
-| `DELETE`    | `/api/v1/users/{id}`   | Slett en bruker.                              | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
 
 ### Course-ressurs
 
