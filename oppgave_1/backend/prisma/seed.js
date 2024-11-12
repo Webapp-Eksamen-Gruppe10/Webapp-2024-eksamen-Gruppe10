@@ -1,28 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import {
   courses,
-  users,
   comments,
-  courseCreateSteps,
-  categories,
-} from "../../frontend/src/data/data.js";
+} from "../src/data/data.js";
 
 const prisma = new PrismaClient();
-
-// Create Users
-const createUsers = async () => {
-  await Promise.all(
-    users.map(async (user) => {
-      await prisma.user.create({
-        data: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        },
-      });
-    })
-  );
-};
 
 // Create Courses and Lessons
 const createCourses = async () => {
@@ -69,49 +51,16 @@ const createComments = async () => {
   );
 };
 
-// Create CourseCreateSteps
-const createCourseCreateSteps = async () => {
-  await Promise.all(
-    courseCreateSteps.map(async (step) => {
-      await prisma.courseCreateStep.create({
-        data: {
-          id: step.id,
-          name: step.name,
-        },
-      });
-    })
-  );
-};
-
-// Create Categories
-const createCategories = async () => {
-  await Promise.all(
-    categories.map(async (category) => {
-      await prisma.category.create({
-        data: {
-          name: category,
-        },
-      });
-    })
-  );
-};
-
 const main = async () => {
   try {
     // Clear existing data
     await prisma.comment.deleteMany();
     await prisma.lesson.deleteMany();
     await prisma.course.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.courseCreateStep.deleteMany();
-    await prisma.category.deleteMany();
 
     // Seed data
-    await createUsers();
     await createCourses();
     await createComments();
-    await createCourseCreateSteps();
-    await createCategories();
 
     console.log("Database seeded successfully");
   } catch (error) {
