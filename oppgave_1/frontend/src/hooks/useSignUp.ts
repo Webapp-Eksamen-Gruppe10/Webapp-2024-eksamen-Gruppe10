@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+//chatGPT for feilsøking av navigering
 export function useSignUp() { // Named export
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
