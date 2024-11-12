@@ -23,7 +23,7 @@ export function useSignUp() { // Named export
     if (formIsValid.length === 0) {
       setSuccess(true);
       setTimeout(() => {
-        router.push("/kurs");
+        router.push("/courses");
       }, 500);
     } else {
       setFormError(true);
