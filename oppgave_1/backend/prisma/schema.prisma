@@ -11,7 +11,6 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
-
 }
  
 
@@ -23,12 +22,6 @@ model Course {
   category    String
   lessons     Lesson[]
 
-}
-
-model User {
-  id    String @id
-  name  String
-  email String @unique
 }
 
 model Lesson {
@@ -56,15 +49,4 @@ model Comment {
   lesson     Lesson @relation(fields: [lessonSlug], references: [id])
 
   @@index([lessonSlug])
-}
-
-// kun som en enum ?
-model CourseCreateStep {
-  id   String @id @default(cuid()) 
-  name String
-}
-
-// kun som en enum?
-model Category {
-  name String  @unique
 }
