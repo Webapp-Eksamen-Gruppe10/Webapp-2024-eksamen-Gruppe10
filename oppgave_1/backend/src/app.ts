@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { endpointsV1 } from "./config/urls";
+import prisma from "./client/db"
 
 const app = new Hono();
 
@@ -9,7 +10,8 @@ app.use("/*", cors());
 // ----- KURS -----
 // GET - Hent liste over alle kurs
 app.get(endpointsV1.courses, async (c) => {
-
+  const data = await prisma?.course.findMany()
+  return c.json(data)
 })
 
 // POST - Opprett et nytt kurs
@@ -35,8 +37,21 @@ app.delete(endpointsV1.specificCourse, async (c) => {
 // ----- LESSON -----
 // GET - Hent alle leksjoner i et bestemt kurs
 app.get(endpointsV1.lessons, async (c) => {
+  const courseId = c.req.param("ourseId");  
 
-})
+  try {
+    const lessons = await prisma?.lesson.findMany({
+      where: {
+        courseId: courseId,
+      },
+    });
+    return c.json(lessons);
+
+  } catch (error) {
+    console.error(error);
+    return c.json(undefined, 204);
+  }
+});
 
 // POST - Opprett en ny leksjon i et kurs.
 app.post(endpointsV1.lessons, async (c) => {
