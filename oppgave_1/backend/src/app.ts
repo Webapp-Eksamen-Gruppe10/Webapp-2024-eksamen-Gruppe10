@@ -134,15 +134,31 @@ app.get(endpointsV1.specificCourse, async (c) => {
   }
 })
 
-// PATCH - Oppdater deler av kurset
-app.patch(endpointsV1.specificCourse, async (c) => {
+// PATCH - Oppdater deler av kurset (kun category)
+app.patch(endpointsV1.courses, async (c) => {
   try {
     const requestData = await c.req.json();
-    // hvordan ser requestData ut?
+    if (!requestData) {
+      return c.json({ success: false, message: "BAD REQUEST" }, 400);
+    }
     
+    const validatedCourse = courseSchema.parse(requestData);
+    const courseId = validatedCourse.id;
+    const updatedCategory = validatedCourse.category;
+    
+    const updateCourse = await prisma.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        category: updatedCategory,
+      },
+    })
+    
+    return c.json(updateCourse);
 
   } catch (error) {
-
+    return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
 })
 
