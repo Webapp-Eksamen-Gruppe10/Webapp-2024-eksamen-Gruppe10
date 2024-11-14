@@ -13,6 +13,7 @@ app.use("/*", cors());
 
 // ----- KURS -----
 // GET - Hent liste over alle kurs
+/*
 app.get(endpointsV1.courses, async (c) => {
   const data = await prisma?.course.findMany()
   data.map { () 
@@ -21,6 +22,7 @@ app.get(endpointsV1.courses, async (c) => {
 
   return c.json(data)
 })
+*/
 
 // POST - Opprett et nytt kurs
 app.post(endpointsV1.courses, async (c) => {
@@ -213,53 +215,27 @@ app.get(endpointsV1.lessons, async (c) => {
   }
 });
 
-// ----- LESSON -----
-/*
-// POST - Opprett en ny leksjon i et kurs.
-app.post(endpointsV1.lessons, async (c) => {
-  
-})
-
-// GET - Hent detaljer om en spesifikk leksjon.
-app.get(endpointsV1.specificLesson, async (c) => {
-  
-})
-
-// PATCH - Oppdater deler av leksjonen.
-app.patch(endpointsV1.specificLesson, async (c) => {
-  
-})
-
-// DELETE - Slett en leksjon.
-app.delete(endpointsV1.specificLesson, async (c) => {
-  
-})
-*/
-
 // ----- COMMENTS -----
-
 // GET - Hent alle kommentarer på en leksjon.
+// ENDPOINTSV1.COMMENTS = /api/lessons/:lessonId/comments
 app.get(endpointsV1.comments, async (c) => {
+  try {
+    const lessonId = c.req.param("lessonId");
+    const allCommentsForLecture = await prisma?.comment.findMany({where: {lessonId: lessonId}})
 
+    if (!allCommentsForLecture){
+      return c.json({success: false, message: "NOT FOUND"}, 404)
+    }
+
+    return c.json(allCommentsForLecture)
+
+  } catch (error) {
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
 })
 
 // POST - Legg til en kommentar til en leksjon.
 app.post(endpointsV1.comments, async (c) => {
-  
-})
-
-// GET - Hent en spesifikk kommentar.
-app.get(endpointsV1.specificComment, async (c) => {
-  
-})
-
-// PATCH - Oppdater deler av kommentaren.
-app.patch(endpointsV1.specificComment, async (c) => {
-  
-})
-
-// DELETE - Slett en kommentar.
-app.delete(endpointsV1.specificComment, async (c) => {
   
 })
 
