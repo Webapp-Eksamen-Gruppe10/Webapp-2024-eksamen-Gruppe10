@@ -1,6 +1,11 @@
 "use client";
 
-import { createComment, getComments, getCourse, getLesson } from "@/lib/services/api";
+import {
+  createComment,
+  getComments,
+  getCourse,
+  getLesson,
+} from "@/lib/services/api";
 import { useEffect, useState } from "react";
 
 export default function Lesson() {
@@ -60,7 +65,7 @@ export default function Lesson() {
     <div>
       <div className="flex justify-between">
         <h3 data-testid="course_title" className="mb-6 text-base font-bold">
-          <a className="underline" href={`/kurs/${course?.slug}`}>
+          <a className="underline" href={`/courses/${course?.slug}`}>
             {course?.title}
           </a>
         </h3>

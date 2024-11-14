@@ -16,11 +16,11 @@ export const getCourse = async (slug: any) => {
   return data?.[0];
 };
 
-export const createCourse = async (data: any) => {
+export const createCourse = async (data) => {
   await courses.push(data);
 };
 
-export const getLesson = async ({ courseSlug, lessonSlug }: any) => {
+export const getLesson = async (courseSlug, lessonSlug) => {
   const data = await courses
     .flatMap(
       (course) =>
@@ -31,13 +31,13 @@ export const getLesson = async ({ courseSlug, lessonSlug }: any) => {
   return data?.[0];
 };
 
-export const getComments = async (lessonSlug: any) => {
+export const getComments = async (lessonSlug) => {
   const data = await comments.filter(
     (comment) => comment.lesson.slug === lessonSlug
   );
   return data;
 };
 
-export const createComment = async (data: any) => {
+export const createComment = async (data) => {
   await comments.push(data);
 };
