@@ -13,8 +13,10 @@ const commentsSchema = z.array(commentSchema);
 
 export function validateComment(data: unknown) {
     return commentSchema.safeParse(data);
-  }
+}
   
-  export function validateComments(data: unknown) {
+export function validateComments(data: unknown) {
     return commentsSchema.safeParse(data);
-  }
+}
+
+export type Comment = z.infer<typeof commentSchema>;
