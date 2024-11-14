@@ -4,7 +4,7 @@ import { endpointsV1 } from "./config/urls";
 import prisma from "./client/db"
 import { Lesson, LessonDb, lessonDbSchema } from "./features/lessons/lessons.schema";
 import { z } from "zod";
-import { courseDbSchema, courseSchema } from "./features/courses/types";
+import { courseDbSchema as courseSchemaDb, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
 
 const app = new Hono();
@@ -15,6 +15,10 @@ app.use("/*", cors());
 // GET - Hent liste over alle kurs
 app.get(endpointsV1.courses, async (c) => {
   const data = await prisma?.course.findMany()
+  data.map { () 
+
+  }
+
   return c.json(data)
 })
 
@@ -76,7 +80,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
   try {
     const courseId = c.req.param("courseId");
     const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
-
+  
     if(!specificCourse) {
       return c.json({ success: false, message: "NOT FOUND"}, 404);
     }
@@ -126,9 +130,10 @@ app.get(endpointsV1.specificCourse, async (c) => {
       category: z.string()
     */
     var returnCourse = { ...specificCourse, lessons: allLessonsForCourse }
+    const validatedCourse = courseSchema.parse(returnCourse)
 
     // Returner data
-    return c.json(returnCourse)
+    return c.json({ success: true, data: validatedCourse })
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
@@ -192,6 +197,8 @@ app.get(endpointsV1.lessons, async (c) => {
   }
 });
 
+// ----- LESSON -----
+/*
 // POST - Opprett en ny leksjon i et kurs.
 app.post(endpointsV1.lessons, async (c) => {
   
@@ -211,8 +218,10 @@ app.patch(endpointsV1.specificLesson, async (c) => {
 app.delete(endpointsV1.specificLesson, async (c) => {
   
 })
+*/
 
-// ----- LESSON -----
+// ----- COMMENTS -----
+
 // GET - Hent alle kommentarer på en leksjon.
 app.get(endpointsV1.comments, async (c) => {
 
