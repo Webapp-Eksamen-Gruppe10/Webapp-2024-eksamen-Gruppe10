@@ -1,14 +1,14 @@
 import { ofetch } from "ofetch";
 import { endpoint } from "@/config/url";
 
-import { validateComment, Comment } from "@/features/comments/lib/schema";
+import { Comment, validateComments } from "@/features/comments/lib/schema";
 
 const url = endpoint.comment;
 
 const getComments = async (lessonId: string) => {
     try {
         const comments = await ofetch(`${url}/${lessonId}`);
-        return validateComment(comments.data)
+        return validateComments(comments.data)
     } catch (error) {
         console.error(error);
     }
