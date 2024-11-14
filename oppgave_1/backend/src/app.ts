@@ -160,7 +160,7 @@ app.patch(endpointsV1.courses, async (c) => {
       },
     })
     
-    return c.json(updateCourse);
+    return c.json({success: true, data: updateCourse});
 
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
