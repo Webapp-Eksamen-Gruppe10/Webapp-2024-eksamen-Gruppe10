@@ -71,7 +71,62 @@ app.post(endpointsV1.courses, async (c) => {
 
 // GET - Hent detaljene til et spesifikt kurs
 app.get(endpointsV1.specificCourse, async (c) => {
+  // Hent et kurs
+  const courseId = c.req.param("courseId");
+  const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
+
+  if(!specificCourse) {
+    return c.json({ success: false, message: "NOT FOUND"}, 404);
+  }
   
+  /* Specific Course bør nå se slik ut:
+    {
+      "id": "1",
+      "title": "JavaScript 101",
+      "slug": "javascript-101",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore",
+      "category": "code"
+    }
+  */
+  // Hent alle lessons knyttet til dette kurset
+  const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId}})
+  if(!allLessonsForCourse){
+    return c.json({ success: false, message: "NO CONTENT"}, 204);
+  }
+  /* allLessonsForCourse bør nå se slik ut:
+    [
+      {
+        "id": "1",
+        "courseId": "1",
+        "title": "Variabler",
+        "slug": "variabler",
+        "preAmble": "Lorem ipsum dolor sit amet, conseteturusam et.",
+        "text": "[\"Lat, sed diam volupt digren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"]"
+      },
+      {
+        "id": "2",
+        "courseId": "1",
+        "title": "Løkker",
+        "slug": "lokker",
+        "preAmble": "Lorem gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+        "text": "[]"
+      },
+    ]
+  */
+  
+  // Kombiner Kurs + Lessons
+  /* Skal sendes tilbake ifølge features/courses/types.ts
+    id: z.string().optional(),
+    title: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    lessons: z.array(lessonSchema),
+    category: z.string()
+  */
+  var returnCourse = { ...specificCourse, lessons: allLessonsForCourse }
+
+  // Returner data
+  return c.json(returnCourse)
 })
 
 // PATCH - Oppdater deler av kurset
