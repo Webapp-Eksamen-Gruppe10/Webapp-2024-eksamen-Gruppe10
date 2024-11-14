@@ -53,8 +53,8 @@ export default function Courses() {
               key={course.id}
               data-testid="course_wrapper"
             >
-              <span className="block text-right capitalize">
-                [{course.category}]
+              <span className="block text-right capitalize underline">
+                {course.category}
               </span>
               <h3
                 className="mb-2 text-base font-bold"
