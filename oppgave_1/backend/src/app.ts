@@ -6,6 +6,7 @@ import { Lesson, LessonDb, lessonDbSchema } from "./features/lessons/lessons.sch
 import { z } from "zod";
 import { courseDbSchema as courseSchemaDb, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
+import { commentSchema } from "./features/comments/types";
 
 const app = new Hono();
 
@@ -235,10 +236,30 @@ app.get(endpointsV1.comments, async (c) => {
 })
 
 // POST - Legg til en kommentar til en leksjon.
+/* TODO: finish this.
 app.post(endpointsV1.comments, async (c) => {
-  
-})
+  try {
+    const lessonId = c.req.param("lessonId");
+    const requestData = await c.req.json();
+    // const validatedComment = commentSchema.parse(requestData);
 
+
+    const createdCourse = await prisma.comment.create({
+      data: {
+        id: "1",
+        lessonId: "1",
+        createdBy: "1",
+        comment: "hi"
+    }});
+
+    return c.json(createdCourse)
+
+
+  } catch (error) {
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
+})
+*/
 
 app.onError((err, c) => {
   console.error(err);
