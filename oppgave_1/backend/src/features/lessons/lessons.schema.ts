@@ -2,7 +2,7 @@ import {z} from "zod";
 
 
 export const lessonSchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     title: z.string(),
     slug: z.string(),
     preAmble: z.string(),
@@ -14,7 +14,7 @@ export const lessonDbSchema = z.object({
     id: z.string(),
     title: z.string(),
     slug: z.string(),
-    preAmble: z.string(),
+    preAmble: z.string(), 
     text: z.string(),
     courseId: z.string()
 })

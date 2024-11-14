@@ -1,14 +1,13 @@
 import { z } from "zod";
-import { lessonSchema } from "@/features/lessons/lessons.schema";
+import { lessonSchema } from "../lessons/lessons.schema";
 
 export const courseSchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     title: z.string(),
     slug: z.string(),
     description: z.string(),
     lessons: z.array(lessonSchema),
-    category: z.string(),
-    userId: z.string()
+    category: z.string()
 })
 
 export const courseDbSchema = z.object({
@@ -16,8 +15,7 @@ export const courseDbSchema = z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
-    category: z.string(),
-    userId: z.string()
+    category: z.string()
 })
 
 export type Course = z.infer<typeof courseSchema>;
