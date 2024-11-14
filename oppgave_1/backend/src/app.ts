@@ -24,48 +24,49 @@ app.post(endpointsV1.courses, async (c) => {
     const requestData = await c.req.json();
     const validatedCourse = courseSchema.parse(requestData);
 
+    // Her gjøres det en valideringssjekk for at både slugen/e til Course og Lessons er unike
     const existingCourse = await prisma.course.findUnique({
       where: { slug: validatedCourse.slug },
     });
 
     const existingLessons = await prisma.lesson.findMany({
       where: {
-        slug: { in: validatedCourse.lessons.map((lesson: Lesson) => lesson.slug) }, 
+        slug: { in: validatedCourse.lessons.map((lesson: Lesson) => lesson.slug) },
       },
       select: { slug: true }, 
     });
 
-    if(existingCourse || existingLessons.length > 0) {
-      return c.json({ success: false, message: "NOT UNIQUE"}, 409);
+    if(existingCourse) {
+      return c.json({ success: false, message: "NOT UNIQUE" }, 409);
     }
-    
-    const lessons = validatedCourse.lessons;
 
-    const courseDbData = courseDbSchema.parse({
+    if (existingLessons.length > 0) {
+      return c.json({ success: false, message: "NOT UNIQUE" }, 409);
+    }
+
+    const courseData = {
       id: crypto.randomUUID(),
       ...validatedCourse,
       lessons: undefined, 
-    });
+    };
 
     const createdCourse = await prisma.course.create({
-      data: courseDbData,
+      data: courseData,
     });
 
-    const createdLessons = await Promise.all(
-      lessons.map((lesson:Lesson) => {
-        const lessonDbData: LessonDb = lessonDbSchema.parse({
-          ...lesson,
-          courseId: createdCourse.id, 
-          text: JSON.stringify(lesson.text), 
-        });
 
-          prisma.lesson.create({ data: lessonDbData });
-      })
-    );
+    const createdLessons = await prisma.lesson.createMany({
+      data: validatedCourse.lessons.map(lesson => ({
+        ...lesson,
+        courseId: createdCourse.id,
+        text: JSON.stringify(lesson.text),
+      }))
+    });
 
-    return c.json({ success: true, data: {createdCourse, createdLessons} }, 201);
+    return c.json({ success: true, data: createdCourse }, 201);
   } catch (error) {
-      return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
+    console.log('Error:', error); 
+    return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
 });
 
