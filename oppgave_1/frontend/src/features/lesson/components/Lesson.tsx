@@ -1,3 +1,4 @@
+// src/features/lesson/components/Lesson.tsx
 "use client";
 
 import {
@@ -8,26 +9,29 @@ import {
 } from "@/lib/services/api";
 import { useEffect, useState } from "react";
 
-export default function Lesson() {
+interface LessonProps {
+  courseSlug: string;
+  lessonSlug: string;
+}
+
+export default function Lesson({ courseSlug, lessonSlug }: LessonProps) {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
   const [lessonComments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [name, setName] = useState("");
-  const [lesson, setLesson] = useState(null);
-  const [course, setCourse] = useState(null);
-  const courseSlug = "javascript-101";
-  const lessonSlug = "variabler";
+  const [lesson, setLesson] = useState<any>(null);
+  const [course, setCourse] = useState<any>(null);
 
-  const handleComment = (event) => {
+  const handleComment = (event: any) => {
     setComment(event.target.value);
   };
 
-  const handleName = (event) => {
+  const handleName = (event: any) => {
     setName(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     setFormError(false);
     setSuccess(false);
@@ -46,15 +50,17 @@ export default function Lesson() {
       const commentsData = await getComments(lessonSlug);
       setComments(commentsData);
       setSuccess(true);
+      setComment("");
+      setName("");
     }
   };
 
   useEffect(() => {
     const getContent = async () => {
-      const lessonDate = await getLesson(courseSlug, lessonSlug);
-      const courseData = await getCourse(courseSlug, lessonSlug);
+      const lessonData = await getLesson(courseSlug, lessonSlug);
+      const courseData = await getCourse(courseSlug);
       const commentsData = await getComments(lessonSlug);
-      setLesson(lessonDate);
+      setLesson(lessonData);
       setCourse(courseData);
       setComments(commentsData);
     };
@@ -83,7 +89,7 @@ export default function Lesson() {
         {lesson?.preAmble}
       </p>
       {lesson?.text?.length > 0 &&
-        lesson.text.map((text) => (
+        lesson.text.map((text: any) => (
           <p
             data-testid="lesson_text"
             className="mt-4 font-normal"
@@ -115,13 +121,12 @@ export default function Lesson() {
             </span>
             <textarea
               data-testid="form_textarea"
-              type="text"
               name="comment"
               id="comment"
               value={comment}
               onChange={handleComment}
               className="w-full rounded bg-slate-100"
-              cols="30"
+              cols={30}
             />
           </label>
           <button
@@ -147,7 +152,7 @@ export default function Lesson() {
         </form>
         <ul className="mt-8" data-testid="comments_list">
           {lessonComments?.length > 0
-            ? lessonComments.map((c) => (
+            ? lessonComments.map((c: any) => (
                 <li
                   className="mb-6 rounded border border-slate-200 px-4 py-6"
                   key={c.id}

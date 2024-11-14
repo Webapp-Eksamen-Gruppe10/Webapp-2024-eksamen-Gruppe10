@@ -9,7 +9,7 @@ export default function Navigation() {
           <a href="/courses">Kurs</a>
         </li>
         <li className="text-base font-semibold" data-testid="nav_new">
-          <a href="/ny">Nytt kurs</a>
+          <a href="/create">Nytt kurs</a>
         </li>
       </ul>
     </nav>
