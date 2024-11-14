@@ -137,8 +137,30 @@ app.patch(endpointsV1.specificCourse, async (c) => {
 
 // DELETE - Slett et kurs
 app.delete(endpointsV1.specificCourse, async (c) => {
+  try {
+  const courseId = c.req.param("courseId");
+  const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
+
+  if(!specificCourse){
+    return c.json({sucess: false, message: "NOT FOUND"}, 404)
+  }
   
-})
+  const courseLessons = await prisma?.lesson.findMany({
+    where: {courseId: courseId}
+  })
+
+  if(courseLessons.length > 0){
+    await prisma?.lesson.deleteMany({ where: {courseId: courseId}})
+  } 
+
+  await prisma?.course.delete({ where: {id: courseId} }); 
+ 
+  return c.json({success: true, data: courseId}, 200)
+
+  } catch(error){
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
+}); 
 
 // ----- LESSON -----
 // GET - Hent alle leksjoner i et bestemt kurs
