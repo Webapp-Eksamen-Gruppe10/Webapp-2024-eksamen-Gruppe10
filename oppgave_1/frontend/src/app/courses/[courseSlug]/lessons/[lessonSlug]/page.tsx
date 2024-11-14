@@ -1,7 +1,9 @@
 // app/courses/[slug]/lessons/[slug]/page.tsx
 
-//chatGPT dummy-side 
-import React from 'react';
+"use client";
+
+//chatGPT dummy-side
+import React from "react";
 
 // Definerer types for `params`
 type LessonPageProps = {
@@ -16,12 +18,14 @@ const LessonPage: React.FC<LessonPageProps> = ({ params }) => {
   const { courseSlug, lessonSlug } = params;
 
   return (
-    <div>
+    <>
       <h1>Kurs: {courseSlug}</h1>
       <h2>Leksjon: {lessonSlug}</h2>
-      <p>Dette er siden for leksjonen "{lessonSlug}" i kurset "{courseSlug}".</p>
+      <p>
+        Dette er siden for leksjonen "{lessonSlug}" i kurset "{courseSlug}".
+      </p>
       {/* Her kan du legge til leksjonsinnhold */}
-    </div>
+    </>
   );
 };
 

@@ -48,5 +48,5 @@ model Comment {
   // Relasjon fields og references er for å lage en relasjon mellom comment og lesson
   lesson     Lesson @relation(fields: [lessonSlug], references: [id])
 
-  @@index([lessonSlug])
+  @@index([lessonSlug]) // byttet til id til lesson
 }
