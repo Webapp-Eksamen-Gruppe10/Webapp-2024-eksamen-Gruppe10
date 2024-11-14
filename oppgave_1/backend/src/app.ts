@@ -71,7 +71,7 @@ app.post(endpointsV1.courses, async (c) => {
 
 // GET - Hent detaljene til et spesifikt kurs
 app.get(endpointsV1.specificCourse, async (c) => {
-
+  
 })
 
 // PATCH - Oppdater deler av kurset

@@ -1,10 +1,11 @@
 const endpointsV1 = {
     courses: `/api/v1/courses`,
-    specificCourse: `/api/v1/courses/:id`,
-    lessons: `/api/v1/courses/:id/lessons`,
-    specificLesson: `/api/v1/courses/:id/lessons/:id`,
-    comments: `/api/v1/courses/:id/lessons/:id/comments`,
-    specificComment: `/api/v1/courses/:id/lessons/:id/comments/:id`
+    specificCourse: `/api/v1/courses/:courseId`,
+    comments: `/api/v1/courses/:courseId/lessons/:lessonId/comments`,
+    specificComment: `/api/v1/courses/:courseId/lessons/:lessonId/comments/:commentId`,
+    // Under brukes ikke (todo: vurder å slette)
+    lessons: `/api/v1/courses/:courseId/lessons`,
+    specificLesson: `/api/v1/courses/:courseId/lessons/:lessonId`,
 };
 
 export { endpointsV1 };
