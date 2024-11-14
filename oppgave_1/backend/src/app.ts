@@ -137,9 +137,9 @@ app.get(endpointsV1.specificCourse, async (c) => {
 app.patch(endpointsV1.specificCourse, async (c) => {
   try {
     const requestData = await c.req.json();
+    // hvordan ser requestData ut?
     
-    
-    
+
   } catch (error) {
 
   }
