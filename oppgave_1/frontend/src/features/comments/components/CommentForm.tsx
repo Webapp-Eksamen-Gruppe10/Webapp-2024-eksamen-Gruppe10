@@ -1,8 +1,8 @@
-import { Comment } from "@/features/comments/lib/schema"
+import { CommentToDb } from "@/features/comments/lib/schema"
 import useCommentsForm from "../hooks/useCommentsForm";
 
 type CommentFormProps = {
-    onSubmit: (comment: Omit<Comment, 'id'>) => void;
+  onSubmit: (comment: CommentToDb) => void;
     lessonId: string
   };
 
@@ -13,7 +13,7 @@ type CommentFormProps = {
       initialFields: { createdBy:  "", comment: "" },
       onSubmit: (data) => onSubmit({
         lessonId: lessonId,
-        createdBy: data.createdBy,
+        createdBy: {name: data.createdBy},
         comment: data.comment,
     }),
       validate: {
