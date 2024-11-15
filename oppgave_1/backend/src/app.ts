@@ -4,7 +4,7 @@ import { endpointsV1 } from "./config/urls";
 import prisma from "./client/db"
 import { Lesson, LessonDb, lessonDbSchema } from "./features/lessons/lessons.schema";
 import { z } from "zod";
-import { courseDbSchema as courseSchemaDb, courseSchema } from "./features/courses/types";
+import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
 
 const app = new Hono();
@@ -13,14 +13,27 @@ app.use("/*", cors());
 
 // ----- KURS -----
 // GET - Hent liste over alle kurs
-app.get(endpointsV1.courses, async (c) => {
+/*app.get(endpointsV1.courses, async (c) => {
   const data = await prisma?.course.findMany()
-  data.map { () 
-
-  }
-
   return c.json(data)
-})
+})*/
+
+app.get(endpointsV1.courses, async (c) => { 
+  try {
+    // Hent alle kurs med tilknyttede leksjoner og kommentarer
+    const data = await prisma.course.findMany({
+      include: {
+        lessons: true
+      }
+    });
+
+    return c.json({ success: true, data: data });
+    
+  } catch (error) {
+    console.error(error);
+    return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
+  }
+});
 
 // POST - Opprett et nytt kurs
 app.post(endpointsV1.courses, async (c) => {
@@ -95,10 +108,16 @@ app.get(endpointsV1.specificCourse, async (c) => {
       }
     */
     // Hent alle lessons knyttet til dette kurset
-    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId}})
-    if(!allLessonsForCourse){
+    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId }})
+     if(!allLessonsForCourse){
       return c.json({ success: false, message: "NO CONTENT"}, 204);
     }
+
+  
+    const parsedLessons = allLessonsForCourse.map(lesson => ({
+     ...lesson,
+     text: JSON.parse(lesson.text) 
+    }));
     /* allLessonsForCourse bør nå se slik ut:
       [
         {
@@ -129,9 +148,9 @@ app.get(endpointsV1.specificCourse, async (c) => {
       lessons: z.array(lessonSchema),
       category: z.string()
     */
-    var returnCourse = { ...specificCourse, lessons: allLessonsForCourse }
+    var returnCourse = { ...specificCourse, lessons: parsedLessons }
     const validatedCourse = courseSchema.parse(returnCourse)
-
+    console.log(validatedCourse)
     // Returner data
     return c.json({ success: true, data: validatedCourse })
   } catch (error) {
@@ -160,7 +179,7 @@ app.patch(endpointsV1.courses, async (c) => {
       },
     })
     
-    return c.json({success: true, data: updateCourse});
+    return c.json({success: true, data:updateCourse});
 
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
@@ -168,6 +187,7 @@ app.patch(endpointsV1.courses, async (c) => {
 })
 
 // DELETE - Slett et kurs
+// husk å slette alle kommentarer for en lekson og 
 app.delete(endpointsV1.specificCourse, async (c) => {
   try {
   const courseId = c.req.param("courseId");
