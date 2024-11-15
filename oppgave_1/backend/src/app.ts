@@ -6,29 +6,26 @@ import { Lesson, LessonDb, lessonDbSchema } from "./features/lessons/lessons.sch
 import { z } from "zod";
 import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
+import { commentSchema } from "./features/comments/types";
 
 const app = new Hono();
 
 app.use("/*", cors());
 
 // ----- KURS -----
-// GET - Hent liste over alle kurs
-/*app.get(endpointsV1.courses, async (c) => {
-  const data = await prisma?.course.findMany()
-  return c.json(data)
-})*/
+// GET - Hent liste over alle kurs 
 
 app.get(endpointsV1.courses, async (c) => { 
   try {
-    // Hent alle kurs med tilknyttede leksjoner og kommentarer
+    // Hent alle kurs med tilknyttede leksjoner
     const data = await prisma.course.findMany({
       include: {
         lessons: true
       }
     });
-
-    return c.json({ success: true, data: data });
     
+    return c.json({ success: true, data: data });
+
   } catch (error) {
     console.error(error);
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
@@ -216,7 +213,7 @@ app.delete(endpointsV1.specificCourse, async (c) => {
 
 // ----- LESSON -----
 // GET - Hent alle leksjoner i et bestemt kurs
-app.get(endpointsV1.lessons, async (c) => {
+/*app.get(endpointsV1.lessons, async (c) => {
   const courseId = c.req.param("courseId");  
 
   try {
@@ -231,56 +228,50 @@ app.get(endpointsV1.lessons, async (c) => {
     console.error(error);
     return c.json(undefined, 204);
   }
-});
-
-// ----- LESSON -----
-/*
-// POST - Opprett en ny leksjon i et kurs.
-app.post(endpointsV1.lessons, async (c) => {
-  
-})
-
-// GET - Hent detaljer om en spesifikk leksjon.
-app.get(endpointsV1.specificLesson, async (c) => {
-  
-})
-
-// PATCH - Oppdater deler av leksjonen.
-app.patch(endpointsV1.specificLesson, async (c) => {
-  
-})
-
-// DELETE - Slett en leksjon.
-app.delete(endpointsV1.specificLesson, async (c) => {
-  
-})
-*/
+});*/
 
 // ----- COMMENTS -----
-
 // GET - Hent alle kommentarer på en leksjon.
+// ENDPOINTSV1.COMMENTS = /api/lessons/:lessonId/comments
 app.get(endpointsV1.comments, async (c) => {
+  try {
+    const lessonId = c.req.param("lessonId");
+    const allCommentsForLecture = await prisma?.comment.findMany({where: {lessonId: lessonId}})
 
+    if (!allCommentsForLecture){
+      return c.json({success: false, message: "NOT FOUND"}, 404)
+    }
+
+    return c.json(allCommentsForLecture)
+
+  } catch (error) {
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
 })
 
 // POST - Legg til en kommentar til en leksjon.
+// TODO: finish this
 app.post(endpointsV1.comments, async (c) => {
-  
-})
+  try {
+    const lessonId = c.req.param("lessonId");
+    const requestData = await c.req.json();
+    // const validatedComment = commentSchema.parse(requestData);
 
-// GET - Hent en spesifikk kommentar.
-app.get(endpointsV1.specificComment, async (c) => {
-  
-})
 
-// PATCH - Oppdater deler av kommentaren.
-app.patch(endpointsV1.specificComment, async (c) => {
-  
-})
+    const createdCourse = await prisma.comment.create({
+      data: {
+        id: "1",
+        lessonId: "1",
+        createdBy: "1",
+        comment: "hi"
+    }});
 
-// DELETE - Slett en kommentar.
-app.delete(endpointsV1.specificComment, async (c) => {
-  
+    return c.json(createdCourse)
+
+
+  } catch (error) {
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
 })
 
 
