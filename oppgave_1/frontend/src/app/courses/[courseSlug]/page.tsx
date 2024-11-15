@@ -1,27 +1,17 @@
-// app/courses/[slug]/page.tsx
+// src/app/courses/[courseSlug]/page.tsx
+"use client";
 
+import React from "react";
 
-//chatGPT dummy-side 
-import React from 'react';
+import { useParams } from "next/navigation";
+import Course from "@/features/course/components/Course";
 
-// Definerer types for `params`
-type CoursePageProps = {
-  params: {
-    courseSlug: string;
-  };
-};
-
-// Komponent for et spesifikt kurs
-const CoursePage: React.FC<CoursePageProps> = ({ params }) => {
-  const { courseSlug } = params;
+export default function CourseDetailPage() {
+  const { courseSlug } = useParams();
 
   return (
-    <div>
-      <h1>Kurs: {courseSlug}</h1>
-      <p>Dette er siden for kurset med slug "{courseSlug}".</p>
-      {/* Her kan du legge til innhold relatert til det spesifikke kurset */}
-    </div>
+    <main>
+      <Course courseSlug={courseSlug} />
+    </main>
   );
-};
-
-export default CoursePage;
+}
