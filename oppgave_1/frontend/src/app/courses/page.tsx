@@ -1,18 +1,13 @@
 // app/courses/page.tsx
 
+"use client";
 
-//chatGPT dummy-side 
-import React from 'react';
+import Courses from "@/features/courses/components/Courses";
 
-// Komponent for kursoversiktssiden
-const CoursesPage: React.FC = () => {
+export default function CoursesPage() {
   return (
-    <div>
-      <h1>Kursoversikt</h1>
-      <p>Her kan du finne alle tilgjengelige kurs.</p>
-      {/* Her kan du senere legge til en liste over kurs */}
-    </div>
+    <main>
+      <Courses />
+    </main>
   );
-};
-
-export default CoursesPage;
+}

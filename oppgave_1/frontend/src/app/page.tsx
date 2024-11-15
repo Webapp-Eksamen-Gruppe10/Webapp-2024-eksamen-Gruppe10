@@ -1,10 +1,10 @@
-import All from "@/pages/All";
+import React from "react";
+import SignUp from "../components/SignUp"; // Adjust path if needed
 
 export default function Home() {
   return (
     <main className="h-full">
-      {/*DENNE KAN KOMMENTERES UT ETTERSOM LAYOUT ER IMPLEMENTERT, SAMT NEXTROUTING : <All />*/}
+      <SignUp />
     </main>
   );
 }
-import React from "react";
