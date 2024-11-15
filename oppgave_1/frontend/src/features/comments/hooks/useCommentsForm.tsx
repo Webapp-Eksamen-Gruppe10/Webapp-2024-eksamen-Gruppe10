@@ -85,7 +85,7 @@ export function useCommentsForm<T extends Record<string, string>>({
     );
   };
 
-  const getFieldProps = (field: keyof T) => ({
+  const getFieldInputProps = (field: keyof T) => ({
     value: fields[field].value,
     onChange: (event: FormEvent<HTMLInputElement>) => {
       const input = event.target as HTMLInputElement;
@@ -94,13 +94,22 @@ export function useCommentsForm<T extends Record<string, string>>({
     onBlur: () => setFieldTouched(field),
   });
 
+  const getFieldAreaProps = (field: keyof T) => ({
+    value: fields[field].value,
+    onChange: (event: FormEvent<HTMLTextAreaElement>) => {
+      const input = event.target as HTMLTextAreaElement;
+      updateField(field, input.value);
+    },
+    onBlur: () => setFieldTouched(field),
+  });
   const isFieldInvalid = (field: keyof T) =>
     !fields[field].isValid && fields[field].isDirty;
 
   return {
     fields,
     handleSubmit,
-    getFieldProps,
+    getFieldInputProps,
+    getFieldAreaProps,
     isFieldInvalid,
   };
 }
