@@ -16,8 +16,8 @@
 
 | HTTP Metode | Endepunkt                                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|-----------------------------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
-| `GET`       | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments`  | Hent alle kommentarer på en leksjon.          | `200 OK`, JSON-liste av kommentarer| `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/courses/{courseId}/lessons/{lessonId}/comments`  | Legg til en kommentar til en leksjon.         | `201 Created`, Ny kommentar-JSON   | `400 Bad Request`, `500 
+| `GET`       | `/api/v1/lessons/{lessonId}/comments`  | Hent alle kommentarer på en leksjon.          | `200 OK`, JSON-liste av kommentarer| `404 Not Found`, `500 Internal Server Error` |
+| `POST`      | `/api/v1/lessons/{lessonId}/comments`  | Legg til en kommentar til en leksjon.         | `201 Created`, Ny kommentar-JSON   | `400 Bad Request`, `500 
 
 
 ## Hvilke sider skal benytte de ulike API-ene
