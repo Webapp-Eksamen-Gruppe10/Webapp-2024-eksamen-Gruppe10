@@ -8,42 +8,42 @@ import { useEffectOnce } from "@/hooks/useEffectOnce";
 type Status  = "idle" | "loading" | "error" | "success" | "fetching";
 
 export function useCourses(courseId?: string) {
-    const [status, setStatus] = useState<Status>("idle");
-    const [data, setData] = useState<Course[]>([]);
+    const [courseStatus, setCourseStatus] = useState<Status>("idle");
+    const [courseData, setCourseData] = useState<Course[]>([]);
 
-    const [error, setError] = useState<string | null>(null);
+    const [courseError, setCourseError] = useState<string | null>(null);
 
-    const isFetching = status === "fetching";
-    const isLoading = status === "loading" || isFetching;
-    const isError = status === "error" || !!error;
-    const isIdle = status === "idle";
-    const isSuccess = status === "success";
+    const isFetching = courseStatus === "fetching";
+    const isLoading = courseStatus === "loading" || isFetching;
+    const isError = courseStatus === "error" || !!courseError;
+    const isIdle = courseStatus === "idle";
+    const isSuccess = courseStatus === "success";
     const isCourseId = !!courseId;
 
     const resetToIdle = useCallback(
         (timeout = 2000) =>
           setTimeout(() => {
-            setStatus("idle");
+            setCourseStatus("idle");
           }, timeout),
         []
       );
 
       const fetchData = useCallback(async () => {
         try {
-          setStatus("loading");
+            setCourseStatus("loading");
           if(isCourseId){
             const result = await api.getCourse(courseId);
-            setData(result?.data ? [...data, result?.data] : []);
+            setCourseData(result?.data ? [...courseData, result?.data] : []);
           }
           else{
             const results = await api.list();
-            setData(results?.data ?? []);
+            setCourseData(results?.data ?? []);
           }
     
-          setStatus("success");
+          setCourseStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Feilet ved henting av data");
+            setCourseStatus("error");
+          setCourseError("Feilet ved henting av data");
         } finally {
           resetToIdle();
         }
@@ -55,13 +55,13 @@ export function useCourses(courseId?: string) {
 
       const add = async (data: CourseToDb) => {
         try {
-          setStatus("loading");
+            setCourseStatus("loading");
           await api.create(data);
           await fetchData();
-          setStatus("success");
+          setCourseStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Feilet ved opprettelse av data");
+          setCourseStatus("error");
+          setCourseError("Feilet ved opprettelse av data");
         } finally {
           resetToIdle();
         }
@@ -69,13 +69,13 @@ export function useCourses(courseId?: string) {
 
       const remove = async (id: string) => {
         try {
-          setStatus("loading");
+          setCourseStatus("loading");
           await api.remove(id);
           await fetchData();
-          setStatus("success");
+          setCourseStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Failed removing item");
+          setCourseStatus("error");
+          setCourseError("Failed removing item");
         } finally {
           resetToIdle();
         }
@@ -83,13 +83,13 @@ export function useCourses(courseId?: string) {
 
       const update = async (data: Course) => {
         try {
-          setStatus("loading");
+          setCourseStatus("loading");
           await api.update(data);
           await fetchData();
-          setStatus("success");
+          setCourseStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Failed updating item");
+          setCourseStatus("error");
+          setCourseError("Failed updating item");
         } finally {
           resetToIdle();
         }
@@ -102,9 +102,9 @@ export function useCourses(courseId?: string) {
         remove,
         update,
         get: fetchData,
-        data,
-        error,
-        status: {
+        courseData,
+        courseError,
+        courseStatus: {
           idle: isIdle,
           loading: isLoading,
           success: isSuccess,
