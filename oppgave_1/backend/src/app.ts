@@ -6,7 +6,8 @@ import { Lesson, LessonDb, lessonDbSchema, lessonSchema } from "./features/lesso
 import { z } from "zod";
 import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
-import { commentSchema } from "./features/comments/types";
+import { commentDbSchema, commentSchema, Comment, CommentDb } from "./features/comments/types";
+
 
 const app = new Hono();
 
@@ -14,17 +15,39 @@ app.use("/*", cors());
 
 // ----- KURS -----
 // GET - Hent liste over alle kurs 
-
 app.get(endpointsV1.courses, async (c) => { 
   try {
     // Hent alle kurs med tilknyttede leksjoner
     const data = await prisma.course.findMany({
       include: {
         lessons: true
+        
       }
     });
+    console.log(data);
+    // validerer data fra databasen, deretter mapper til frontend-schema: 
+    const parsedData = data.map((course) => {
+
+      const dbCourse = courseDbSchema.parse(course); 
+      console.log(dbCourse)
+      const parsedLessons = course.lessons.map((lesson) => ({
+        ...lesson, 
+        text: JSON.parse(lesson.text).map((text: string) => ({
+          id: crypto.randomUUID(), 
+          text: text.toString(), 
+        }))
+      }));  
+
+      // validerer course etter mapping: 
+      return courseSchema.parse({
+        ...dbCourse, 
+        lessons: parsedLessons, 
+      }); 
+
+    }); 
+
     
-    return c.json({ success: true, data: data });
+    return c.json({ success: true, data: parsedData });
 
   } catch (error) {
     console.error(error);
@@ -73,11 +96,11 @@ app.post(endpointsV1.courses, async (c) => {
       data: validatedCourse.lessons.map(lesson => ({
         ...lesson,
         courseId: createdCourse.id,
-        text: JSON.stringify(lesson.text),
+        text: JSON.stringify(lesson.text.map((item) => item.text))
       }))
     });
-
-    return c.json({ success: true, data: createdCourse }, 201);
+    console.log(createdLessons)
+    return c.json({ success: true, data: createdCourse, createdLessons }, 201);
   } catch (error) {
     console.log('Error:', error); 
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
@@ -101,23 +124,20 @@ app.get(endpointsV1.specificCourse, async (c) => {
       return c.json({ success: false, message: "NO CONTENT"}, 204);
     }
 
-  
+    // mapper lessons til riktig format: 
     const parsedLessons = allLessonsForCourse.map(lesson => ({
      ...lesson,
      text: JSON.parse(lesson.text).map((text:string) => ({
       id: crypto.randomUUID(),
-      text: text
+      text: text.toString()
       }))
     }));
-
-    //lessonSchema.parse(parsedLessons); 
-
+    
+    // mapper course og validerer kurset: 
     var returnCourse = { ...specificCourse, lessons: parsedLessons }
-   /* const validatedCourse = courseSchema.parse(returnCourse)
-    console.log(validatedCourse)
-    // Returner data
-    */
-    return c.json({ success: true, data: returnCourse })
+    const validatedCourse = courseSchema.parse(returnCourse)
+  
+    return c.json({ success: true, data: validatedCourse })
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
@@ -200,17 +220,33 @@ app.delete(endpointsV1.specificCourse, async (c) => {
 
 // ----- COMMENTS -----
 // GET - Hent alle kommentarer på en leksjon.
-// ENDPOINTSV1.COMMENTS = /api/lessons/:lessonId/comments
 app.get(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
-    const allCommentsForLecture = await prisma?.comment.findMany({where: {lessonId: lessonId}})
+    const allCommentsForLecture:CommentDb[] = await prisma?.comment.findMany({where: {lessonId: lessonId}})
 
+    const parsedComments = await Promise.all(
+
+      allCommentsForLecture.map(async (comment) => {
+        const lesson = await prisma.lesson.findUnique({where: {id: lessonId}})
+
+      if (!lesson){
+        return c.json({success: false, message: "NOT FOUND"}, 404)
+      }
+        return commentSchema.parse({
+          ...comment, 
+          lesson: {
+            slug: lesson.slug
+          }
+        }); 
+    })
+  ); 
+ 
     if (!allCommentsForLecture){
       return c.json({success: false, message: "NOT FOUND"}, 404)
     }
 
-    return c.json(allCommentsForLecture)
+    return c.json({success: true, data: parsedComments})
 
   } catch (error) {
     return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
@@ -218,23 +254,23 @@ app.get(endpointsV1.comments, async (c) => {
 })
 
 // POST - Legg til en kommentar til en leksjon.
-// TODO: finish this
 app.post(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
-    const requestData = await c.req.json();
-    // const validatedComment = commentSchema.parse(requestData);
+    const data = await c.req.json();
+    
+    const validatedComment = commentSchema.parse(data);
 
+    const parsedComment = commentDbSchema.parse({
+      ...validatedComment, 
+      lessonId: lessonId
+    })
 
     const createdCourse = await prisma.comment.create({
-      data: {
-        id: "1",
-        lessonId: "1",
-        createdBy: "1",
-        comment: "hi"
-    }});
+     data: parsedComment
+    });
 
-    return c.json(createdCourse)
+    return c.json({success: true, data: createdCourse})
 
 
   } catch (error) {
