@@ -2,9 +2,13 @@
 
 import { categories, courses } from "@/data/data";
 import { useState } from "react";
+import { Course } from "../lib/schema";
 
-
-export default function Courses() {
+type CoursesProps = {
+  courses: Course[]
+}
+export default function Courses(props: CoursesProps) {
+  const { courses } = props;
   const [value, setValue] = useState("");
   const [data, setData] = useState(courses);
 

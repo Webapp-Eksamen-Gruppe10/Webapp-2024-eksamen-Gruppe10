@@ -2,7 +2,6 @@
 
 import { categories, courseCreateSteps } from "@/data/data";
 import { isValid } from "@/lib/index";
-import { createCourse } from "@/lib/services/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Category, Course } from "../lib/schema";
@@ -32,7 +31,7 @@ export default function CourseForm(props: CourseFormProps) {
         description: "",
         category: Category.Enum.Empty,
     });
-    const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lesson : []);
+    const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lessons : []);
 
     const router = useRouter();
 
@@ -47,9 +46,9 @@ export default function CourseForm(props: CourseFormProps) {
             setSuccess(true);
             setCurrent(2);
             if (isEditing)
-                await api.update({ id: course.id, ...courseFields, lesson: lessons });
+                await api.update({ id: course.id, ...courseFields, lessons: lessons });
             else
-                await api.create({...courseFields, lesson: lessons })
+                await api.create({...courseFields, lessons: lessons })
             setTimeout(() => {
             if (isEditing)
                 router.push(`/courses/${course.slug}`);
