@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
 import { endpoint } from "@/config/url";
 
-import { Comment, validateCommentList } from "@/features/comments/lib/schema";
+import { CommentToDb, validateCommentList } from "@/features/comments/lib/schema";
 
 const url = endpoint.comment;
 
@@ -14,7 +14,7 @@ const getComments = async (lessonId: string) => {
     }
 };
 
-const create = async (data: Omit<Comment, 'id'>) => {
+const create = async (data: CommentToDb) => {
     try {
         const createdComment = await ofetch(`${url}/${data.lessonId}`, {
             method: "POST",

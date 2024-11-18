@@ -8,7 +8,6 @@ export default function Comments(props: CommentsProps){
     const { lessonComments } = props;
 
     return(
-        <section data-testid="comments">
             <ul className="mt-8" data-testid="comments_list">
                 {lessonComments?.length > 0
                     ? lessonComments.map((c) => (
@@ -24,6 +23,5 @@ export default function Comments(props: CommentsProps){
                 ))
                 : null}
             </ul>
-        </section>
     )
 }

@@ -2,11 +2,11 @@ import { CommentToDb } from "@/features/comments/lib/schema"
 import useCommentsForm from "../hooks/useCommentsForm";
 
 type CommentFormProps = {
-  onSubmit: (comment: CommentToDb) => void;
+    onSubmit: (comment: CommentToDb) => void;
     lessonId: string
   };
 
-  export default function HabitForm(props: Readonly<CommentFormProps>) {
+  export default function CommentForm(props: Readonly<CommentFormProps>) {
     const { onSubmit, lessonId} = props;
   
     const { handleSubmit, getFieldInputProps, getFieldAreaProps, isFieldInvalid } = useCommentsForm({

@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import api from "@/features/comments/services/api";
 
-import type { Comment } from "@/features/comments/lib/schema";
+import type { Comment, CommentToDb } from "@/features/comments/lib/schema";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
 
 
@@ -45,7 +45,7 @@ export function useComments(lessonId: string) {
     
       useEffectOnce(fetchData);
 
-      const add = async (data: Omit<Comment, 'id'>) => {
+      const add = async (data: CommentToDb) => {
         try {
           setCommentStatus("loading");
           await api.create(data);
@@ -63,7 +63,7 @@ export function useComments(lessonId: string) {
         add,
         get: fetchData,
         commentData,
-        setCommentError,
+        commentError,
         commentStatus: {
           idle: isIdle,
           loading: isLoading,

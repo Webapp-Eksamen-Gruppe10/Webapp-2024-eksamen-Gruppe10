@@ -17,9 +17,9 @@ const users = [
 export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>){
     const { courseSlug, children} = props
 
-    const { data } = useCourses(courseSlug);
+    const { courseData } = useCourses(courseSlug);
 
-    const content = data[0]
+    const content = courseData[0]
 
     const router = useRouter();
     
