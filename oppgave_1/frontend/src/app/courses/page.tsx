@@ -7,7 +7,7 @@ import Courses from "@/features/courses/components/Courses";
 export default function CoursesPage() {
   return (
     <main>
-      <Courses />
+      <CoursesPage />
     </main>
   );
 }

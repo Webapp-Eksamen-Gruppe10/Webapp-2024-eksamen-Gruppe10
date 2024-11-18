@@ -1,5 +1,6 @@
 import { PropsWithChildren, useState } from "react"
 import useCourses from "../hooks/useCourses";
+import { useRouter } from "next/navigation";
 
 type CourseLayoutProps = {
     courseSlug: string
@@ -19,6 +20,8 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
     const { data } = useCourses(courseSlug);
 
     const content = data[0]
+
+    const router = useRouter();
     
     const [currentLessonSlug, setCurrentLessonSlug] = useState<string>(""); 
 
@@ -38,10 +41,11 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
                     data-testid="lesson_url"
                     data-slug={currentLessonSlug}
                     className="block h-full w-full"
-                    href={`/kurs/${content?.slug}/${lesson.slug}`}
+                    href={`/courses/${content?.slug}/${lesson.slug}`}
                     onClick={() => {
                         if(currentLessonSlug === lesson.slug){
                             setCurrentLessonSlug("")
+                            router.push(`/courses/${content?.slug}`)
                         }
                         else{
                             setCurrentLessonSlug(lesson.slug)
@@ -53,25 +57,9 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
               ))}
             </ul>
           </aside>
-          {currentLessonSlug === "" ? (
             <article>
               {children}
             </article>
-          ) : (
-            <section>
-              <>
-                <h2 className="text-2xl font-bold" data-testid="course_title">
-                  {content?.title}
-                </h2>
-                <p
-                  className="mt-4 font-semibold leading-relaxed"
-                  data-testid="course_description"
-                >
-                  {content?.description}
-                </p>
-              </>
-            </section>
-          )}
           <aside
             data-testid="enrollments"
             className="border-l border-slate-200 pl-6"
