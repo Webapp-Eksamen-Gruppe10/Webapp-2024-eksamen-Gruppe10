@@ -30,14 +30,3 @@ export const getLesson = async (courseSlug, lessonSlug) => {
     .filter(Boolean);
   return data?.[0];
 };
-
-export const getComments = async (lessonSlug) => {
-  const data = await comments.filter(
-    (comment) => comment.lesson.slug === lessonSlug
-  );
-  return data;
-};
-
-export const createComment = async (data) => {
-  await comments.push(data);
-};
