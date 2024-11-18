@@ -53,7 +53,7 @@ export function useComments(lessonId: string) {
           setStatus("success");
         } catch (error) {
           setStatus("error");
-          setError("Failed creating habit");
+          setError("Feilet ved opprettelse av data");
         } finally {
           resetToIdle();
         }
