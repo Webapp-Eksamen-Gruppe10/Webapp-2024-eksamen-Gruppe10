@@ -7,7 +7,7 @@
 		"prisma:init": "prisma init",
 		"prisma:migrate": "prisma migrate dev",
 		"prisma:generate": "prisma generate",
-		"prisma:seed": "tsx prisma/seed.ts",
+		"prisma:seed": "tsx prisma/seed.js",
 		"prisma:push": "prisma db push"
 	},
 	"dependencies": {

@@ -12,7 +12,6 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
- 
 
 model Course {
   id          String   @id @default(cuid())
@@ -21,32 +20,31 @@ model Course {
   description String
   category    String
   lessons     Lesson[]
-
 }
 
 model Lesson {
-  id       String    @id @default(cuid())
+  id       String @id @default(cuid())
   courseId String
   title    String
-  slug     String    @unique
+  slug     String @unique
   preAmble String
-  text     String  //Dette er en liste
+  text     String //Dette er en liste
 
   // Relasjon fields og references er for å lage en relasjon mellom lesson og course
-  course   Course    @relation(fields: [courseId], references: [id])
-  Comment  Comment[]
+  course  Course    @relation(fields: [courseId], references: [id])
+  Comment Comment[]
 
   @@index([courseId])
 }
 
 model Comment {
-  id         String @id @default(cuid())
-  lessonSlug String
-  createdBy  String
-  comment    String
+  id        String @id @default(cuid())
+  lessonId  String
+  createdBy String
+  comment   String
 
   // Relasjon fields og references er for å lage en relasjon mellom comment og lesson
-  lesson     Lesson @relation(fields: [lessonSlug], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
 
-  @@index([lessonSlug]) // byttet til id til lesson
+  @@index([lessonId])
 }
