@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { endpointsV1 } from "./config/urls";
 import prisma from "./client/db"
-import { Lesson, LessonDb, lessonDbSchema } from "./features/lessons/lessons.schema";
+import { Lesson, LessonDb, lessonDbSchema, lessonSchema } from "./features/lessons/lessons.schema";
 import { z } from "zod";
 import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
@@ -94,16 +94,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
     if(!specificCourse) {
       return c.json({ success: false, message: "NOT FOUND"}, 404);
     }
-    
-    /* Specific Course bør nå se slik ut:
-      {
-        "id": "1",
-        "title": "JavaScript 101",
-        "slug": "javascript-101",
-        "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore",
-        "category": "code"
-      }
-    */
+ 
     // Hent alle lessons knyttet til dette kurset
     const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId }})
      if(!allLessonsForCourse){
@@ -113,43 +104,20 @@ app.get(endpointsV1.specificCourse, async (c) => {
   
     const parsedLessons = allLessonsForCourse.map(lesson => ({
      ...lesson,
-     text: JSON.parse(lesson.text) 
+     text: JSON.parse(lesson.text).map((text:string) => ({
+      id: crypto.randomUUID(),
+      text: text
+      }))
     }));
-    /* allLessonsForCourse bør nå se slik ut:
-      [
-        {
-          "id": "1",
-          "courseId": "1",
-          "title": "Variabler",
-          "slug": "variabler",
-          "preAmble": "Lorem ipsum dolor sit amet, conseteturusam et.",
-          "text": "[\"Lat, sed diam volupt digren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"]"
-        },
-        {
-          "id": "2",
-          "courseId": "1",
-          "title": "Løkker",
-          "slug": "lokker",
-          "preAmble": "Lorem gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-          "text": "[]"
-        },
-      ]
-    */
-    
-    // Kombiner Kurs + Lessons
-    /* Skal sendes tilbake ifølge features/courses/types.ts
-      id: z.string().optional(),
-      title: z.string(),
-      slug: z.string(),
-      description: z.string(),
-      lessons: z.array(lessonSchema),
-      category: z.string()
-    */
+
+    //lessonSchema.parse(parsedLessons); 
+
     var returnCourse = { ...specificCourse, lessons: parsedLessons }
-    const validatedCourse = courseSchema.parse(returnCourse)
+   /* const validatedCourse = courseSchema.parse(returnCourse)
     console.log(validatedCourse)
     // Returner data
-    return c.json({ success: true, data: validatedCourse })
+    */
+    return c.json({ success: true, data: returnCourse })
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
