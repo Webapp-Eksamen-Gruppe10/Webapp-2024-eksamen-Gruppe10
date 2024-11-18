@@ -5,9 +5,9 @@ import { CourseToDb, validateCourseList, Course, validateCourseToDb, validateCou
 
 const url = endpoint.course;
 
-const getCourse = async (id: string) => {
+const getCourse = async (slug: string) => {
     try {
-        const course = await ofetch(`${url}/${id}`);
+        const course = await ofetch(`${url}/${slug}`);
         return validateCourse(course.data)
     } catch (error) {
         console.error(error);

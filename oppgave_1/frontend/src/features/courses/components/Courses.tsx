@@ -3,6 +3,7 @@
 import { categories, courses } from "@/data/data";
 import { useState } from "react";
 
+
 export default function Courses() {
   const [value, setValue] = useState("");
   const [data, setData] = useState(courses);

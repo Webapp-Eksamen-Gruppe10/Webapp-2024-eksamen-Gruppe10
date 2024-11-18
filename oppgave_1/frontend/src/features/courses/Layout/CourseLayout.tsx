@@ -1,9 +1,8 @@
 import { PropsWithChildren, useState } from "react"
 import useCourses from "../hooks/useCourses";
-import { Lesson } from "@/features/lesson/lib/schema";
 
 type CourseLayoutProps = {
-    courseId: string
+    courseSlug: string
 }
 
 const users = [
@@ -15,9 +14,9 @@ const users = [
   ]
 
 export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>){
-    const { courseId, children} = props
+    const { courseSlug, children} = props
 
-    const { data } = useCourses(courseId);
+    const { data } = useCourses(courseSlug);
 
     const content = data[0]
     

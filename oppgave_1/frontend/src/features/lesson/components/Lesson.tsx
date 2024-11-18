@@ -1,30 +1,18 @@
 // src/features/lesson/components/Lesson.tsx
 "use client";
 
-import {
-  getCourse,
-  getLesson,
-} from "@/lib/services/api";
-import { useEffect, useState } from "react";
+import useCourses from "@/features/courses/hooks/useCourses";
 
 interface LessonProps {
-  courseSlug: string;
-  lessonSlug: string;
+  courseSlug: string
+  lessonSlug: string
 }
 
 export default function Lesson({ courseSlug, lessonSlug }: LessonProps) {
-  const [lesson, setLesson] = useState<any>(null);
-  const [course, setCourse] = useState<any>(null);
 
-  useEffect(() => {
-    const getContent = async () => {
-      const lessonData = await getLesson(courseSlug, lessonSlug);
-      const courseData = await getCourse(courseSlug);
-      setLesson(lessonData);
-      setCourse(courseData);
-    };
-    getContent();
-  }, [courseSlug, lessonSlug]);
+  const { data } = useCourses(courseSlug)
+  const course = data[0];
+  const lesson = course.lessons.find(item => item.slug === lessonSlug);
 
   return (
     <div>
@@ -47,8 +35,8 @@ export default function Lesson({ courseSlug, lessonSlug }: LessonProps) {
       >
         {lesson?.preAmble}
       </p>
-      {lesson?.text?.length > 0 &&
-        lesson.text.map((text: any) => (
+      {lesson?.text?.length && lesson?.text?.length > 0 &&
+        lesson?.text.map((text: any) => (
           <p
             data-testid="lesson_text"
             className="mt-4 font-normal"
