@@ -18,7 +18,7 @@ const courseSchema = z.object({
     slug: z.string(),
     description: z.string(),
     category: Category,
-    lesson: lessonListSchema
+    lessons: lessonListSchema
 })
 
 const courseSchemaToDb = z.object({
@@ -26,7 +26,7 @@ const courseSchemaToDb = z.object({
     slug: z.string(),
     description: z.string(),
     category: Category,
-    lesson: lessonListSchema
+    lessons: lessonListSchema
 })
 
 const courseListSchema = z.array(courseSchema);
