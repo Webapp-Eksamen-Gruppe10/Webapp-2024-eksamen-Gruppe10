@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { lessonListSchema, lessonListSchemaToDb } from "@/features/lesson/lib/schema";
+import { lessonListSchema } from "@/features/lesson/lib/schema";
 
 export { courseSchema, courseSchemaToDb, courseListSchema, courseListSchemaToDb };
 
-const category = z.enum(['Marketing',
+export const Category = z.enum(['Marketing',
     'Photoshop',
     'Code',
     'Video',
@@ -17,7 +17,7 @@ const courseSchema = z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
-    category: category,
+    category: Category,
     lesson: lessonListSchema
 })
 
@@ -25,8 +25,8 @@ const courseSchemaToDb = z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
-    category: category,
-    lesson: lessonListSchemaToDb
+    category: Category,
+    lesson: lessonListSchema
 })
 
 const courseListSchema = z.array(courseSchema);
