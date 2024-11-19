@@ -13,7 +13,6 @@ type CommentFormProps = {
     const { handleSubmit, getFieldInputProps, getFieldAreaProps, isFieldInvalid } = useCommentsForm({
       initialFields: { createdBy:  "", comment: "" },
       onSubmit: (data) => onSubmit({
-        lessonId: lessonId,
         createdBy: {name: data.createdBy},
         comment: data.comment,
         lesson: lessonSlug

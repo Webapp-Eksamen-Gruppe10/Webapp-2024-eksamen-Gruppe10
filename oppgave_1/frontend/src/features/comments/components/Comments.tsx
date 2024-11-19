@@ -13,7 +13,7 @@ export default function Comments(props: CommentsProps){
                     ? lessonComments.map((c) => (
                     <li
                         className="mb-6 rounded border border-slate-200 px-4 py-6"
-                        key={c.id}
+                        key={c.lesson.slug}
                     >
                         <h5 data-testid="user_comment_name" className="font-bold">
                             {c.createdBy.name}

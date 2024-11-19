@@ -30,7 +30,6 @@ export function useComments(lessonId: string) {
       const fetchData = useCallback(async () => {
         try {
           setCommentStatus("loading");
-          console.log(`her: ${lessonId}`)
           const result = await api.getComments(lessonId);
     
           setCommentData(result?.data ?? []);
@@ -49,7 +48,7 @@ export function useComments(lessonId: string) {
       const add = async (data: CommentToDb) => {
         try {
           setCommentStatus("loading");
-          await api.create(data);
+          await api.create(data, lessonId);
           await fetchData();
           setCommentStatus("success");
         } catch (error) {

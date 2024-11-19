@@ -14,6 +14,11 @@ export const Category = z.enum(['marketing',
     'programmering'
 ])
 
+export const courseCreateSteps = [
+    { id: '1', name: 'Kurs' },
+    { id: '2', name: 'Leksjoner' },
+  ]
+
 const courseSchema = z.object({
     id: z.string(),
     title: z.string(),

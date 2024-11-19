@@ -20,8 +20,11 @@ export default function CommentPage(props: commentProps){
 
     return(
         <section data-testid="comments">
-            <Comments lessonComments={commentData}/>
+            <h4 className="mt-8 mb-4 text-lg font-bold">
+                Kommentarer ({commentData?.length})
+            </h4>
             <CommentForm onSubmit={onSubmit} lessonId={lessonId} lessonSlug={lesson} />
+            <Comments lessonComments={commentData}/>
         </section>
     )
 }

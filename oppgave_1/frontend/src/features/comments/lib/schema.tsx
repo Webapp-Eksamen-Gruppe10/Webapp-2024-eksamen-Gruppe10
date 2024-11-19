@@ -3,8 +3,6 @@ import { z } from "zod";
 export { commentSchema, commentSchemaToDb, commentListSchema, commentListSchemaToDb };
 
 const commentSchema = z.object({
-    id: z.string(),
-    lessonId: z.string(),
     createdBy: z.object({
         id: z.string(),
         name: z.string()
@@ -16,7 +14,6 @@ const commentSchema = z.object({
 })
 
 const commentSchemaToDb = z.object({
-    lessonId: z.string(),
     createdBy: z.object({
         name: z.string()
     }),

@@ -1,10 +1,9 @@
 "use client";
 
-import { categories, courseCreateSteps } from "@/data/data";
 import { isValid } from "@/lib/index";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Category, Course } from "../lib/schema";
+import { Category, Course, courseCreateSteps } from "../lib/schema";
 import { Lesson } from "@/features/lesson/lib/schema";
 import useCourses from "../hooks/useCourses";
 
@@ -50,6 +49,7 @@ export default function CourseForm(props: CourseFormProps) {
                 update({ id: course.id, ...courseFields, lessons: lessons });
             else
                 add({...courseFields, lessons: lessons })
+                console.log(JSON.stringify({...courseFields, lessons: lessons }))
             setTimeout(() => {
             if (isEditing)
                 router.push(`/courses/${course.slug}`);
@@ -259,7 +259,7 @@ export default function CourseForm(props: CourseFormProps) {
                 <option disabled value="">
                   Velg kategori
                 </option>
-                {categories.map((category) => (
+                {Object.values(Category.Values).map((category) => (
                   <option key={category} value={category}>
                     {category}
                   </option>

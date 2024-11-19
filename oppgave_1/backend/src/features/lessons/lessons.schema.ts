@@ -9,7 +9,7 @@ export const lessonSchema = z.object({
     text: z.array(z.object({
         id: z.string().optional(),
         text: z.string()})),
-    courseId: z.string()
+    courseId: z.string().optional()
 })
 
 export const lessonDbSchema = z.object({
