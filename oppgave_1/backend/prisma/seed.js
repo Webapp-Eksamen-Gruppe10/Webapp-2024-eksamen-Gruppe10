@@ -40,7 +40,7 @@ const createComments = async () => {
       await prisma.comment.create({
         data: {
           id: comment.id,
-          createdBy: comment.createdBy.id,
+          createdBy: JSON.stringify(comment.createdBy), 
           comment: comment.comment,
           lesson: {
             connect: { slug: comment.lesson.slug },
