@@ -25,3 +25,4 @@ dist-ssr
 *.sw?
 *.db
 oppgave_1/backend/prisma/migrations
+oppgave_1/backend/prisma/dev.db
