@@ -19,7 +19,7 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
     const { courseSlug } = useParams() as {courseSlug: string};
     const { lessonSlug } = useParams() as {lessonSlug: string};
 
-    const { courseData } = useCourses(courseSlug);
+    const { courseData , remove} = useCourses(courseSlug);
 
     const content = courseData[0]
 
@@ -28,7 +28,6 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
     return(
         <div className="grid grid-cols-[250px_minmax(20%,1fr)_1fr] gap-16">
           <aside className="border-r border-slate-200 pr-6">
-            <button onClick={() => {router.push(`/courses/${content?.slug}/update`)}}>Rediger</button>
             <h3 className="mb-4 text-base font-bold">Leksjoner</h3>
             <ul data-testid="lessons">
               {content?.lessons?.map((lesson) => (
@@ -49,6 +48,13 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
                 </li>
               ))}
             </ul>
+            <div className="flex gap-2">
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded padding-3" onClick={() => {router.push(`/courses/${content?.slug}/update`)}}>Rediger</button>
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded padding" onClick={() => {
+                remove(content.id)
+                router.push(`/courses/`)
+              }}>Slett</button>
+            </div>
           </aside>
             <article>
               {children}
