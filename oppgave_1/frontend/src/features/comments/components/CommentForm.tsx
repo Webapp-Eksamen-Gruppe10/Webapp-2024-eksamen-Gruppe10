@@ -3,11 +3,12 @@ import useCommentsForm from "../hooks/useCommentsForm";
 
 type CommentFormProps = {
     onSubmit: (comment: CommentToDb) => void;
-    lessonId: string
+    lessonId: string,
+    lessonSlug: {slug: string}
   };
 
   export default function CommentForm(props: Readonly<CommentFormProps>) {
-    const { onSubmit, lessonId} = props;
+    const { onSubmit, lessonId, lessonSlug} = props;
   
     const { handleSubmit, getFieldInputProps, getFieldAreaProps, isFieldInvalid } = useCommentsForm({
       initialFields: { createdBy:  "", comment: "" },
@@ -15,6 +16,7 @@ type CommentFormProps = {
         lessonId: lessonId,
         createdBy: {name: data.createdBy},
         comment: data.comment,
+        lesson: lessonSlug
     }),
       validate: {
         createdBy: (_, value) => value.length > 1,

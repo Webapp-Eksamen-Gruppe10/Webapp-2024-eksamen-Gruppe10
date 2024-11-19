@@ -9,7 +9,10 @@ const commentSchema = z.object({
         id: z.string(),
         name: z.string()
     }),
-    comment: z.string()
+    comment: z.string(),
+    lesson: z.object({
+        slug: z.string()
+    })
 })
 
 const commentSchemaToDb = z.object({
@@ -17,7 +20,10 @@ const commentSchemaToDb = z.object({
     createdBy: z.object({
         name: z.string()
     }),
-    comment: z.string()
+    comment: z.string(),
+    lesson: z.object({
+        slug: z.string()
+    })
 })
 
 const commentListSchema = z.array(commentSchema);

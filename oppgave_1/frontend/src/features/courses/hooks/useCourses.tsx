@@ -34,7 +34,6 @@ export function useCourses(courseId?: string) {
           if(isCourseId){
             const result = await api.getCourse(courseId);
             setCourseData(result?.data ? [...courseData, result?.data] : []);
-            console.log(result?.success)
           }
           else{
             const results = await api.list();

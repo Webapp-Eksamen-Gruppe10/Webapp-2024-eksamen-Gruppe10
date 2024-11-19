@@ -7,7 +7,8 @@ const url = endpoint.comment;
 
 const getComments = async (lessonId: string) => {
     try {
-        const comments = await ofetch(`${url}/${lessonId}`);
+        console.log(url)
+        const comments = await ofetch(`${url}/${lessonId}/comments`);
         return validateCommentList(comments.data)
     } catch (error) {
         console.error(error);

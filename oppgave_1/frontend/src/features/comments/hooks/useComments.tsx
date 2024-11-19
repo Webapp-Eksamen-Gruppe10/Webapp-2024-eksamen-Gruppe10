@@ -30,6 +30,7 @@ export function useComments(lessonId: string) {
       const fetchData = useCallback(async () => {
         try {
           setCommentStatus("loading");
+          console.log(`her: ${lessonId}`)
           const result = await api.getComments(lessonId);
     
           setCommentData(result?.data ?? []);

@@ -6,6 +6,7 @@ import Comments from "@/features/comments/components/Comments";
 import CommentForm from "@/features/comments/components/CommentForm";
 import { CommentToDb } from "@/features/comments/lib/schema";
 import { useParams } from "next/navigation";
+import CommentPage from "@/features/comments/page/CommentPage";
 
 export default function LessonPage(){
     const { courseSlug } = useParams() as {courseSlug: string};
@@ -14,31 +15,15 @@ export default function LessonPage(){
 
     const course = courseData[0];
 
-    const lessonId = course?.lessons.find(item => item.slug === lessonSlug)?.id ?? ""; // Finn lessonId basert på course
-    const { commentData, add } = useComments(lessonId);
-
-    if (courseStatus.fetching) {
-        return <div>Laster...</div>;
-    }
-
-    if (courseStatus.error) {
-        return <div>Feil: {courseError}</div>;
-    }
-
     if (course) {
-        const lesson = course.lessons.find(item => item.slug === lessonSlug);
-
-        const onSubmit = (comment: CommentToDb) => {
-            add(comment);
-        }
+        const lesson = course.lessons?.find(item => item.slug === lessonSlug);
 
         return (
             <div>
                 <Lesson course={course} lesson={lesson} />
-                <section data-testid="comments">
-                    <Comments lessonComments={commentData} />
-                    <CommentForm onSubmit={onSubmit} lessonId={lessonId} /> {/* Bruk lessonId her */}
-                </section>
+                <CommentPage lessonId={lesson?.id ?? ""} lesson={lesson? {slug: lesson.slug} : {
+                    slug: ""
+                }}/>
             </div>
         );
     }
