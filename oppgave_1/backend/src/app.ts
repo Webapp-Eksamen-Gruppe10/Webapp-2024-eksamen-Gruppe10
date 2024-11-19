@@ -56,20 +56,8 @@ app.get(endpointsV1.courses, async (c) => {
 app.post(endpointsV1.courses, async (c) => {
   try {
     const requestData = await c.req.json();
-    const parsedCourse = requestData.lessons.map((lesson:Lesson) => {
-      const updatedText = lesson.text.map((textItem) => ({
-        ...textItem,
-        id: crypto.randomUUID(),
-      }));
-    
-      return {
-        ...requestData,
-        ...lesson,
-        text: updatedText,
-      };
-    });
-    const validatedCourse = courseSchema.parse(parsedCourse);
-
+    console.log(requestData.data)
+    const validatedCourse = courseSchema.parse(requestData.data);
     // Her gjøres det en valideringssjekk for at både slugen/e til Course og Lessons er unike
     const existingCourse = await prisma.course.findUnique({
       where: { slug: validatedCourse.slug },
@@ -90,25 +78,26 @@ app.post(endpointsV1.courses, async (c) => {
       return c.json({ success: false, message: "NOT UNIQUE" }, 409);
     }
 
-    const courseData = {
-      id: crypto.randomUUID(),
-      ...validatedCourse,
-      lessons: undefined, 
-    };
-
     const createdCourse = await prisma.course.create({
-      data: courseData,
+      data: {
+        id: crypto.randomUUID(),
+        title: validatedCourse.title,
+        slug: validatedCourse.slug,
+        description: validatedCourse.description,
+        category: validatedCourse.category,
+        lessons: {
+          create: validatedCourse.lessons.map((lesson:Lesson) => ({
+            id: lesson.id,
+            title: lesson.title,
+            slug: lesson.slug,
+            preAmble: lesson.preAmble,
+            text: JSON.stringify(lesson.text.map((item) => item.text)), 
+          })),
+        },
+      },
     });
 
-
-    const createdLessons = await prisma.lesson.createMany({
-      data: validatedCourse.lessons.map(lesson => ({
-        ...lesson,
-        courseId: createdCourse.id,
-        text: JSON.stringify(lesson.text.map((item) => item.text))
-      }))
-    });
-    return c.json({ success: true, data: createdCourse, createdLessons }, 201);
+    return c.json({ success: true, data: createdCourse }, 201);
   } catch (error) {
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
@@ -119,14 +108,14 @@ app.get(endpointsV1.specificCourse, async (c) => {
   // Hent et kurs
   try {
     const courseId = c.req.param("courseId");
-    const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
+    const specificCourse = await prisma?.course.findUnique({where: {slug: courseId}})
   
     if(!specificCourse) {
       return c.json({ success: false, message: "NOT FOUND"}, 404);
     }
  
     // Hent alle lessons knyttet til dette kurset
-    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId }})
+    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': specificCourse.id }})
      if(!allLessonsForCourse){
       return c.json({ success: false, message: "NO CONTENT"}, 204);
     }
@@ -238,6 +227,10 @@ app.get(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
     const allCommentsForLecture:CommentDb[] = await prisma?.comment.findMany({where: {lessonId: lessonId}})
+    
+    if (allCommentsForLecture.length <= 0 ){
+      return c.json({success: false, message: "NOT FOUND"}, 404)
+    }
 
     const parsedComments = await Promise.all(
 

@@ -3,21 +3,24 @@ import { z } from "zod";
 export { commentSchema, commentSchemaToDb, commentListSchema, commentListSchemaToDb };
 
 const commentSchema = z.object({
-    id: z.string(),
-    lessonId: z.string(),
     createdBy: z.object({
         id: z.string(),
         name: z.string()
     }),
-    comment: z.string()
+    comment: z.string(),
+    lesson: z.object({
+        slug: z.string()
+    })
 })
 
 const commentSchemaToDb = z.object({
-    lessonId: z.string(),
     createdBy: z.object({
         name: z.string()
     }),
-    comment: z.string()
+    comment: z.string(),
+    lesson: z.object({
+        slug: z.string()
+    })
 })
 
 const commentListSchema = z.array(commentSchema);

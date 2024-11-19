@@ -2,20 +2,18 @@
 "use client";
 
 import useCourses from "@/features/courses/hooks/useCourses";
+import { Course } from "@/features/courses/lib/schema";
+import { Lesson as LessonProp } from "../lib/schema";
 
-interface LessonProps {
-  courseSlug: string
-  lessonSlug: string
+type LessonProps = {
+  course?: Course
+  lesson?: LessonProp
 }
 
-export default function Lesson({ courseSlug, lessonSlug }: LessonProps) {
-
-  const { data } = useCourses(courseSlug)
-  const course = data[0];
-  const lesson = course.lessons.find(item => item.slug === lessonSlug);
+export default function Lesson({ course, lesson }: LessonProps) {
 
   return (
-    <div>
+      <>
       <div className="flex justify-between">
         <h3 data-testid="course_title" className="mb-6 text-base font-bold">
           <a className="underline" href={`/courses/${course?.slug}`}>
@@ -45,6 +43,6 @@ export default function Lesson({ courseSlug, lessonSlug }: LessonProps) {
             {text.text}
           </p>
         ))}
-    </div>
+    </>
   );
 }

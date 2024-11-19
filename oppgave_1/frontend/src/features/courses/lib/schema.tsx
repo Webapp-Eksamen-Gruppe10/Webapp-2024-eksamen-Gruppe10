@@ -3,14 +3,21 @@ import { lessonListSchema } from "@/features/lesson/lib/schema";
 
 export { courseSchema, courseSchemaToDb, courseListSchema, courseListSchemaToDb };
 
-export const Category = z.enum(['Marketing',
-    'Photoshop',
-    'Code',
-    'Video',
-    'Analytics',
-    'Web',
-    'Design',
-    'Empty',])
+export const Category = z.enum(['marketing',
+    'photoshop',
+    'code',
+    'video',
+    'analytics',
+    'web',
+    'design',
+    'empty',
+    'programmering'
+])
+
+export const courseCreateSteps = [
+    { id: '1', name: 'Kurs' },
+    { id: '2', name: 'Leksjoner' },
+  ]
 
 const courseSchema = z.object({
     id: z.string(),

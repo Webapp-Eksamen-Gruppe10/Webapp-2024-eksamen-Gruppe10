@@ -2,16 +2,11 @@
 "use client";
 
 import React from "react";
+import CoursePage from "@/features/courses/pages/CoursePage";
 
-import { useParams } from "next/navigation";
-import Course from "@/features/course/components/Course";
-
-export default function CourseDetailPage() {
-  const { courseSlug } = useParams();
+export default function Page() {
 
   return (
-    <main>
-      <Course courseSlug={courseSlug} />
-    </main>
+      <CoursePage />
   );
 }

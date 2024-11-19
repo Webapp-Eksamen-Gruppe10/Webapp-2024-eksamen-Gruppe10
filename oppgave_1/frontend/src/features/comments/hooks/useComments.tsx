@@ -1,43 +1,43 @@
 import { useCallback, useState } from "react";
 import api from "@/features/comments/services/api";
 
-import type { Comment } from "@/features/comments/lib/schema";
+import type { Comment, CommentToDb } from "@/features/comments/lib/schema";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
 
 
 type Status  = "idle" | "loading" | "error" | "success" | "fetching";
 
 export function useComments(lessonId: string) {
-    const [status, setStatus] = useState<Status>("idle");
-    const [data, setData] = useState<Comment[]>([]);
+    const [commentStatus, setCommentStatus] = useState<Status>("idle");
+    const [commentData, setCommentData] = useState<Comment[]>([]);
 
-    const [error, setError] = useState<string | null>(null);
+    const [commentError, setCommentError] = useState<string | null>(null);
 
-    const isFetching = status === "fetching";
-    const isLoading = status === "loading" || isFetching;
-    const isError = status === "error" || !!error;
-    const isIdle = status === "idle";
-    const isSuccess = status === "success";
+    const isFetching = commentStatus === "fetching";
+    const isLoading = commentStatus === "loading" || isFetching;
+    const isError = commentStatus === "error" || !!commentError;
+    const isIdle = commentStatus === "idle";
+    const isSuccess = commentStatus === "success";
 
     const resetToIdle = useCallback(
         (timeout = 2000) =>
           setTimeout(() => {
-            setStatus("idle");
+            setCommentStatus("idle");
           }, timeout),
         []
       );
 
       const fetchData = useCallback(async () => {
         try {
-          setStatus("loading");
+          setCommentStatus("loading");
           const result = await api.getComments(lessonId);
     
-          setData(result?.data ?? []);
+          setCommentData(result?.data ?? []);
     
-          setStatus("success");
+          setCommentStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Feilet ved henting av data");
+          setCommentStatus("error");
+          setCommentError("Feilet ved henting av data");
         } finally {
           resetToIdle();
         }
@@ -45,15 +45,15 @@ export function useComments(lessonId: string) {
     
       useEffectOnce(fetchData);
 
-      const add = async (data: Omit<Comment, 'id'>) => {
+      const add = async (data: CommentToDb) => {
         try {
-          setStatus("loading");
-          await api.create(data);
+          setCommentStatus("loading");
+          await api.create(data, lessonId);
           await fetchData();
-          setStatus("success");
+          setCommentStatus("success");
         } catch (error) {
-          setStatus("error");
-          setError("Feilet ved opprettelse av data");
+          setCommentStatus("error");
+          setCommentError("Feilet ved opprettelse av data");
         } finally {
           resetToIdle();
         }
@@ -62,9 +62,9 @@ export function useComments(lessonId: string) {
       return {
         add,
         get: fetchData,
-        data,
-        error,
-        status: {
+        commentData,
+        commentError,
+        commentStatus: {
           idle: isIdle,
           loading: isLoading,
           success: isSuccess,

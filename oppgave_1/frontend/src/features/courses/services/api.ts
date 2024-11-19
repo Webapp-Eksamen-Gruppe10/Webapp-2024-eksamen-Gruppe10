@@ -1,7 +1,7 @@
 import { ofetch } from "ofetch";
 import { endpoint } from "@/config/url";
 
-import { CourseToDb, validateCourseList, Course, validateCourseToDb, validateCourse } from "../lib/schema";
+import { CourseToDb, validateCourseList, Course, validateCourseToDb, validateCourse, Category } from "../lib/schema";
 
 const url = endpoint.course;
 
@@ -17,7 +17,10 @@ const getCourse = async (slug: string) => {
 const list = async () => {
     try {
         const courses = await ofetch(`${url}`);
-        return validateCourseList(courses.data)
+        return validateCourseList(courses.data.map((data) => ({
+            ...data,
+            category: Category.parse(data.category)
+        })))
     } catch (error) {
         console.error(error);
     }

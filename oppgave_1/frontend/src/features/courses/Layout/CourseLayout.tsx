@@ -1,8 +1,8 @@
+"use client";
 import { PropsWithChildren, useState } from "react"
 import useCourses from "../hooks/useCourses";
-
+import { useParams, useRouter } from "next/navigation";
 type CourseLayoutProps = {
-    courseSlug: string
 }
 
 const users = [
@@ -14,38 +14,35 @@ const users = [
   ]
 
 export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>){
-    const { courseSlug, children} = props
+    const { children} = props
 
-    const { data } = useCourses(courseSlug);
+    const { courseSlug } = useParams() as {courseSlug: string};
+    const { lessonSlug } = useParams() as {lessonSlug: string};
 
-    const content = data[0]
-    
-    const [currentLessonSlug, setCurrentLessonSlug] = useState<string>(""); 
+    const { courseData } = useCourses(courseSlug);
+
+    const content = courseData[0]
+
+    const router = useRouter();
 
     return(
         <div className="grid grid-cols-[250px_minmax(20%,1fr)_1fr] gap-16">
           <aside className="border-r border-slate-200 pr-6">
+            <button onClick={() => {router.push(`/courses/${content?.slug}/update`)}}>Rediger</button>
             <h3 className="mb-4 text-base font-bold">Leksjoner</h3>
             <ul data-testid="lessons">
               {content?.lessons?.map((lesson) => (
                 <li
                   className={`text-sm" mb-4 w-full max-w-[95%] rounded-lg border border-slate-300 px-4 py-2 ${
-                    currentLessonSlug === lesson.slug ? "bg-emerald-300" : "bg-transparent"
+                    lessonSlug === lesson.slug ? "bg-emerald-300" : "bg-transparent"
                   }`}
                   key={lesson.id}
                 >
                   <a
                     data-testid="lesson_url"
-                    data-slug={currentLessonSlug}
+                    data-slug={lessonSlug}
                     className="block h-full w-full"
-                    href={`/kurs/${content?.slug}/${lesson.slug}`}
-                    onClick={() => {
-                        if(currentLessonSlug === lesson.slug){
-                            setCurrentLessonSlug("")
-                        }
-                        else{
-                            setCurrentLessonSlug(lesson.slug)
-                        }}}
+                    href={lessonSlug === lesson.slug ? `/courses/${content?.slug}`: `/courses/${content?.slug}/${lesson.slug}`}
                   >
                     {lesson.title}
                   </a>
@@ -53,25 +50,9 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
               ))}
             </ul>
           </aside>
-          {currentLessonSlug === "" ? (
             <article>
               {children}
             </article>
-          ) : (
-            <section>
-              <>
-                <h2 className="text-2xl font-bold" data-testid="course_title">
-                  {content?.title}
-                </h2>
-                <p
-                  className="mt-4 font-semibold leading-relaxed"
-                  data-testid="course_description"
-                >
-                  {content?.description}
-                </p>
-              </>
-            </section>
-          )}
           <aside
             data-testid="enrollments"
             className="border-l border-slate-200 pl-6"

@@ -1,12 +1,10 @@
 // src/app/create/page.tsx
 "use client";
 
-import Create from "@/features/create/components/Create";
+import CourseForm from "@/features/courses/components/CourseForm";
 
-export default function CreateCoursePage() {
+export default function Page() {
   return (
-    <main>
-      <Create />
-    </main>
+    <CourseForm/>
   );
 }
