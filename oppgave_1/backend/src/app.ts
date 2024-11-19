@@ -119,7 +119,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
     }
  
     // Hent alle lessons knyttet til dette kurset
-    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': courseId }})
+    const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': specificCourse.id }})
      if(!allLessonsForCourse){
       return c.json({ success: false, message: "NO CONTENT"}, 204);
     }

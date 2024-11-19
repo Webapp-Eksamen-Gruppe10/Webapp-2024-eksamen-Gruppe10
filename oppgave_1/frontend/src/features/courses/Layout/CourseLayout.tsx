@@ -17,15 +17,13 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
     const { children} = props
 
     const { courseSlug } = useParams() as {courseSlug: string};
+    const { lessonSlug } = useParams() as {lessonSlug: string};
 
     const { courseData } = useCourses(courseSlug);
 
     const content = courseData[0]
 
     const router = useRouter();
-    console.log(courseData)
-    
-    const [currentLessonSlug, setCurrentLessonSlug] = useState<string>(""); 
 
     return(
         <div className="grid grid-cols-[250px_minmax(20%,1fr)_1fr] gap-16">
@@ -36,23 +34,15 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
               {content?.lessons?.map((lesson) => (
                 <li
                   className={`text-sm" mb-4 w-full max-w-[95%] rounded-lg border border-slate-300 px-4 py-2 ${
-                    currentLessonSlug === lesson.slug ? "bg-emerald-300" : "bg-transparent"
+                    lessonSlug === lesson.slug ? "bg-emerald-300" : "bg-transparent"
                   }`}
                   key={lesson.id}
                 >
                   <a
                     data-testid="lesson_url"
-                    data-slug={currentLessonSlug}
+                    data-slug={lessonSlug}
                     className="block h-full w-full"
-                    href={`/courses/${content?.slug}/${lesson.slug}`}
-                    onClick={() => {
-                        if(currentLessonSlug === lesson.slug){
-                            setCurrentLessonSlug("")
-                            router.push(`/courses/${content?.slug}`)
-                        }
-                        else{
-                            setCurrentLessonSlug(lesson.slug)
-                        }}}
+                    href={lessonSlug === lesson.slug ? `/courses/${content?.slug}`: `/courses/${content?.slug}/${lesson.slug}`}
                   >
                     {lesson.title}
                   </a>

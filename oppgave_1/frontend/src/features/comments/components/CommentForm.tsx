@@ -17,8 +17,8 @@ type CommentFormProps = {
         comment: data.comment,
     }),
       validate: {
-        createdBy: (_, value) => value.length > 0,
-        comment: (_, value) => value.length > 0
+        createdBy: (_, value) => value.length > 1,
+        comment: (_, value) => value.length > 1
       }
     });
   
