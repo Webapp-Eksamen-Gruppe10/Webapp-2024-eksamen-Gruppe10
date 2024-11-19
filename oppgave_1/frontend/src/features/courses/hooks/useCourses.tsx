@@ -7,7 +7,7 @@ import { useEffectOnce } from "@/hooks/useEffectOnce";
 
 type Status  = "idle" | "loading" | "error" | "success" | "fetching";
 
-export function useCourses(courseId?: string) {
+export function useCourses(courseSlug?: string) {
     const [courseStatus, setCourseStatus] = useState<Status>("idle");
     const [courseData, setCourseData] = useState<Course[]>([]);
 
@@ -18,7 +18,7 @@ export function useCourses(courseId?: string) {
     const isError = courseStatus === "error" || !!courseError;
     const isIdle = courseStatus === "idle";
     const isSuccess = courseStatus === "success";
-    const isCourseId = !!courseId;
+    const isCourseId = !!courseSlug;
 
     const resetToIdle = useCallback(
         (timeout = 2000) =>
@@ -32,7 +32,7 @@ export function useCourses(courseId?: string) {
         try {
             setCourseStatus("loading");
           if(isCourseId){
-            const result = await api.getCourse(courseId);
+            const result = await api.getCourse(courseSlug);
             setCourseData(result?.data ? [...courseData, result?.data] : []);
           }
           else{
