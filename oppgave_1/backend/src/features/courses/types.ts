@@ -6,8 +6,8 @@ export const courseSchema = z.object({
     title: z.string(),
     slug: z.string(),
     description: z.string(),
-    lessons: z.array(lessonSchema),
-    category: z.string()
+    category: z.string(),
+    lessons: z.array(lessonSchema)
 })
 
 export const courseDbSchema = z.object({

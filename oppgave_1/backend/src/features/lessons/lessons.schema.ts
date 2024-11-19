@@ -18,7 +18,7 @@ export const lessonDbSchema = z.object({
     slug: z.string(),
     preAmble: z.string(), 
     text: z.string(),
-    courseId: z.string()
+    courseId: z.string().optional()
 })
 
 
