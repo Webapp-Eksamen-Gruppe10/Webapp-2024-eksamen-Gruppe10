@@ -59,8 +59,19 @@ app.get(endpointsV1.courses, async (c) => {
 app.post(endpointsV1.courses, async (c) => {
   try {
     const requestData = await c.req.json();
-    const validatedCourse = courseSchema.parse(requestData);
-    console.log(validatedCourse)
+    const parsedCourse = requestData.lessons.map((lesson:Lesson) => {
+      const updatedText = lesson.text.map((textItem) => ({
+        ...textItem,
+        id: crypto.randomUUID(),
+      }));
+    
+      return {
+        ...requestData,
+        ...lesson,
+        text: updatedText,
+      };
+    });
+    const validatedCourse = courseSchema.parse(parsedCourse);
 
     // Her gjøres det en valideringssjekk for at både slugen/e til Course og Lessons er unike
     const existingCourse = await prisma.course.findUnique({
