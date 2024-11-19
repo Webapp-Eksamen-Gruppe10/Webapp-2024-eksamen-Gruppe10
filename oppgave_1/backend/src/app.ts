@@ -60,6 +60,7 @@ app.post(endpointsV1.courses, async (c) => {
   try {
     const requestData = await c.req.json();
     const validatedCourse = courseSchema.parse(requestData);
+    console.log(validatedCourse)
 
     // Her gjøres det en valideringssjekk for at både slugen/e til Course og Lessons er unike
     const existingCourse = await prisma.course.findUnique({
@@ -125,7 +126,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
     }
 
     // mapper lessons til riktig format: 
-    const parsedLessons = allLessonsForCourse.map(lesson => ({
+    const parsedLessons = allLessonsForCourse?.map(lesson => ({
      ...lesson,
      text: JSON.parse(lesson.text).map((text:string) => ({
       id: crypto.randomUUID(),
@@ -181,12 +182,19 @@ app.delete(endpointsV1.specificCourse, async (c) => {
   if(!specificCourse){
     return c.json({sucess: false, message: "NOT FOUND"}, 404)
   }
-  
+
   const courseLessons = await prisma?.lesson.findMany({
     where: {courseId: courseId}
   })
 
   if(courseLessons.length > 0){
+
+        const lessonIds = courseLessons.map(lesson => lesson.id);
+
+        await prisma?.comment.deleteMany({
+          where: { lessonId: { in: lessonIds } },
+        });
+
     await prisma?.lesson.deleteMany({ where: {courseId: courseId}})
   } 
 
