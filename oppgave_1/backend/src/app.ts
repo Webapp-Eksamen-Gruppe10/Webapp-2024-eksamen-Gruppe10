@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { endpointsV1 } from "./config/urls";
 import prisma from "./client/db"
 import { Lesson, LessonDb, lessonDbSchema, lessonSchema } from "./features/lessons/lessons.schema";
-import { z } from "zod";
+import { map, z } from "zod";
 import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
 import { commentDbSchema, commentSchema, Comment, CommentDb } from "./features/comments/types";
@@ -254,6 +254,7 @@ app.get(endpointsV1.comments, async (c) => {
       }
         return commentSchema.parse({
           ...comment, 
+          createdBy: JSON.parse(comment.createdBy),
           lesson: {
             slug: lesson.slug
           }
@@ -277,11 +278,22 @@ app.post(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
     const data = await c.req.json();
+    console.log(data)
+    const mappedData = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdBy: {
+        ...data.createdBy,
+        id: crypto.randomUUID(),
+      },
+    };
     
-    const validatedComment = commentSchema.parse(data);
+    console.log(mappedData)
+    const validatedComment = commentSchema.parse(mappedData);
 
     const parsedComment = commentDbSchema.parse({
       ...validatedComment, 
+      createdBy: JSON.stringify(validatedComment.createdBy), 
       lessonId: lessonId
     })
 
