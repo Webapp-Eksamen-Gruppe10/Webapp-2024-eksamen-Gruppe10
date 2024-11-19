@@ -23,5 +23,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-oppgave_1/backend/prisma/dev.db
-oppgave_1/backend/prisma/migrate
+*.db
+oppgave_1/backend/prisma/migrations
