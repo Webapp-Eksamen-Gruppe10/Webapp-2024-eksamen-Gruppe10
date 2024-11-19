@@ -11,7 +11,6 @@ type LessonProps = {
 }
 
 export default function Lesson({ course, lesson }: LessonProps) {
-  
 
   return (
       <>

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Category, Course } from "../lib/schema";
 import { Lesson } from "@/features/lesson/lib/schema";
-import api from "@/features/courses/services/api";
+import useCourses from "../hooks/useCourses";
 
 type CourseFormProps = {
     course?: Course
@@ -20,6 +20,7 @@ export default function CourseForm(props: CourseFormProps) {
     const [formError, setFormError] = useState(false);
     const [current, setCurrent] = useState(0);
     const [currentLesson, setCurrentLesson] = useState(0);
+    const { add, update } = useCourses()
     const [courseFields, setCourseFields] = useState(isEditing? {
         title: course.title,
         slug: course.slug,
@@ -29,7 +30,7 @@ export default function CourseForm(props: CourseFormProps) {
         title: "",
         slug: "",
         description: "",
-        category: Category.Enum.Empty,
+        category: Category.Enum.empty,
     });
     const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lessons : []);
 
@@ -46,9 +47,9 @@ export default function CourseForm(props: CourseFormProps) {
             setSuccess(true);
             setCurrent(2);
             if (isEditing)
-                await api.update({ id: course.id, ...courseFields, lessons: lessons });
+                update({ id: course.id, ...courseFields, lessons: lessons });
             else
-                await api.create({...courseFields, lessons: lessons })
+                add({...courseFields, lessons: lessons })
             setTimeout(() => {
             if (isEditing)
                 router.push(`/courses/${course.slug}`);

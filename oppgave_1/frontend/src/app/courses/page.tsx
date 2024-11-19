@@ -2,12 +2,10 @@
 
 "use client";
 
-import Courses from "@/features/courses/components/Courses";
+import CoursesPage from "@/features/courses/pages/CoursesPage";
 
-export default function CoursesPage() {
+export default function Page() {
   return (
-    <main>
-      <CoursesPage />
-    </main>
+    <CoursesPage />
   );
 }

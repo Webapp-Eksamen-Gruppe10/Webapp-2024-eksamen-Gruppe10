@@ -112,7 +112,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
   // Hent et kurs
   try {
     const courseId = c.req.param("courseId");
-    const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
+    const specificCourse = await prisma?.course.findUnique({where: {slug: courseId}})
   
     if(!specificCourse) {
       return c.json({ success: false, message: "NOT FOUND"}, 404);

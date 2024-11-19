@@ -1,9 +1,8 @@
+"use client";
 import { PropsWithChildren, useState } from "react"
 import useCourses from "../hooks/useCourses";
-import { useRouter } from "next/navigation";
-
+import { useParams, useRouter } from "next/navigation";
 type CourseLayoutProps = {
-    courseSlug: string
 }
 
 const users = [
@@ -15,19 +14,23 @@ const users = [
   ]
 
 export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>){
-    const { courseSlug, children} = props
+    const { children} = props
+
+    const { courseSlug } = useParams() as {courseSlug: string};
 
     const { courseData } = useCourses(courseSlug);
 
     const content = courseData[0]
 
     const router = useRouter();
+    console.log(courseData)
     
     const [currentLessonSlug, setCurrentLessonSlug] = useState<string>(""); 
 
     return(
         <div className="grid grid-cols-[250px_minmax(20%,1fr)_1fr] gap-16">
           <aside className="border-r border-slate-200 pr-6">
+            <button onClick={() => {router.push(`/courses/${content?.slug}/update`)}}>Rediger</button>
             <h3 className="mb-4 text-base font-bold">Leksjoner</h3>
             <ul data-testid="lessons">
               {content?.lessons?.map((lesson) => (

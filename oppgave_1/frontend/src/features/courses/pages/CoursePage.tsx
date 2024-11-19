@@ -1,11 +1,9 @@
+"use client";
+import { useParams } from "next/navigation";
 import useCourses from "../hooks/useCourses";
 
-type CoursePageProps = {
-    courseSlug: string
-}
-
-export default function CoursePage(props: CoursePageProps) {
-    const {courseSlug} = props;
+export default function CoursePage() {
+    const { courseSlug } = useParams() as {courseSlug: string};
     const { courseData, courseStatus, courseError} = useCourses(courseSlug)
 
     if (courseStatus.loading) return <p>Kursen laster ...</p>;

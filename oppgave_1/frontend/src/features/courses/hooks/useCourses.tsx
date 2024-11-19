@@ -38,8 +38,8 @@ export function useCourses(courseId?: string) {
           else{
             const results = await api.list();
             setCourseData(results?.data ?? []);
+            //console.log(results)
           }
-    
           setCourseStatus("success");
         } catch (error) {
             setCourseStatus("error");
