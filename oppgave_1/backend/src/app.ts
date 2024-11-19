@@ -24,12 +24,10 @@ app.get(endpointsV1.courses, async (c) => {
         
       }
     });
-    console.log(data);
     // validerer data fra databasen, deretter mapper til frontend-schema: 
     const parsedData = data.map((course) => {
 
       const dbCourse = courseDbSchema.parse(course); 
-      console.log(dbCourse)
       const parsedLessons = course.lessons.map((lesson) => ({
         ...lesson, 
         text: JSON.parse(lesson.text).map((text: string) => ({
@@ -50,7 +48,6 @@ app.get(endpointsV1.courses, async (c) => {
     return c.json({ success: true, data: parsedData });
 
   } catch (error) {
-    console.error(error);
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
 });
@@ -111,10 +108,8 @@ app.post(endpointsV1.courses, async (c) => {
         text: JSON.stringify(lesson.text.map((item) => item.text))
       }))
     });
-    console.log(createdLessons)
     return c.json({ success: true, data: createdCourse, createdLessons }, 201);
   } catch (error) {
-    console.log('Error:', error); 
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
 });
@@ -278,7 +273,6 @@ app.post(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
     const data = await c.req.json();
-    console.log(data)
     const mappedData = {
       ...data,
       id: crypto.randomUUID(),
@@ -288,7 +282,6 @@ app.post(endpointsV1.comments, async (c) => {
       },
     };
     
-    console.log(mappedData)
     const validatedComment = commentSchema.parse(mappedData);
 
     const parsedComment = commentDbSchema.parse({
