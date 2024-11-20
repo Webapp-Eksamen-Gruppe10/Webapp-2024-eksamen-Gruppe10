@@ -52,7 +52,7 @@ const remove = async (id: string) => {
 
 const update = async (data: Course) => {
     try {
-        await ofetch(`${url}/${data.id}`, {
+        await ofetch(`${url}`, {
             method: "PATCH",
             body: validateCourse(data)
         });  

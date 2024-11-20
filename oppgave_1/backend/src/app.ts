@@ -139,87 +139,61 @@ app.get(endpointsV1.specificCourse, async (c) => {
   }
 })
 
-// PATCH - Oppdater deler av kurset (kun category)
+
+// PATCH - Oppdater deler av kurset (inkluderer lessons)
 app.patch(endpointsV1.courses, async (c) => {
-  try {
-    const requestData = await c.req.json();
-    if (!requestData) {
-      return c.json({ success: false, message: "BAD REQUEST" }, 400);
-    }
-    
-    const validatedCourse = courseSchema.parse(requestData);
-    const courseId = validatedCourse.id;
-    const updatedCategory = validatedCourse.category;
-    
-    const updateCourse = await prisma.course.update({
-      where: {
-        id: courseId,
-      },
-      data: {
-        category: updatedCategory,
-      },
-    })
-    
-    return c.json({success: true, data:updateCourse});
+    try {
+     
+      const requestData = await c.req.json(); 
+      console.log(requestData)
+  
+      const validatedCourse = courseSchema.parse(requestData.data);
+  
+      const { id, title, slug, description, category, lessons } = validatedCourse;
+  
+      if (!id) {
+        return c.json({ success: false, message: "NOT FOUND" }, 404);
+      }
+  
+      // Bruk en transaksjon for å oppdatere kurs og lessons
+      await prisma.$transaction(async (prisma) => {
 
-  } catch (error) {
-    return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
-  }
-})
-
-// DELETE - Slett et kurs
-// husk å slette alle kommentarer for en lekson og 
-app.delete(endpointsV1.specificCourse, async (c) => {
-  try {
-  const courseId = c.req.param("courseId");
-  const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
-
-  if(!specificCourse){
-    return c.json({sucess: false, message: "NOT FOUND"}, 404)
-  }
-
-  const courseLessons = await prisma?.lesson.findMany({
-    where: {courseId: courseId}
-  })
-
-  if(courseLessons.length > 0){
-
-        const lessonIds = courseLessons.map(lesson => lesson.id);
-
-        await prisma?.comment.deleteMany({
-          where: { lessonId: { in: lessonIds } },
+        const updatedCourse = await prisma.course.update({
+          where: { id: id },
+          data: { title, slug, description, category },
         });
 
-    await prisma?.lesson.deleteMany({ where: {courseId: courseId}})
-  } 
-
-  await prisma?.course.delete({ where: {id: courseId} }); 
- 
-  return c.json({success: true, data: courseId}, 200)
-
-  } catch(error){
-    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
-  }
-}); 
-
-// ----- LESSON -----
-// GET - Hent alle leksjoner i et bestemt kurs
-/*app.get(endpointsV1.lessons, async (c) => {
-  const courseId = c.req.param("courseId");  
-
-  try {
-    const lessons = await prisma?.lesson.findMany({
-      where: {
-        courseId: courseId,
-      },
-    });
-    return c.json(lessons);
-
-  } catch (error) {
-    console.error(error);
-    return c.json(undefined, 204);
-  }
-});*/
+        if (lessons && lessons.length > 0) {
+          for (const lesson of lessons) {
+            const { id: lessonId, title, slug, preAmble, text } = lesson;
+  
+            await prisma.lesson.upsert({
+              where: { id: lessonId || '' }, 
+              update: {
+                title,
+                slug,
+                preAmble,
+                text: JSON.stringify(lesson.text.map((item) => item.text)), 
+                courseId: updatedCourse.id,
+              },
+              create: {
+                title,
+                slug,
+                preAmble,
+                text: JSON.stringify(lesson.text.map((item) => item.text)),
+                courseId: updatedCourse.id,
+              },
+            });
+          }
+        }
+      });
+  
+      return c.json({ success: true, message: "UPDATED SUCCESSFULLY" }, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
+    }
+  });
 
 // ----- COMMENTS -----
 // GET - Hent alle kommentarer på en leksjon.
