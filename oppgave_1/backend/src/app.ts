@@ -233,10 +233,6 @@ app.get(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
     const allCommentsForLecture:CommentDb[] = await prisma?.comment.findMany({where: {lessonId: lessonId}})
-    
-    if (allCommentsForLecture.length <= 0 ){
-      return c.json({success: false, message: "NOT FOUND"}, 404)
-    }
 
     const parsedComments = await Promise.all(
 
