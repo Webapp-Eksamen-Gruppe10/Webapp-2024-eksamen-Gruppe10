@@ -6,60 +6,112 @@ import { useState } from "react";
 import { Category, Course, courseCreateSteps } from "../lib/schema";
 import { Lesson } from "@/features/lesson/lib/schema";
 import useCourses from "../hooks/useCourses";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Tiptap from "@/components/Tiptap";
 
 type CourseFormProps = {
-    course?: Course
-}
+  course?: Course;
+};
 
 export default function CourseForm(props: CourseFormProps) {
-    const { course } = props;
-    const isEditing = !!course;
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(5, { message: "Tittelen må være minst 5 tegn" })
+      .max(100, { message: "Tittelen kan ikke være mer enn 100 tegn" }),
+    slug: z
+      .string()
+      .min(5, { message: "Slug må være minst 5 tegn" })
+      .max(100, { message: "Slug kan ikke være mer enn 100 tegn" }),
+    ingress: z
+      .string()
+      .min(5, { message: "Beskrivelsen må være minst 5 tegn" })
+      .max(100, { message: "Beskrivelsen kan ikke være mer enn 100 tegn" }),
+    text: z.array(
+      z.object({
+        text: z
+          .string()
+          .min(5, { message: "Teksten må være minst 5 tegn" })
+          .max(100, { message: "Teksten kan ikke være mer enn 100 tegn" }),
+      })
+    ),
+  });
 
-    const [success, setSuccess] = useState(false);
-    const [formError, setFormError] = useState(false);
-    const [current, setCurrent] = useState(0);
-    const [currentLesson, setCurrentLesson] = useState(0);
-    const { add, update } = useCourses()
-    const [courseFields, setCourseFields] = useState(isEditing? {
-        title: course.title,
-        slug: course.slug,
-        description: course.description,
-        category: course.category,
-    } : {
-        title: "",
-        slug: "",
-        description: "",
-        category: Category.Enum.empty,
-    });
-    const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lessons : []);
+  const { course } = props;
+  const isEditing = !!course;
 
-    const router = useRouter();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: course?.title || "",
+      slug: course?.slug || "",
+      ingress: course?.description || "",
+      text:
+        course?.lessons?.map((lesson) => ({
+          text: lesson.text.map((t) => t.text).join(" "),
+        })) || [],
+    },
+  });
 
-    const step = courseCreateSteps[current]?.name;
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setFormError(false);
-        setSuccess(false);
-
-        if (lessons.length > 0 && isValid(lessons) && isValid(courseFields)) {
-            setSuccess(true);
-            setCurrent(2);
-            if (isEditing)
-                update({ id: course.id, ...courseFields, lessons: lessons });
-            else
-                add({...courseFields, lessons: lessons })
-                console.log(JSON.stringify({...courseFields, lessons: lessons }))
-            setTimeout(() => {
-            if (isEditing)
-                router.push(`/courses/${course.slug}`);
-            else
-                router.push("/courses")
-        }, 500);
-        } else {
-            setFormError(true);
+  const [success, setSuccess] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [currentLesson, setCurrentLesson] = useState(0);
+  const { add, update } = useCourses();
+  const [courseFields, setCourseFields] = useState(
+    isEditing
+      ? {
+          title: course.title,
+          slug: course.slug,
+          description: course.description,
+          category: course.category,
         }
-    };
+      : {
+          title: "",
+          slug: "",
+          description: "",
+          category: Category.Enum.empty,
+        }
+  );
+  const [lessons, setLessons] = useState<Lesson[]>(
+    isEditing ? course.lessons : []
+  );
+
+  const router = useRouter();
+
+  const step = courseCreateSteps[current]?.name;
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setFormError(false);
+    setSuccess(false);
+
+    if (lessons.length > 0 && isValid(lessons) && isValid(courseFields)) {
+      setSuccess(true);
+      setCurrent(2);
+      if (isEditing)
+        update({ id: course.id, ...courseFields, lessons: lessons });
+      else add({ ...courseFields, lessons: lessons });
+      console.log(JSON.stringify({ ...courseFields, lessons: lessons }));
+      setTimeout(() => {
+        if (isEditing) router.push(`/courses/${course.slug}`);
+        else router.push("/courses");
+      }, 500);
+    } else {
+      setFormError(true);
+    }
+  };
 
   const addTextBox = () => {
     const updatedLessonText = lessons.map((lesson, i) => {
@@ -176,37 +228,46 @@ export default function CourseForm(props: CourseFormProps) {
               {courseStep.name}
             </button>
           ))}
-          {isEditing? <button
-            disabled={
-              lessons?.length === 0 ||
-              !(isValid(lessons) && isValid(courseFields))
-            }
-            data-testid="form_submit"
-            type="button"
-            onClick={handleSubmit}
-            className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
-          >
-            Oppdater
-          </button> : <button
-            disabled={
-              lessons?.length === 0 ||
-              !(isValid(lessons) && isValid(courseFields))
-            }
-            data-testid="form_submit"
-            type="button"
-            onClick={handleSubmit}
-            className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
-          >
-            Publiser
-          </button>}
+          {isEditing ? (
+            <button
+              disabled={
+                lessons?.length === 0 ||
+                !(isValid(lessons) && isValid(courseFields))
+              }
+              data-testid="form_submit"
+              type="button"
+              onClick={handleSubmit}
+              className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
+            >
+              Oppdater
+            </button>
+          ) : (
+            <button
+              disabled={
+                lessons?.length === 0 ||
+                !(isValid(lessons) && isValid(courseFields))
+              }
+              data-testid="form_submit"
+              type="button"
+              onClick={handleSubmit}
+              className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
+            >
+              Publiser
+            </button>
+          )}
         </ul>
       </nav>
-      {isEditing? <h2 className="text-xl font-bold" data-testid="title">
-        Oppdater kurset
-      </h2> : <h2 className="text-xl font-bold" data-testid="title">
-        Lag nytt kurs
-      </h2>}
-      <form className="mt-8 max-w-4xl" data-testid="form" noValidate>
+      {isEditing ? (
+        <h2 className="text-xl font-bold" data-testid="title">
+          Oppdater kurset
+        </h2>
+      ) : (
+        <h2 className="text-xl font-bold" data-testid="title">
+          Lag nytt kurs
+        </h2>
+      )}
+      //... form === new, to include zod validation
+      <form {...form} className="mt-8 max-w-4xl" data-testid="form" noValidate>
         {current === 0 ? (
           <div data-testid="course_step" className="max-w-lg">
             {/* {JSON.stringify(courseFields)} */}
@@ -221,6 +282,22 @@ export default function CourseForm(props: CourseFormProps) {
                 value={courseFields?.title}
                 onChange={handleCourseFieldChange}
               />
+
+              {/* <input
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <input
+                    className="rounded"
+                    data-testid="form_title"
+                    type="text"
+                    name="title"
+                    id="title"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              /> */}
             </label>
             <label className="mb-4 flex flex-col" htmlFor="slug">
               <span className="mb-1 font-semibold">Slug*</span>
@@ -236,6 +313,7 @@ export default function CourseForm(props: CourseFormProps) {
             </label>
             <label className="mb-4 flex flex-col" htmlFor="description">
               <span className="mb-1 font-semibold">Beskrivelse*</span>
+              {/* <Tiptap  description={courseFields?.description} onChange={handleCourseFieldChange}/> */}
               <input
                 className="rounded"
                 data-testid="form_description"
