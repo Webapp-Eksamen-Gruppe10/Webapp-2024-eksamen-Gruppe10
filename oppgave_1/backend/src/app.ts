@@ -105,7 +105,6 @@ app.post(endpointsV1.courses, async (c) => {
 
 // GET - Hent detaljene til et spesifikt kurs
 app.get(endpointsV1.specificCourse, async (c) => {
-  // Hent et kurs
   try {
     const courseId = c.req.param("courseId");
     const specificCourse = await prisma?.course.findUnique({where: {slug: courseId}})
@@ -114,13 +113,11 @@ app.get(endpointsV1.specificCourse, async (c) => {
       return c.json({ success: false, message: "NOT FOUND"}, 404);
     }
  
-    // Hent alle lessons knyttet til dette kurset
     const allLessonsForCourse = await prisma?.lesson.findMany({where: {'courseId': specificCourse.id }})
      if(!allLessonsForCourse){
       return c.json({ success: false, message: "NO CONTENT"}, 204);
     }
 
-    // mapper lessons til riktig format: 
     const parsedLessons = allLessonsForCourse?.map(lesson => ({
      ...lesson,
      text: JSON.parse(lesson.text).map((text:string) => ({
@@ -129,7 +126,6 @@ app.get(endpointsV1.specificCourse, async (c) => {
       }))
     }));
     
-    // mapper course og validerer kurset: 
     var returnCourse = { ...specificCourse, lessons: parsedLessons }
     const validatedCourse = courseSchema.parse(returnCourse)
   
@@ -138,6 +134,42 @@ app.get(endpointsV1.specificCourse, async (c) => {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
 })
+
+
+// DELETE - Slett et kurs
+// husk å slette alle kommentarer for en lekson og 
+app.delete(endpointsV1.specificCourse, async (c) => {
+  try {
+  const courseId = c.req.param("courseId");
+  const specificCourse = await prisma?.course.findUnique({where: {id: courseId}})
+
+  if(!specificCourse){
+    return c.json({sucess: false, message: "NOT FOUND"}, 404)
+  }
+
+  const courseLessons = await prisma?.lesson.findMany({
+    where: {courseId: courseId}
+  })
+
+  if(courseLessons.length > 0){
+
+        const lessonIds = courseLessons.map(lesson => lesson.id);
+
+        await prisma?.comment.deleteMany({
+          where: { lessonId: { in: lessonIds } },
+        });
+
+    await prisma?.lesson.deleteMany({ where: {courseId: courseId}})
+  } 
+
+  await prisma?.course.delete({ where: {id: courseId} }); 
+ 
+  return c.json({success: true, data: courseId}, 200)
+
+  } catch(error){
+    return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
+  }
+}); 
 
 
 // PATCH - Oppdater deler av kurset (inkluderer lessons)
