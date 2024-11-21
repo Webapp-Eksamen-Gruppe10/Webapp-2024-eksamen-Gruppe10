@@ -4,7 +4,7 @@
 import useCourses from "@/features/courses/hooks/useCourses";
 import { Course } from "@/features/courses/lib/schema";
 import { Lesson as LessonProp } from "../lib/schema";
-import parse, { domToReact } from "html-react-parser";
+import parse from "html-react-parser";
 
 type LessonProps = {
   course?: Course;
@@ -36,13 +36,13 @@ export default function Lesson({ course, lesson }: LessonProps) {
       {lesson?.text?.length &&
         lesson?.text?.length > 0 &&
         lesson?.text.map((text: any) => (
-          <p
+          <div
             data-testid="lesson_text"
             className="mt-4 font-normal"
             key={text.id}
           >
             {parse(text.text)}
-          </p>
+          </div>
         ))}
     </>
   );
