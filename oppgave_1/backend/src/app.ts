@@ -24,6 +24,9 @@ app.get(endpointsV1.courses, async (c) => {
         
       }
     });
+    if (data.length <= 0){
+      return c.json({ success: false, message: "NOT FOUND" }, 404);
+    }
     // validerer data fra databasen, deretter mapper til frontend-schema: 
     const parsedData = data.map((course) => {
 
@@ -56,8 +59,12 @@ app.get(endpointsV1.courses, async (c) => {
 app.post(endpointsV1.courses, async (c) => {
   try {
     const requestData = await c.req.json();
-    console.log(requestData.data)
+   
     const validatedCourse = courseSchema.parse(requestData.data);
+
+    if(!validatedCourse){
+      return c.json({ success: false, message: "BAD REQUEST" }, 400);
+    }
     // Her gjøres det en valideringssjekk for at både slugen/e til Course og Lessons er unike
     const existingCourse = await prisma.course.findUnique({
       where: { slug: validatedCourse.slug },
@@ -233,10 +240,6 @@ app.get(endpointsV1.comments, async (c) => {
   try {
     const lessonId = c.req.param("lessonId");
     const allCommentsForLecture:CommentDb[] = await prisma?.comment.findMany({where: {lessonId: lessonId}})
-    
-    if (allCommentsForLecture.length <= 0 ){
-      return c.json({success: false, message: "NOT FOUND"}, 404)
-    }
 
     const parsedComments = await Promise.all(
 
