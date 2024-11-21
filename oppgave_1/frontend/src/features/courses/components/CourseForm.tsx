@@ -323,26 +323,26 @@ export default function CourseForm(props: CourseFormProps) {
             </aside>
             {lessons?.length > 0 ? (
               <div className="w-full">
-                <label className="mb-4 flex flex-col" htmlFor="title">
+                <label className="mb-4 flex flex-col" htmlFor="lessonTitle">
                   <span className="mb-1 font-semibold">Tittel*</span>
                   <input
                     className="rounded"
                     data-testid="form_lesson_title"
                     type="text"
                     name="title"
-                    id="title"
+                    id="lessonTitle"
                     value={lessons[currentLesson]?.title}
                     onChange={handleLessonFieldChange}
                   />
                 </label>
-                <label className="mb-4 flex flex-col" htmlFor="slug">
+                <label className="mb-4 flex flex-col" htmlFor="lessonSlug">
                   <span className="mb-1 font-semibold">Slug*</span>
                   <input
                     className="rounded"
                     data-testid="form_lesson_slug"
                     type="text"
                     name="slug"
-                    id="slug"
+                    id="lessonSlug"
                     value={lessons[currentLesson]?.slug}
                     onChange={handleLessonFieldChange}
                   />
@@ -361,10 +361,12 @@ export default function CourseForm(props: CourseFormProps) {
                 </label>
                 {lessons[currentLesson]?.text?.length > 1 ? (
                   lessons[currentLesson]?.text?.map((field, index) => (
+         
                     <div key={field?.id}>
                       <label
-                        className="mt-4 flex flex-col"
+                        className="mt-4 flex flex-col"    
                         htmlFor={`text-${field?.id}`}
+                        
                       >
                         <span className="text-sm font-semibold">Tekst*</span>
 
@@ -372,9 +374,11 @@ export default function CourseForm(props: CourseFormProps) {
                           name="text"
                           id={`text-${field?.id}`}
                           value={field?.text}
-                          onChange={(event) =>
-                            handleLessonFieldChange(event, index)
+                          onChange={(event) => 
+                            handleLessonFieldChange(event, index)                       
+                         
                           }
+                      
                           data-testid="form_lesson_text"
                         />
 
