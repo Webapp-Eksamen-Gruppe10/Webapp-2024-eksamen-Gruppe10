@@ -46,12 +46,12 @@ export default function Course({ courseSlug }: CourseProps) {
         <h2 className="text-2xl font-bold" data-testid="course_title">
           {content?.title}
         </h2>
-        <p
+        <div
           className="mt-4 font-semibold leading-relaxed"
           data-testid="course_description"
         >
           {content?.description}
-        </p>
+        </div>
       </section>
       <aside
         data-testid="enrollments"

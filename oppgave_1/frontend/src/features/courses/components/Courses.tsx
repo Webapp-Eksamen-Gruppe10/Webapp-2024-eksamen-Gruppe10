@@ -3,10 +3,15 @@
 import { categories, courses } from "@/data/data";
 import { useState } from "react";
 import { Course } from "../lib/schema";
+import parse, {
+  domToReact,
+  Element,
+  HTMLReactParserOptions,
+} from "html-react-parser";
 
 type CoursesProps = {
-  courses: Course[]
-}
+  courses: Course[];
+};
 export default function Courses(props: CoursesProps) {
   const { courses } = props;
   const [value, setValue] = useState("");
@@ -67,12 +72,12 @@ export default function Courses(props: CoursesProps) {
               >
                 <a href={`/courses/${course.slug}`}>{course.title}</a>
               </h3>
-              <p
+              <div
                 className="mb-6 text-base font-light"
                 data-testid="courses_description"
               >
                 {course.description}
-              </p>
+              </div>
               <a
                 className="font-semibold underline"
                 data-testid="courses_url"

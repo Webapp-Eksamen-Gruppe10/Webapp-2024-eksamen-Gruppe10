@@ -6,17 +6,6 @@ import { useState } from "react";
 import { Category, Course, courseCreateSteps } from "../lib/schema";
 import { Lesson } from "@/features/lesson/lib/schema";
 import useCourses from "../hooks/useCourses";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Tiptap from "@/components/Tiptap";
 
 type CourseFormProps = {
@@ -24,45 +13,8 @@ type CourseFormProps = {
 };
 
 export default function CourseForm(props: CourseFormProps) {
-  const formSchema = z.object({
-    title: z
-      .string()
-      .min(5, { message: "Tittelen må være minst 5 tegn" })
-      .max(100, { message: "Tittelen kan ikke være mer enn 100 tegn" }),
-    slug: z
-      .string()
-      .min(5, { message: "Slug må være minst 5 tegn" })
-      .max(100, { message: "Slug kan ikke være mer enn 100 tegn" }),
-    ingress: z
-      .string()
-      .min(5, { message: "Beskrivelsen må være minst 5 tegn" })
-      .max(100, { message: "Beskrivelsen kan ikke være mer enn 100 tegn" }),
-    text: z.array(
-      z.object({
-        text: z
-          .string()
-          .min(5, { message: "Teksten må være minst 5 tegn" })
-          .max(100, { message: "Teksten kan ikke være mer enn 100 tegn" }),
-      })
-    ),
-  });
-
   const { course } = props;
   const isEditing = !!course;
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    mode: "onChange",
-    defaultValues: {
-      title: course?.title || "",
-      slug: course?.slug || "",
-      ingress: course?.description || "",
-      text:
-        course?.lessons?.map((lesson) => ({
-          text: lesson.text.map((t) => t.text).join(" "),
-        })) || [],
-    },
-  });
 
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState(false);
@@ -266,8 +218,7 @@ export default function CourseForm(props: CourseFormProps) {
           Lag nytt kurs
         </h2>
       )}
-      //... form === new, to include zod validation
-      <form {...form} className="mt-8 max-w-4xl" data-testid="form" noValidate>
+      <form className="mt-8 max-w-4xl" data-testid="form" noValidate>
         {current === 0 ? (
           <div data-testid="course_step" className="max-w-lg">
             {/* {JSON.stringify(courseFields)} */}
@@ -282,22 +233,6 @@ export default function CourseForm(props: CourseFormProps) {
                 value={courseFields?.title}
                 onChange={handleCourseFieldChange}
               />
-
-              {/* <input
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <input
-                    className="rounded"
-                    data-testid="form_title"
-                    type="text"
-                    name="title"
-                    id="title"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              /> */}
             </label>
             <label className="mb-4 flex flex-col" htmlFor="slug">
               <span className="mb-1 font-semibold">Slug*</span>
@@ -313,7 +248,6 @@ export default function CourseForm(props: CourseFormProps) {
             </label>
             <label className="mb-4 flex flex-col" htmlFor="description">
               <span className="mb-1 font-semibold">Beskrivelse*</span>
-              {/* <Tiptap  description={courseFields?.description} onChange={handleCourseFieldChange}/> */}
               <input
                 className="rounded"
                 data-testid="form_description"
@@ -433,7 +367,17 @@ export default function CourseForm(props: CourseFormProps) {
                         htmlFor={`text-${field?.id}`}
                       >
                         <span className="text-sm font-semibold">Tekst*</span>
-                        <textarea
+                        <Tiptap
+                          name="text"
+                          id={`text-${field?.id}`}
+                          value={field?.text}
+                          onChange={(event) =>
+                            handleLessonFieldChange(event, index)
+                          }
+                          data-testid="form_lesson_text"
+                        />
+
+                        {/* <textarea
                           data-testid="form_lesson_text"
                           name="text"
                           id={`text-${field?.id}`}
@@ -443,7 +387,7 @@ export default function CourseForm(props: CourseFormProps) {
                           }
                           className="w-full rounded bg-slate-100"
                           cols={30}
-                        />
+                        /> */}
                       </label>
                       <button
                         className="text-sm font-semibold text-red-400 "
@@ -457,7 +401,14 @@ export default function CourseForm(props: CourseFormProps) {
                 ) : (
                   <label className="mb-4 flex flex-col" htmlFor="text">
                     <span className="mb-1 text-sm font-semibold">Tekst*</span>
-                    <textarea
+                    <Tiptap
+                      data-testid="form_lesson_text"
+                      name="text"
+                      id="text"
+                      value={lessons[currentLesson]?.text?.[0]?.text}
+                      onChange={(event) => handleLessonFieldChange(event, 0)}
+                    />
+                    {/* <textarea
                       data-testid="form_lesson_text"
                       name="text"
                       id="text"
@@ -465,7 +416,7 @@ export default function CourseForm(props: CourseFormProps) {
                       onChange={(event) => handleLessonFieldChange(event, 0)}
                       className="w-full rounded bg-slate-100"
                       cols={30}
-                    />
+                    /> */}
                   </label>
                 )}
                 <button
