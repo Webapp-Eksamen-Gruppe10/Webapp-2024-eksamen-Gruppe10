@@ -38,7 +38,7 @@ export default function Lesson({ course, lesson }: LessonProps) {
         lesson?.text.map((text: any) => (
           <div
             data-testid="lesson_text"
-            className="mt-4 font-normal"
+            className="mt-4 font-normal break-words overflow-hidden"
             key={text.id}
           >
             {parse(text.text)}
