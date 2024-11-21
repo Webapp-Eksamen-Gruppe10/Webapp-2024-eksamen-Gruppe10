@@ -355,6 +355,7 @@ export default function CourseForm(props: CourseFormProps) {
                         htmlFor={`text-${field?.id}`}
                       >
                         <span className="text-sm font-semibold">Tekst*</span>
+                        {/*TODO: Dette skal erstattes med TipTap - Ikke test */}
                         <textarea
                           data-testid="form_lesson_text"
                           name="text"
@@ -379,6 +380,7 @@ export default function CourseForm(props: CourseFormProps) {
                 ) : (
                   <label className="mb-4 flex flex-col" htmlFor="text">
                     <span className="mb-1 text-sm font-semibold">Tekst*</span>
+                    {/*TODO: Dette skal erstattes med TipTap - Ikke test */}
                     <textarea
                       data-testid="form_lesson_text"
                       name="text"
