@@ -19,3 +19,12 @@
 | `DELETE`    | `/api/v1/events/{id}/registrations/{id}`        | Slett en påmelding til et arrangement.     | `200 OK`, Slettet påmelding-JSON      | `404 Not Found`, `500 Internal Server Error` |
 | `PATCH`     | `/api/v1/events/{id}/registrations/{id}`        | Oppdater en eksisterende påmelding.        | `200 OK`, Oppdatert påmelding-JSON    | `404 Not Found`, `500 Internal Server Error` |
 
+### Template-ressurs
+
+| HTTP Metode | Endepunkt                | Beskrivelse                                | Respons ved suksess             | Respons ved feil                      |
+|-------------|--------------------------|--------------------------------------------|----------------------------------|---------------------------------------|
+| `GET`       | `/api/v1/templates`      | Hent en liste over alle templates.         | `200 OK`, JSON-liste av templates | `204 No Content` (ingen templates)   |
+| `GET`       | `/api/v1/templates/{id}` | Hent detaljer om en spesifikk template.    | `200 OK`, JSON av template       | `404 Not Found`, `500 Internal Server Error` |
+| `POST`      | `/api/v1/templates`      | Opprett en ny template.                    | `201 Created`, Ny template-JSON  | `400 Bad Request`, `500 Internal Server Error` |
+| `PATCH`     | `/api/v1/templates/{id}` | Oppdater en spesifikk template.            | `200 OK`, Oppdatert template-JSON | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error`
+| `DELETE`    | `/api/v1/templates/{id}` | Slett en spesifikk template.               | `200 OK`, Slettet template-JSON  | `404 Not Found`, `500 Internal Server Error` |
