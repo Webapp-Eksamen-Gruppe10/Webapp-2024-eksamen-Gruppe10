@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Course } from "../lib/schema";
 
 type CoursesProps = {
-  courses: Course[]
-}
+  courses: Course[];
+};
 export default function Courses(props: CoursesProps) {
   const { courses } = props;
   const [value, setValue] = useState("");
@@ -68,7 +68,7 @@ export default function Courses(props: CoursesProps) {
                 <a href={`/courses/${course.slug}`}>{course.title}</a>
               </h3>
               <p
-                className="mb-6 text-base font-light"
+                className="mb-6 text-base font-light break-words overflow-y-auto max-h-96 max-w-3xl"
                 data-testid="courses_description"
               >
                 {course.description}
