@@ -10,7 +10,6 @@ export const Category = z.enum(['marketing',
     'analytics',
     'web',
     'design',
-    'empty',
     'programmering'
 ])
 

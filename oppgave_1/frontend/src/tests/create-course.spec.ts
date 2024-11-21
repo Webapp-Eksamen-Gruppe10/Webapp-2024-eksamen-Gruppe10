@@ -236,9 +236,9 @@ test.describe("Oppgave 1 Create", () => {
       // Går til steg 2
       await goToStepTwo(page)
       // Prøver å finne success
-      const formError = page.getByTestId('form_success')
+      const formSuccess = page.getByTestId('form_success')
       // Verifiserer at success ikke dukker når man kommer til steg 2
-      await expect(formError).toBeHidden()
+      await expect(formSuccess).toBeHidden()
     });
     
     test("Should have test-id lessons", async () => {
@@ -247,7 +247,9 @@ test.describe("Oppgave 1 Create", () => {
       // Ser etter test-id lessons
       const lessons = page.getByTestId('lessons')
       // Verifiserer at elementet eksisterer
-      await expect(lessons).toBeVisible();
+      // NB: toBeVisible() fungerer ikke her da test-id lessons eksisterer,
+      // men ikke er (eller skal være) synlig.
+      await expect(lessons).toBeEmpty();
     });
     
     test("Should have test-id form_lesson_add", async () => {
@@ -261,40 +263,84 @@ test.describe("Oppgave 1 Create", () => {
   });
   test.describe("When added new lesson", () => {
     test("Should have disabled submit btn", async () => {
-      // Går til steg 2 og fyller lesson
-      goToStepTwoAndFillLessonForm(page, True)
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have no errors", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Prøver å finne error
+      const formError = page.getByTestId('form_error')
+      // Verifiserer at error ikke dukker når man kommer til steg 2
+      await expect(formError).toBeHidden()
     });
     
     test("Should have no success", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Prøver å finne error
+      const formSuccess = page.getByTestId('form_success')
+      // Verifiserer at error ikke dukker når man kommer til steg 2
+      await expect(formSuccess).toBeHidden()
     });
     
     test("Should have test-id lessons", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med lessons
+      const lessons = page.getByTestId('lessons')
+      // Verifiserer at elementet eksisterer
+      await expect(lessons).toBeVisible();
     });
     
     test("Should have test-id form_lesson_add", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med form_lesson_add
+      const formLessonAdd = page.getByTestId('form_lesson_add')
+      // Verifiserer at elementet eksisterer
+      await expect(formLessonAdd).toBeVisible();
     });
     
     test("Should have test-id form_lesson_add_text", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med form_lesson_add_text
+      const formLessonAddText = page.getByTestId('form_lesson_add_text')
+      // Verifiserer at elementet eksisterer
+      await expect(formLessonAddText).toBeVisible();
     });
     
     test("Should have test-id form_lesson_title", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med form_lesson_title
+      const formLessonTitle = page.getByTestId('form_lesson_title')
+      // Verifiserer at elementet eksisterer
+      await expect(formLessonTitle).toBeVisible();
     });
     
     test("Should have test-id form_lesson_slug", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med form_lesson_slug
+      const formLessonSlug = page.getByTestId('form_lesson_slug')
+      // Verifiserer at elementet eksisterer
+      await expect(formLessonSlug).toBeVisible();
     });
     
     test("Should have test-id form_lesson_preAmble", async () => {
-
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Finner element med form_lesson_preAmble
+      const formLessonPreAmble = page.getByTestId('form_lesson_preAmble')
+      // Verifiserer at elementet eksisterer
+      await expect(formLessonPreAmble).toBeVisible();
     });
     
     test("Should have one lesson", async () => {

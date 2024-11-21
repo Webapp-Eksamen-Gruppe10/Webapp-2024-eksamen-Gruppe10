@@ -29,7 +29,7 @@ export default function CourseForm(props: CourseFormProps) {
         title: "",
         slug: "",
         description: "",
-        category: Category.Enum.empty,
+        category: "",
     });
     const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lessons : []);
 
