@@ -51,8 +51,8 @@ export default function CourseLayout(props: PropsWithChildren<CourseLayoutProps>
             <div className="flex gap-2">
               <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded padding-3" onClick={() => {router.push(`/courses/${content?.slug}/update`)}}>Rediger</button>
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded padding" onClick={() => {
-                remove(content.id)
                 router.push(`/courses/`)
+                remove(content.id)
               }}>Slett</button>
             </div>
           </aside>

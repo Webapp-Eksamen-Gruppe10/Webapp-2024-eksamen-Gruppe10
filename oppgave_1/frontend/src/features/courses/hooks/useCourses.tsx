@@ -57,7 +57,6 @@ export function useCourses(courseSlug?: string) {
         try {
             setCourseStatus("loading");
           await api.create(data);
-          await fetchData();
           setCourseStatus("success");
         } catch (error) {
           setCourseStatus("error");
@@ -71,7 +70,6 @@ export function useCourses(courseSlug?: string) {
         try {
           setCourseStatus("loading");
           await api.remove(id);
-          await fetchData();
           setCourseStatus("success");
         } catch (error) {
           setCourseStatus("error");
@@ -85,7 +83,6 @@ export function useCourses(courseSlug?: string) {
         try {
           setCourseStatus("loading");
           await api.update(data);
-          await fetchData();
           setCourseStatus("success");
         } catch (error) {
           setCourseStatus("error");
