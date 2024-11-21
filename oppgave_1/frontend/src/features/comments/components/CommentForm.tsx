@@ -8,9 +8,9 @@ type CommentFormProps = {
   };
 
   export default function CommentForm(props: Readonly<CommentFormProps>) {
-    const { onSubmit, lessonId, lessonSlug} = props;
+    const { onSubmit, lessonSlug} = props;
   
-    const { handleSubmit, getFieldInputProps, getFieldAreaProps, isFieldInvalid } = useCommentsForm({
+    const { handleSubmit, getFieldInputProps, getFieldAreaProps, isFieldInvalid, success } = useCommentsForm({
       initialFields: { createdBy:  "", comment: "" },
       onSubmit: (data) => onSubmit({
         createdBy: {name: data.createdBy},
@@ -65,7 +65,7 @@ type CommentFormProps = {
               Fyll ut alle felter med *
             </p>
           ) : null}
-          {!isFieldInvalid("createdBy") && !isFieldInvalid("comment") ? (
+          {success ? (
             <p
               className="font-semibold text-emerald-500"
               data-testid="form_success"
