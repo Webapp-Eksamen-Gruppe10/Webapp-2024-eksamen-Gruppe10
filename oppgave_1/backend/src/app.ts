@@ -7,6 +7,7 @@ import { map, z } from "zod";
 import { courseDbSchema, courseSchema } from "./features/courses/types";
 import { json } from "stream/consumers";
 import { commentDbSchema, commentSchema, Comment, CommentDb } from "./features/comments/types";
+import { HTTPException } from "hono/http-exception";
 
 
 const app = new Hono();
@@ -24,9 +25,7 @@ app.get(endpointsV1.courses, async (c) => {
         
       }
     });
-    if (data.length <= 0){
-      return c.json({ success: false, message: "NOT FOUND" }, 404);
-    }
+   
     // validerer data fra databasen, deretter mapper til frontend-schema: 
     const parsedData = data.map((course) => {
 
@@ -48,7 +47,7 @@ app.get(endpointsV1.courses, async (c) => {
     }); 
 
     
-    return c.json({ success: true, data: parsedData });
+    return c.json({ success: true, data: parsedData }, 200);
 
   } catch (error) {
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
@@ -136,7 +135,7 @@ app.get(endpointsV1.specificCourse, async (c) => {
     var returnCourse = { ...specificCourse, lessons: parsedLessons }
     const validatedCourse = courseSchema.parse(returnCourse)
   
-    return c.json({ success: true, data: validatedCourse })
+    return c.json({ success: true, data: validatedCourse }, 200)
   } catch (error) {
     return c.json({ success: false, message: "INERNAL SERVER ERROR" }, 500);
   }
@@ -184,10 +183,13 @@ app.patch(endpointsV1.courses, async (c) => {
     try {
      
       const requestData = await c.req.json(); 
-      console.log(requestData)
-  
       const validatedCourse = courseSchema.parse(requestData.data);
-  
+
+            
+      if(!validatedCourse){
+        return c.json({ success: false, message: "BAD REQUEST" }, 400);
+      }
+
       const { id, title, slug, description, category, lessons } = validatedCourse;
   
       if (!id) {
@@ -197,7 +199,7 @@ app.patch(endpointsV1.courses, async (c) => {
       // Bruk en transaksjon for å oppdatere kurs og lessons
       await prisma.$transaction(async (prisma) => {
 
-        const updatedCourse = await prisma.course.update({
+         const updatedCourse = await prisma.course.update({
           where: { id: id },
           data: { title, slug, description, category },
         });
@@ -227,7 +229,7 @@ app.patch(endpointsV1.courses, async (c) => {
         }
       });
   
-      return c.json({ success: true, message: "UPDATED SUCCESSFULLY" }, 200);
+      return c.json({ success: true, data: validatedCourse}, 200);
     } catch (error) {
       console.error(error);
       return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
@@ -263,7 +265,7 @@ app.get(endpointsV1.comments, async (c) => {
       return c.json({success: false, message: "NOT FOUND"}, 404)
     }
 
-    return c.json({success: true, data: parsedComments})
+    return c.json({success: true, data: parsedComments}, 200)
 
   } catch (error) {
     return c.json({success: false, message: "INTERNAL SERVER ERROR"}, 500)
@@ -286,17 +288,21 @@ app.post(endpointsV1.comments, async (c) => {
     
     const validatedComment = commentSchema.parse(mappedData);
 
+    if (!validatedComment){
+      return c.json({ success: false, message: "BAD REQUEST" }, 400)
+    }
+
     const parsedComment = commentDbSchema.parse({
       ...validatedComment, 
       createdBy: JSON.stringify(validatedComment.createdBy), 
       lessonId: lessonId
     })
 
-    const createdCourse = await prisma.comment.create({
+    const createdComment = await prisma.comment.create({
      data: parsedComment
     });
 
-    return c.json({success: true, data: createdCourse})
+    return c.json({success: true, data: createdComment}, 201)
 
 
   } catch (error) {
