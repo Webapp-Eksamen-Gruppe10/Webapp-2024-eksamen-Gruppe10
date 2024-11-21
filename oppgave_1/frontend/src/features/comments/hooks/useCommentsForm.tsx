@@ -36,6 +36,8 @@ export function useCommentsForm<T extends Record<string, string>>({
     ) as Record<keyof T, FieldState>
   );
 
+  const [success, setSuccess] = useState(false)
+
   const updateField = (field: keyof T, value: string) => {
     setFields((prev) => ({
       ...prev,
@@ -56,6 +58,7 @@ export function useCommentsForm<T extends Record<string, string>>({
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    setSuccess(false)
     event.preventDefault();
     const isFormValid = Object.values(fields).every((field) => field.isValid);
 
@@ -64,8 +67,8 @@ export function useCommentsForm<T extends Record<string, string>>({
     const formData = Object.fromEntries(
       Object.keys(fields).map((key) => [key, fields[key as keyof T].value])
     ) as T;
-
     onSubmit(formData);
+    setSuccess(true)
     resetForm();
   };
 
@@ -83,6 +86,9 @@ export function useCommentsForm<T extends Record<string, string>>({
         ])
       ) as Record<keyof T, FieldState>
     );
+    setTimeout(() => {
+      setSuccess(false)
+    }, 1000);
   };
 
   const getFieldInputProps = (field: keyof T) => ({
@@ -111,6 +117,7 @@ export function useCommentsForm<T extends Record<string, string>>({
     getFieldInputProps,
     getFieldAreaProps,
     isFieldInvalid,
+    success
   };
 }
 
