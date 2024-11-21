@@ -29,7 +29,7 @@ export default function Lesson({ course, lesson }: LessonProps) {
       </h2>
       <p
         data-testid="lesson_preAmble"
-        className="mt-4 font-semibold leading-relaxed"
+        className="mt-4 font-semibold leading-relaxed break-words overflow-y-auto max-h-96 max-w-3xl"
       >
         {lesson?.preAmble}
       </p>
@@ -38,7 +38,7 @@ export default function Lesson({ course, lesson }: LessonProps) {
         lesson?.text.map((text: any) => (
           <div
             data-testid="lesson_text"
-            className="mt-4 font-normal break-words overflow-hidden"
+            className="mt-4 font-normal break-words overflow-y-auto max-h-96 max-w-3xl"
             key={text.id}
           >
             {parse(text.text)}
