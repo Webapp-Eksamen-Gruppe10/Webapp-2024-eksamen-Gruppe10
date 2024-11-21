@@ -6,10 +6,10 @@
 | HTTP Metode | Endepunkt               | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|--------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
 | `GET`       | `/api/v1/courses`        | Hent en liste over alle kurs.                 | `200 OK`, JSON-liste av kurs       | `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/courses`        | Opprett et nytt kurs.                         | `201 Created`, Ny kurs-JSON        | `400 Bad Request`, `500 Internal Server Error` |
+| `POST`      | `/api/v1/courses`        | Opprett et nytt kurs.                         | `201 Created`, Ny kurs-JSON        | `400 Bad Request`, `500 Internal Server Error`, `409 Not Unique` |
 | `GET`       | `/api/v1/courses/{courseSlug}`   | Hent detaljene til et spesifikt kurs.         | `200 OK`, JSON av kurs             | `404 Not Found`, `500 Internal Server Error` |
 | `PATCH`     | `/api/v1/courses`   | Oppdater deler av kurset.                     | `200 OK`, Oppdatert kurs-JSON      | `400 Bad Request`, `404 Not Found`, `500 Internal Server Error` |
-| `DELETE`    | `/api/v1/courses/{id}`   | Slett et kurs.                                | `204 No Content`                   | `404 Not Found`, `500 Internal Server Error` |
+| `DELETE`    | `/api/v1/courses/{id}`   | Slett et kurs.                                | `200 OK`, courseId                   | `404 Not Found`, `500 Internal Server Error` |
 
 
 ### Comment-ressurs
@@ -17,7 +17,7 @@
 | HTTP Metode | Endepunkt                                                | Beskrivelse                                   | Respons ved suksess                | Respons ved feil                      |
 |-------------|-----------------------------------------------------------|-----------------------------------------------|------------------------------------|---------------------------------------|
 | `GET`       | `/api/v1/lessons/{lessonId}/comments`  | Hent alle kommentarer på en leksjon.          | `200 OK`, JSON-liste av kommentarer| `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/lessons/{lessonId}/comments`  | Legg til en kommentar til en leksjon.         | `201 Created`, Ny kommentar-JSON   | `400 Bad Request`, `500 
+| `POST`      | `/api/v1/lessons/{lessonId}/comments`  | Legg til en kommentar til en leksjon.         | `201 Created`, Ny kommentar-JSON   | `400 Bad Request`, `500 Internal Server Error` 
 
 
 ## Hvilke sider skal benytte de ulike API-ene
