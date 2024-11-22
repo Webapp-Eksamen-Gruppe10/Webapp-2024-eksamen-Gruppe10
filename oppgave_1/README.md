@@ -41,3 +41,27 @@ for å opprette en kurs med leksjoner: fetch( `/api/v1/courses`): METODE POST
 ### UpdateCoursePage
 for å hente valgt kurs: fetch(`api/v1/courses/{courseSlug}`): METODE GET
 for å oppdatere en kurs, samt oppdatere leksjoner: fetch (`/api/v1/courses`): METODE PATCH
+
+
+
+# Eksamen: Oppgave 1.4 Tiptap dokumentasjon:
+
+For å ivareta kravet om enkelt å kunne bytte tilbake til den eksisterende teksteditoren, er det laget en ny komponent kalt "Tiptap.tsx" (plassering: src/components/Tiptap.tsx).
+
+Tiptap-komponenten inneholder all eksisterende logikk og funksjonalitet og brukes nå i "CourseForm.tsx" (plassering: features/courses/components/CourseForm.tsx). 
+Den er designet for å se ut og oppføre seg identisk som den tidligere textarea-editoren og tilbyr derfor kun standard paragraph-formattering uten annen tilleggsfunksjonalitet.
+
+Den gamle teksteditoren, textarea, som fortsatt ligger i CourseForm.tsx, er kommentert ut. 
+Hvis det blir nødvendig å gå tilbake til den gamle editoren, kan dette gjøres ved å kommentere ut Tiptap-komponenten og fjerne kommentarene rundt textarea-editoren.
+
+Ettersom textarea-editoren brukes to steder i CourseForm, må dette gjøres på begge stedene.
+
+Dersom Tiptap-teksteditoren skal utvides med flere formateringsfunksjoner, vil det være hensiktsmessig å opprette en ny komponent, for eksempel kalt "Toolbar.tsx". 
+Denne komponenten kan inneholde logikk og funksjonalitet for de ulike formateringene. Toolbar kan deretter integreres i Tiptap for å håndtere de nye funksjonene.
+
+
+
+
+
+
+
