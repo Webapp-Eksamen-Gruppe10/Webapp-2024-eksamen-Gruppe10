@@ -21,32 +21,54 @@ async function goToStepTwo(currentPage: Page) {
   await page.getByTestId('step').filter({hasText: "Leksjoner"}).click();
 }
 
-async function addNewLection(currentPage: Page) {
+async function createNewLesson(currentPage: Page) {
   await currentPage.getByTestId('form_lesson_add').click();
 }
 
-async function fillLessonForm(currentPage: Page, submit: boolean) {
+async function fillLessonFormAll(currentPage: Page) {
   await currentPage.getByTestId('form_lesson_title').fill('testTitle')
   await currentPage.getByTestId('form_lesson_slug').fill('testSlug')
   await currentPage.getByTestId('form_lesson_preAmble').fill('testPreAmble')
   await currentPage.getByTestId('form_lesson_text').fill('testText')
 }
 
+async function fillLessonFormSpecific(currentPage: Page, title: boolean, slug: boolean, preAmble: boolean, text: boolean) {
+  if (title) {
+    await currentPage.getByTestId('form_lesson_title').fill('testTitle')
+  }
+  if (slug) {
+    await currentPage.getByTestId('form_lesson_slug').fill('testSlug')
+  }
+  if (preAmble) {
+    await currentPage.getByTestId('form_lesson_preAmble').fill('testPreAmble')
+  }
+  if (text) {
+    await currentPage.getByTestId('form_lesson_text').fill('testText')
+  }
+}
+
 async function goToStepTwoAndCreateNewLesson(currentPage: Page, fill: boolean = false) {
   await goToStepTwo(currentPage)
-  await addNewLection(currentPage)
+  await createNewLesson(currentPage)
   if (fill) {
-    await fillLessonForm(currentPage)
+    await fillLessonFormAll(currentPage)
   }
 }
 
 // Testing
 test.describe("Oppgave 1 Create", () => {
-  test.beforeAll(async ({ browser }) => {
+  test.beforeEach(async ({ browser }) => {
     context = await browser.newContext();
     page = await context.newPage();
     await page.goto("/create");
   });
+  /*
+  test.afterEach(async () => {
+    await context.close();
+    await page.close();
+  });
+  */
+  
   test.describe("When showing create page", () => {
     test("Should have test-id steps", async () => {
       // Har brukt chatGPT for å forklare meg hvordan man best kan
@@ -344,36 +366,100 @@ test.describe("Oppgave 1 Create", () => {
     });
     
     test("Should have one lesson", async () => {
-
+      // When added new lesson - should have 1 lesson
+      // Går til steg 2 og lager ny lesson
+      await goToStepTwoAndCreateNewLesson(page)
+      // Ser etter en lesson
+      const lessons = page.getByTestId("lessons")
+      const lessonCount = await lessons.count();
+      expect(1 == lessonCount)
     });
   });
   test.describe("When creating multiple lessons", () => {
     test("Should have disabled submit btn if title is missing", async () => {
-
+      // Går til steg 2 og lager ny lesson, fyller den inn
+      goToStepTwoAndCreateNewLesson(page, true)
+      createNewLesson(page)
+      // Fyller ny lesson med alt untatt 'title'
+      fillLessonFormSpecific(page, false, true, true, true)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have disabled submit btn if preAmble is missing", async () => {
-
+        // Går til steg 2 og lager ny lesson, fyller den inn
+        goToStepTwoAndCreateNewLesson(page, true)
+        createNewLesson(page)
+        // Fyller ny lesson med alt untatt 'preAmble'
+        fillLessonFormSpecific(page, true, true, false, true)
+        // Ser etter submit btn
+        let submitBtn = page.getByTestId('form_submit')
+        // Sjekker om submit btn er disabled
+        await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have disabled submit btn if slug is missing", async () => {
-
+      // Går til steg 2 og lager ny lesson, fyller den inn
+      goToStepTwoAndCreateNewLesson(page, true)
+      createNewLesson(page)
+      // Fyller ny lesson med alt untatt 'slug'
+      fillLessonFormSpecific(page, true, false, true, true)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have disabled submit btn if text is missing", async () => {
-
+      // Går til steg 2 og lager ny lesson, fyller den inn
+      goToStepTwoAndCreateNewLesson(page, true)
+      createNewLesson(page)
+      // Fyller ny lesson med alt untatt 'text'
+      fillLessonFormSpecific(page, true, true, true, false)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have disabled submit btn if all fields are added on last lesson", async () => {
-
+      // Går til steg 2, lager en lesson uten å fylle den inn.
+      goToStepTwoAndCreateNewLesson(page)
+      // Lager en ny lesson igjen og fyller inn denne.
+      createNewLesson(page)
+      fillLessonFormAll(page)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
     
     test("Should have enabled submit btn if all fields are added on all lesson", async () => {
-
+        // Går til steg 2 og lager ny lesson, fyller den inn
+        goToStepTwoAndCreateNewLesson(page, true)
+        createNewLesson(page)
+        // Lager lesson #2 og fyller den inn
+        fillLessonFormAll(page)
+        // Ser etter submit btn
+        let submitBtn = page.getByTestId('form_submit')
+        // Sjekker om submit btn er enabled
+        await expect(submitBtn).toBeEnabled()
     });
     
     test("Should disable publish button if new lesson is added", async () => {
-
+      // Går til steg 2 og lager ny lesson, fyller den inn
+      goToStepTwoAndCreateNewLesson(page, true)
+      // Lager lesson #2 og fyller den inn
+      createNewLesson(page)
+      fillLessonFormAll(page)
+      // Lager ny lesson igjen
+      createNewLesson(page)
+      // Ser etter submit btn
+      let submitBtn = page.getByTestId('form_submit')
+      // Sjekker om submit btn er disabled
+      await expect(submitBtn).toBeDisabled()
     });
   });
   test.describe("When creating multiple lessons with multiple textboxes", () => {
