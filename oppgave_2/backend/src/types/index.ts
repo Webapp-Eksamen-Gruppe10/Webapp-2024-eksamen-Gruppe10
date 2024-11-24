@@ -1,14 +1,23 @@
-export type Success<T> = {
+import type { ErrorCode } from "@/lib/error";
+
+export type Data<T> = {
   success: true;
   data: T;
 };
 
-export type Failure = {
-  success: false;
-  error: {
-    code: string;
-    message: string;
-  };
+type Err = {
+  code: ErrorCode;
+  message: string;
 };
 
-export type Result<T> = Success<T> | Failure;
+export type Error = {
+  success: false;
+  error: Err;
+};
+
+export type Result<T> = Data<T> | Error;
+
+export type ResultFn = {
+  success: <T>(data: T) => Data<T>;
+  failure: (error: unknown, code: ErrorCode) => Error;
+};
