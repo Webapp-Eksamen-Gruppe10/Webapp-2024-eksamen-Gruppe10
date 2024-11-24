@@ -33,7 +33,7 @@ export default function CourseForm(props: CourseFormProps) {
           title: "",
           slug: "",
           description: "",
-          category: Category.Enum.empty,
+          category: "",
         }
   );
   const [lessons, setLessons] = useState<Lesson[]>(
@@ -59,7 +59,7 @@ export default function CourseForm(props: CourseFormProps) {
       setTimeout(() => {
         if (isEditing) router.push(`/courses/${course.slug}`);
         else router.push("/courses");
-      }, 500);
+      }, 60000); // TODO: Endre dette til ~7000 eller lignende
     } else {
       setFormError(true);
     }
@@ -378,8 +378,6 @@ export default function CourseForm(props: CourseFormProps) {
                             handleLessonFieldChange(event, index)                       
                          
                           }
-                      
-                          data-testid="form_lesson_text"
                         />
 
                         {/* <textarea

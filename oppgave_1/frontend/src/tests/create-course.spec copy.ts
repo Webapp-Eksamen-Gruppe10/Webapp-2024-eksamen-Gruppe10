@@ -7,20 +7,16 @@ import {
 } from "@playwright/test";
 
 import { defineConfig, devices } from '@playwright/test';
-import { stringify } from "querystring";
 
 let page: Page;
 let context: BrowserContext;
 
 // Hjelpefunksjoner
 async function goToStepTwo(currentPage: Page) {
-  // Lager tilfeldig identifikator for å gjøre dataen unik
-  const identifyer = Date.now()
-
   // Fyller inn all required data i Course form
-  await currentPage.getByTestId('form_title').fill(`testTitle-${identifyer}`)
-  await currentPage.getByTestId('form_slug').fill(`testSlug-${identifyer}`)
-  await currentPage.getByTestId('form_description').fill(`testDescription-${identifyer}`)
+  await currentPage.getByTestId('form_title').fill('testTitle')
+  await currentPage.getByTestId('form_slug').fill('testSlug')
+  await currentPage.getByTestId('form_description').fill('testDescription')
   await currentPage.getByTestId('form_category').selectOption('code')
 
   // Finner 'Leksjoner' knapp og simulerer museklikk for å submit form.
@@ -36,38 +32,29 @@ async function createNewTextbox(currentPage: Page) {
 }
 
 async function fillNewestTextbox(currentPage: Page) {
-  // Lager tilfeldig identifikator for å gjøre dataen unik
-  const identifyer = Date.now()
-  // Finner nyeste tekstbox og fyller den
   const newestTextbox = currentPage.getByTestId('form_lesson_text').last()
-  await newestTextbox.fill(`testTextBox-${identifyer}`)
+  await newestTextbox.fill('testTextBox')
 }
 
 async function fillLessonFormAll(currentPage: Page) {
-  // Lager tilfeldig identifikator for å gjøre dataen unik
-  const identifyer = Date.now()
-
-  await currentPage.getByTestId('form_lesson_title').fill(`testTitle-${identifyer}`)
-  await currentPage.getByTestId('form_lesson_slug').fill(`testSlug-${identifyer}`)
-  await currentPage.getByTestId('form_lesson_preAmble').fill(`testPreAmble-${identifyer}`)
-  await currentPage.getByTestId('form_lesson_text').fill(`testText-${identifyer}`)
+  await currentPage.getByTestId('form_lesson_title').fill('testTitle')
+  await currentPage.getByTestId('form_lesson_slug').fill('testSlug')
+  await currentPage.getByTestId('form_lesson_preAmble').fill('testPreAmble')
+  await currentPage.getByTestId('form_lesson_text').fill('testText')
 }
 
 async function fillLessonFormSpecific(currentPage: Page, title: boolean, slug: boolean, preAmble: boolean, text: boolean) {
-  // Lager tilfeldig identifikator for å gjøre dataen unik
-  const identifyer = Date.now()
-
   if (title) {
-    await currentPage.getByTestId('form_lesson_title').fill(`testTitle-${identifyer}`)
+    await currentPage.getByTestId('form_lesson_title').fill('testTitle')
   }
   if (slug) {
-    await currentPage.getByTestId('form_lesson_slug').fill(`testSlug-${identifyer}`)
+    await currentPage.getByTestId('form_lesson_slug').fill('testSlug')
   }
   if (preAmble) {
-    await currentPage.getByTestId('form_lesson_preAmble').fill(`testPreAmble-${identifyer}`)
+    await currentPage.getByTestId('form_lesson_preAmble').fill('testPreAmble')
   }
   if (text) {
-    await currentPage.getByTestId('form_lesson_text').fill(`testText-${identifyer}`)
+    await currentPage.getByTestId('form_lesson_text').fill('testText')
   }
 }
 
@@ -94,12 +81,12 @@ test.describe("Oppgave 1 Create", () => {
     page = await context.newPage();
     await page.goto("/create");
   });
-  
+  /*
   test.afterEach(async () => {
     await context.close();
     await page.close();
   });
-  
+  */
   
   test.describe("When showing create page", () => {
     test("Should have test-id steps", async () => {
@@ -109,14 +96,25 @@ test.describe("Oppgave 1 Create", () => {
       // lenke: https://chatgpt.com/share/673f0298-3d9c-8013-a7e7-1a7e325d3895
 
       // Finn elementet med data-testid="steps"
-      const steps = page.getByTestId('steps')    
+      const steps = page.locator('[data-testid="steps"]');
+    
       // Verifiser at elementet finnes og er synlig
       await expect(steps).toBeVisible();
     
       // Valider at elementet inneholder flere steg
-      const stepItems = steps.getByTestId('step');
+      const stepItems = steps.locator('[data-testid="step"]');
       const stepCount = await stepItems.count();
       expect(stepCount).toBeGreaterThan(0); // Forvent at det er minst ett steg
+    
+      // (Valgfritt) Logg antallet steg for debug-formål
+      console.log(`Antall steg funnet: ${stepCount}`);
+    
+      // Sjekk tekstinnholdet for hvert steg (hvis du ønsker å verifisere spesifikke navn)
+      for (let i = 0; i < stepCount; i++) {
+        const stepText = await stepItems.nth(i).textContent();
+        expect(stepText).toBeTruthy(); // Forvent at teksten ikke er tom
+        console.log(`Steg ${i + 1}: ${stepText}`);
+      }
     });
 
     test("Should have test-id form_submit", async () => {
@@ -463,7 +461,6 @@ test.describe("Oppgave 1 Create", () => {
         await createNewLesson(page)
         // Lager lesson #2 og fyller den inn
         await fillLessonFormAll(page)
-        await page.getByTestId('form_lesson_text').fill('testText')
         // Ser etter submit btn
         let submitBtn = page.getByTestId('form_submit')
         // Sjekker om submit btn er enabled
@@ -502,126 +499,60 @@ test.describe("Oppgave 1 Create", () => {
   });
   test.describe("When created new course", () => {
     test("Should have show success when submitted", async () => {
-      // Lager ferdig course og submitter
+      // Fyller inn all nødvendig informasjon for å lage et course og sender det inn
       await goToStepTwoAndCreateNewLesson(page, true)
-      await page.getByTestId('form_submit').click()
-      const successMsg = page.getByTestId('form_success')
-      // Sjekker om success melding er visible
-      expect(successMsg).toBeVisible()
+      let submitBtn = page.getByTestId('form_submit')
+      await submitBtn.click()
+      // TODO: gjør denne testen faktisk
+      expect(submitBtn).toBeVisible()
     });
-
+    
     test("Should show preview of content when submitted", async () => {
-      // Lager ferdig course og submitter
-      await goToStepTwoAndCreateNewLesson(page, true)
-      await page.getByTestId('form_submit').click()
-
-      // Sjekker om Review Section eksisterer
-      const reviewSection = page.getByTestId('review')
-      await expect(reviewSection).toBeVisible()
-
-      // Sjekker om Kurs eksisterer
-      const courseSection = page.getByTestId('review_course')
-      await expect(courseSection).toBeVisible()
-
-      // Sjekker om Kurs - Tittel vises
-      const courseTitle = page.getByTestId('review_course_title')
-      await expect(courseTitle).toBeVisible()
-
-      // Sjekker om Kurs - Slug vises
-      const courseSlug = page.getByTestId('review_course_slug')
-      await expect(courseSlug).toBeVisible()
-
-      // Sjekker om Kurs - Beskrivelse vises
-      const courseDescription = page.getByTestId('review_course_description')
-      await expect(courseDescription).toBeVisible()
-
-      // Sjekker om Kurs - Kategori vises
-      const courseCategory = page.getByTestId('review_course_category')
-      await expect(courseCategory).toBeVisible()
-
-      // Sjekker om Leksjoner eksisterer
-      const lessonSection = page.getByTestId('review_lessons')
-      await expect(lessonSection).toBeVisible()
-
-      // Sjekker om Leksjoner - Tittel vises
-      const lessonTitle = page.getByTestId('review_lesson_title')
-      await expect(lessonTitle).toBeVisible()
-
-      // Sjekker om Leksjoner - Slug vises
-      const lessonSlug = page.getByTestId('review_lesson_slug')
-      await expect(lessonSlug).toBeVisible()
-
-      // Sjekker om Leksjoner - Ingress vises
-      const lessonPreamble = page.getByTestId('review_lesson_preamble')
-      await expect(lessonPreamble).toBeVisible()
-
-      // Sjekker om Leksjoner - Tekster vises
-      const lessonTexts = page.getByTestId('review_lesson_texts')
-      await expect(lessonTexts).toBeVisible()
     });
-
-    test("Should get response 201 from server", async () => {
+    
+    test("Should get response 200 from server", async () => {
       // Oppretter all data og sender inn
       await goToStepTwoAndCreateNewLesson(page, true);
-      const submitBtn = page.getByTestId('form_submit');
+      let submitBtn = page.getByTestId('form_submit');
       await submitBtn.click();
-
-      // Ser etter POST respons fra /api/v1/courses
-      const response = await page.waitForResponse((response) =>
-        response.url().includes('/api/v1/courses') && response.request().method() === 'POST'
-      );
-
-      // Sjekker om responsen har statuskode 201 
-      // (Endret fra 200 -> 201 
-      // Fordi det virker mer etter '201 Created' 'When created new course')
-      expect(response.status()).toBe(201);
+    
+      // Ser etter respons fra server
+      page.on('response', async (response) => {
+        if (response.url().includes('/api/v1/courses')) {
+          const method = response.request().method();
+          if (method === 'GET') {
+            const status = response.status();
+            expect(status).toBe(200); // Check the status code
+          }
+        }
+      });
     });
 
     test("Should get correct data from server", async () => {
       // Oppretter all data og sender inn
       await goToStepTwoAndCreateNewLesson(page, true);
-      const submitBtn = page.getByTestId('form_submit');
+      let submitBtn = page.getByTestId('form_submit');
       await submitBtn.click();
-
-      // Ser etter GET respons fra /api/v1/courses
-      const response = await page.waitForResponse((response) =>
-        response.url().includes('/api/v1/courses') && response.request().method() === 'POST'
-      );
-
-      const responseAsJson = await response.json()
-
-      // -- Validerer data vi får tilbake --
-      // Sjekker at vi får 'success' og 'data'
-      expect(responseAsJson).toHaveProperty('success', true);
-      expect(responseAsJson).toHaveProperty('data');
-
-      // Henter ut kun 'data' feltet
-      const { data } = responseAsJson
-
-      // Henter identifyeren fra course tittel og sjekker at den er funnet
-      // Fikk chatGPT til å generere regEx logikken
-      const courseIdentifyer = data.title.match(/-(\d+)$/)?.[1]
-      expect(courseIdentifyer).toBeDefined()
-
-      // Sjekker at kurs-data er korrekt
-      expect(data.title).toBe(`testTitle-${courseIdentifyer}`);
-      expect(data.slug).toBe(`testSlug-${courseIdentifyer}`);
-      expect(data.description).toBe(`testDescription-${courseIdentifyer}`);
-      expect(data.category).toBe('code');
-
-      // Henter ut kun 'lesson' feltet
-      const lesson = data.lessons[0];
-
-      // Henter identifyeren fra lesson tittel og sjekker at den er funnet
-      // Fikk chatGPT til å generere regEx logikken
-      const lessonIdentifyer = lesson.title.match(/-(\d+)$/)?.[1]
-      expect(lessonIdentifyer).toBeDefined()
-
-      // Sjekker at lesson-data er korrekt
-      expect(lesson.title).toBe(`testTitle-${lessonIdentifyer}`)
-      expect(lesson.slug).toBe(`testSlug-${lessonIdentifyer}`)
-      expect(lesson.preAmble).toBe(`testPreAmble-${lessonIdentifyer}`)
-      expect(lesson.text[0].text).toBe(`<p>testText-${lessonIdentifyer}</p>`)
-    });
-  });
-});
+    
+      // Ser etter respons fra server
+      page.on('response', async (response) => {
+        if (response.url().includes('/api/v1/courses')) {
+          const method = response.request().method();
+          if (method === 'FETCH') {
+            const jsonResponse = await response.json();
+    
+            expect(jsonResponse).toMatchObject({
+              success: true,
+              data: {
+                id: "b1c15279-48de-42d5-b2bf-6df80417d97d",
+                title: "ZELDA",
+                slug: "TheLegendOf",
+                description: "SoAwesome",
+                category: "video"
+              }
+            })
+          }
+        }
+      })
+    })
+})

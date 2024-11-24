@@ -84,7 +84,7 @@ app.post(endpointsV1.courses, async (c) => {
       return c.json({ success: false, message: "NOT UNIQUE" }, 409);
     }
 
-    const createdCourse = await prisma.course.create({
+    await prisma.course.create({
       data: {
         id: crypto.randomUUID(),
         title: validatedCourse.title,
@@ -103,7 +103,7 @@ app.post(endpointsV1.courses, async (c) => {
       },
     });
 
-    return c.json({ success: true, data: createdCourse }, 201);
+    return c.json({ success: true, data: validatedCourse }, 201);
   } catch (error) {
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
