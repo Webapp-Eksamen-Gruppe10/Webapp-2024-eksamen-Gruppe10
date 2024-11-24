@@ -14,11 +14,11 @@
 
 | HTTP Metode | Endepunkt                                       | Beskrivelse                                | Respons ved suksess                    | Respons ved feil                      |
 |-------------|-------------------------------------------------|--------------------------------------------|----------------------------------------|---------------------------------------|
-| `GET`       | `/api/v1/events/{id}/registrations`             | Hent alle påmeldinger for et arrangement.  | `200 OK`, JSON-liste av påmeldinger    | `204 No Content` (ingen påmeldinger) |
-| `GET`       | `/api/v1/events/{id}/registrations/{id}`        | Hent en spesifikk påmelding for et arrangement. | `200 OK`, JSON av påmelding         | `404 Not Found`, `500 Internal Server Error` |
-| `POST`      | `/api/v1/events/{id}/registrations`             | Opprett en ny påmelding for et arrangement. | `200 OK`, Ny påmelding-JSON          | `404 Not Found`, `500 Internal Server Error` |
-| `DELETE`    | `/api/v1/events/{id}/registrations/{id}`        | Slett en påmelding til et arrangement.     | `200 OK`, Slettet påmelding-JSON      | `404 Not Found`, `500 Internal Server Error` |
-| `PATCH`     | `/api/v1/events/{id}/registrations/{id}`        | Oppdater en eksisterende påmelding.        | `200 OK`, Oppdatert påmelding-JSON    | `404 Not Found`, `500 Internal Server Error` |
+| `GET`       | `/api/v1/registrations/{eventId}`             | Hent alle påmeldinger for et arrangement.  | `200 OK`, JSON-liste av påmeldinger    | `204 No Content` (ingen påmeldinger) |
+| `GET`       | `/api/v1/registrations/{id}`        | Hent en spesifikk påmelding for et arrangement. | `200 OK`, JSON av påmelding         | `404 Not Found`, `500 Internal Server Error` |
+| `POST`      | `/api/v1/registrations/{eventId}`             | Opprett en ny påmelding for et arrangement. | `200 OK`, Ny påmelding-JSON          | `404 Not Found`, `500 Internal Server Error` |
+| `DELETE`    | `/api/v1/registrations/{id}`        | Slett en påmelding til et arrangement.     | `200 OK`, Slettet påmelding-JSON      | `404 Not Found`, `500 Internal Server Error` |
+| `PATCH`     | `/api/v1/registrations/{id}`        | Oppdater en eksisterende påmelding.        | `200 OK`, Oppdatert påmelding-JSON    | `404 Not Found`, `500 Internal Server Error` |
 
 ### Template-ressurs
 
