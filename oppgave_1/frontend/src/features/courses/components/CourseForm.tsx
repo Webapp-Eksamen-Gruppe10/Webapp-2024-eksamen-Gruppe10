@@ -6,60 +6,64 @@ import { useState } from "react";
 import { Category, Course, courseCreateSteps } from "../lib/schema";
 import { Lesson } from "@/features/lesson/lib/schema";
 import useCourses from "../hooks/useCourses";
+import Tiptap from "@/components/Tiptap";
 
 type CourseFormProps = {
-    course?: Course
-}
+  course?: Course;
+};
 
 export default function CourseForm(props: CourseFormProps) {
-    const { course } = props;
-    const isEditing = !!course;
+  const { course } = props;
+  const isEditing = !!course;
 
-    const [success, setSuccess] = useState(false);
-    const [formError, setFormError] = useState(false);
-    const [current, setCurrent] = useState(0);
-    const [currentLesson, setCurrentLesson] = useState(0);
-    const { add, update } = useCourses()
-    const [courseFields, setCourseFields] = useState(isEditing? {
-        title: course.title,
-        slug: course.slug,
-        description: course.description,
-        category: course.category,
-    } : {
-        title: "",
-        slug: "",
-        description: "",
-        category: Category.Enum.empty,
-    });
-    const [lessons, setLessons] = useState<Lesson[]>(isEditing? course.lessons : []);
-
-    const router = useRouter();
-
-    const step = courseCreateSteps[current]?.name;
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setFormError(false);
-        setSuccess(false);
-
-        if (lessons.length > 0 && isValid(lessons) && isValid(courseFields)) {
-            setSuccess(true);
-            setCurrent(2);
-            if (isEditing)
-                update({ id: course.id, ...courseFields, lessons: lessons });
-            else
-                add({...courseFields, lessons: lessons })
-                console.log(JSON.stringify({...courseFields, lessons: lessons }))
-            setTimeout(() => {
-            if (isEditing)
-                router.push(`/courses/${course.slug}`);
-            else
-                router.push("/courses")
-        }, 500);
-        } else {
-            setFormError(true);
+  const [success, setSuccess] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [currentLesson, setCurrentLesson] = useState(0);
+  const { add, update } = useCourses();
+  const [courseFields, setCourseFields] = useState(
+    isEditing
+      ? {
+          title: course.title,
+          slug: course.slug,
+          description: course.description,
+          category: course.category,
         }
-    };
+      : {
+          title: "",
+          slug: "",
+          description: "",
+          category: Category.Enum.empty,
+        }
+  );
+  const [lessons, setLessons] = useState<Lesson[]>(
+    isEditing ? course.lessons : []
+  );
+
+  const router = useRouter();
+
+  const step = courseCreateSteps[current]?.name;
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setFormError(false);
+    setSuccess(false);
+
+    if (lessons.length > 0 && isValid(lessons) && isValid(courseFields)) {
+      setSuccess(true);
+      setCurrent(2);
+      if (isEditing)
+        update({ id: course.id, ...courseFields, lessons: lessons });
+      else add({ ...courseFields, lessons: lessons });
+      console.log(JSON.stringify({ ...courseFields, lessons: lessons }));
+      setTimeout(() => {
+        if (isEditing) router.push(`/courses/${course.slug}`);
+        else router.push("/courses");
+      }, 500);
+    } else {
+      setFormError(true);
+    }
+  };
 
   const addTextBox = () => {
     const updatedLessonText = lessons.map((lesson, i) => {
@@ -176,36 +180,44 @@ export default function CourseForm(props: CourseFormProps) {
               {courseStep.name}
             </button>
           ))}
-          {isEditing? <button
-            disabled={
-              lessons?.length === 0 ||
-              !(isValid(lessons) && isValid(courseFields))
-            }
-            data-testid="form_submit"
-            type="button"
-            onClick={handleSubmit}
-            className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
-          >
-            Oppdater
-          </button> : <button
-            disabled={
-              lessons?.length === 0 ||
-              !(isValid(lessons) && isValid(courseFields))
-            }
-            data-testid="form_submit"
-            type="button"
-            onClick={handleSubmit}
-            className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
-          >
-            Publiser
-          </button>}
+          {isEditing ? (
+            <button
+              disabled={
+                lessons?.length === 0 ||
+                !(isValid(lessons) && isValid(courseFields))
+              }
+              data-testid="form_submit"
+              type="button"
+              onClick={handleSubmit}
+              className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
+            >
+              Oppdater
+            </button>
+          ) : (
+            <button
+              disabled={
+                lessons?.length === 0 ||
+                !(isValid(lessons) && isValid(courseFields))
+              }
+              data-testid="form_submit"
+              type="button"
+              onClick={handleSubmit}
+              className="h-12 w-1/4 border border-slate-200 bg-emerald-300 disabled:bg-transparent disabled:opacity-50"
+            >
+              Publiser
+            </button>
+          )}
         </ul>
       </nav>
-      {isEditing? <h2 className="text-xl font-bold" data-testid="title">
-        Oppdater kurset
-      </h2> : <h2 className="text-xl font-bold" data-testid="title">
-        Lag nytt kurs
-      </h2>}
+      {isEditing ? (
+        <h2 className="text-xl font-bold" data-testid="title">
+          Oppdater kurset
+        </h2>
+      ) : (
+        <h2 className="text-xl font-bold" data-testid="title">
+          Lag nytt kurs
+        </h2>
+      )}
       <form className="mt-8 max-w-4xl" data-testid="form" noValidate>
         {current === 0 ? (
           <div data-testid="course_step" className="max-w-lg">
@@ -311,26 +323,26 @@ export default function CourseForm(props: CourseFormProps) {
             </aside>
             {lessons?.length > 0 ? (
               <div className="w-full">
-                <label className="mb-4 flex flex-col" htmlFor="title">
+                <label className="mb-4 flex flex-col" htmlFor="lessonTitle">
                   <span className="mb-1 font-semibold">Tittel*</span>
                   <input
                     className="rounded"
                     data-testid="form_lesson_title"
                     type="text"
                     name="title"
-                    id="title"
+                    id="lessonTitle"
                     value={lessons[currentLesson]?.title}
                     onChange={handleLessonFieldChange}
                   />
                 </label>
-                <label className="mb-4 flex flex-col" htmlFor="slug">
+                <label className="mb-4 flex flex-col" htmlFor="lessonSlug">
                   <span className="mb-1 font-semibold">Slug*</span>
                   <input
                     className="rounded"
                     data-testid="form_lesson_slug"
                     type="text"
                     name="slug"
-                    id="slug"
+                    id="lessonSlug"
                     value={lessons[currentLesson]?.slug}
                     onChange={handleLessonFieldChange}
                   />
@@ -349,13 +361,28 @@ export default function CourseForm(props: CourseFormProps) {
                 </label>
                 {lessons[currentLesson]?.text?.length > 1 ? (
                   lessons[currentLesson]?.text?.map((field, index) => (
+         
                     <div key={field?.id}>
                       <label
-                        className="mt-4 flex flex-col"
+                        className="mt-4 flex flex-col"    
                         htmlFor={`text-${field?.id}`}
+                        
                       >
                         <span className="text-sm font-semibold">Tekst*</span>
-                        <textarea
+
+                        <Tiptap
+                          name="text"
+                          id={`text-${field?.id}`}
+                          value={field?.text}
+                          onChange={(event) => 
+                            handleLessonFieldChange(event, index)                       
+                         
+                          }
+                      
+                          data-testid="form_lesson_text"
+                        />
+
+                        {/* <textarea
                           data-testid="form_lesson_text"
                           name="text"
                           id={`text-${field?.id}`}
@@ -365,7 +392,7 @@ export default function CourseForm(props: CourseFormProps) {
                           }
                           className="w-full rounded bg-slate-100"
                           cols={30}
-                        />
+                        /> */}
                       </label>
                       <button
                         className="text-sm font-semibold text-red-400 "
@@ -379,7 +406,14 @@ export default function CourseForm(props: CourseFormProps) {
                 ) : (
                   <label className="mb-4 flex flex-col" htmlFor="text">
                     <span className="mb-1 text-sm font-semibold">Tekst*</span>
-                    <textarea
+                    <Tiptap
+                      data-testid="form_lesson_text"
+                      name="text"
+                      id="text"
+                      value={lessons[currentLesson]?.text?.[0]?.text}
+                      onChange={(event) => handleLessonFieldChange(event, 0)}
+                    />
+                    {/* <textarea
                       data-testid="form_lesson_text"
                       name="text"
                       id="text"
@@ -387,7 +421,7 @@ export default function CourseForm(props: CourseFormProps) {
                       onChange={(event) => handleLessonFieldChange(event, 0)}
                       className="w-full rounded bg-slate-100"
                       cols={30}
-                    />
+                    /> */}
                   </label>
                 )}
                 <button
