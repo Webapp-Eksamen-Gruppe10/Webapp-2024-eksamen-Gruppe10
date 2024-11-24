@@ -8,6 +8,7 @@
 | `GET`       | `/api/v1/events/{id}`     | Hent detaljer om et spesifikt arrangement. | `200 OK`, JSON av arrangement   | `404 Not Found`, `500 Internal Server Error` |
 | `POST`      | `/api/v1/events`          | Opprett et nytt arrangement.      | `200 OK`, Nytt arrangement-JSON | `404 Not Found`, `500 Internal Server Error` |
 | `DELETE`    | `/api/v1/events/{id}`     | Slett et arrangement.             | `200 OK`, Slettet arrangement-JSON | `404 Not Found`, `500 Internal Server Error` |
+| `PATCH`    | `/api/v1/events/{id}`      | Oppdater en eksisterende arrangement.  | `200 OK`, Oppdatert arrangement-JSON | `404 Not Found`, `500 Internal Server Error` |
 
 ### Registration-ressurs
 
