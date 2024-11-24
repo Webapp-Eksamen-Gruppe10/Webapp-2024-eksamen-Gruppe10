@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Registration {
+  id String @id @default(cuid())
+  event_id String
+  name String
+  email String
+  phoneNumber String
+  status String
+  event Event @relation(fields: [event_id], references: [id])
+
+  @@index([event_id])
+}
+
+model Event {
+  id String @id @default(cuid())
+  template_id String
+  capacity Int
+  title String
+  dateTime DateTime
+  location String
+  category String
+  price Float
+  description String
+  private Boolean
+  waitinglist Boolean
+  participants Registration[]
+  template Template @relation(fields: [template_id], references: [id])
+
+  @@index([template_id])
+}
+
+model Template {
+  id String @id @default(cuid())
+  name String
+  description String
+  weekdays String
+  notSameDay Boolean
+  private Boolean
+  lim_attend Boolean
+  fixed_price Boolean
+  free Boolean
+  waitinglist Boolean
+  events Event[]
+}
+
