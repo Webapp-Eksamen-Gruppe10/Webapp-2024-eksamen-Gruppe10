@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // TODO: Kommenter ut om du ønsker å bruke .css
 // import '../styles/scss/main.css'
@@ -36,6 +37,7 @@ export default function RootLayout({
       >
           <Navbar />
           <main className="flex-grow">{children}</main>
+          <Footer />
       </body>
     </html>
   );
