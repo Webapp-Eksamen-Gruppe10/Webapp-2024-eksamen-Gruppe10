@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Navbar from "../components/Navbar";
 
 // TODO: Kommenter ut om du ønsker å bruke .css
 // import '../styles/scss/main.css'
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
+          <Navbar />
           <main className="flex-grow">{children}</main>
       </body>
     </html>
