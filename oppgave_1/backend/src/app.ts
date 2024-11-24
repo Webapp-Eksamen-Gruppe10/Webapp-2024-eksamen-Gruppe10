@@ -103,7 +103,9 @@ app.post(endpointsV1.courses, async (c) => {
       },
     });
 
-    return c.json({ success: true, data: createdCourse }, 201);
+
+
+    return c.json({ success: true, data: validatedCourse }, 201);
   } catch (error) {
     return c.json({ success: false, message: "INTERNAL SERVER ERROR" }, 500);
   }
