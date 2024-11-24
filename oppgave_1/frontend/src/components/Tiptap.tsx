@@ -19,6 +19,7 @@ export default function Tiptap({ value, onChange, name, id }: TiptapProps) {
     immediatelyRender: false,
     editorProps: {
       attributes: {
+        "data-testid": "form_lesson_text",
         class:
           "w-full rounded prose max-w-none p-4 rounded bg-slate-100  rounded-md max-h-44 overflow-y-auto ",
       },
