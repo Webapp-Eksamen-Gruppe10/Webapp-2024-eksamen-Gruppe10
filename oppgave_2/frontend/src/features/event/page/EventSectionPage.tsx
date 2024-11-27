@@ -1,3 +1,4 @@
+"use client"; 
 import EventSection from "../components/EventSection";
 import useEvent from "../hooks/useEvent";
 
