@@ -39,6 +39,57 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         }
     }
 
+    const getById = async(id: string) => {
+        try {
+            const templateExist = await exist(id)
+
+            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
+            
+            const template = await prismaDb.template.findUnique({
+                where: {
+                    id: id
+                }
+            })
+
+            return ResultHandler.success(template? ToTemplateObject(template): "")
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
+
+    const create = async (data: TemplateWithoutId) => {
+        try {
+            const template = CreateTemplateToDb(data)
+            const create = await prismaDb.template.create({data: template})
+
+            return ResultHandler.success(create)
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
+
+    const update = async (data: Template) => {
+        try {
+            const templateExist = await exist(data.id)
+            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
+            
+            const notAllowedUpdate = await eventsWithTemplate(data.id)
+            if(notAllowedUpdate) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
+        
+            const update = await prismaDb.template.update({
+                where: {
+                    id: data.id
+                },
+                data: UpdateTemplateToDb(data)
+            })
+
+            return ResultHandler.success(update)
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
+
+
 }
 
 export const templateRepositoy = createTemplateRepository(prisma)
