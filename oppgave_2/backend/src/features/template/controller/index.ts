@@ -8,7 +8,7 @@ export const createTemplateController = (templateServiceDb: TemplateService) => 
 
     app.use("/*", cors())
 
-    app.get("/", async (c) => {
+    app.get("", async (c) => {
         const result = await templateServiceDb.getAllTemplates()
 
         if(!result.success)
@@ -23,5 +23,10 @@ export const createTemplateController = (templateServiceDb: TemplateService) => 
         if(!result.success)
             return errorResponse(c, result.error.code, result.error.message)
         return c.json(result)
+    })
+
+    app.post("", async(c) => {
+        const data = c.req.json();
+        const result = await templateServiceDb.createTemplate(data)
     })
 }

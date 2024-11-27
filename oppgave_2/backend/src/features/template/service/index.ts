@@ -2,28 +2,29 @@ import { ResultHandler } from "@/lib/result"
 import { templateRepository, type TemplateRepository } from "../repository"
 import { Template, TemplateWithoutId } from "../types"
 import { validateTemplate, validateTemplateWithoutId } from "../helpers/schema"
+import { Result } from "@/types"
 
 export const createTemplateService = (templateRepositoryDb: TemplateRepository) =>{
     
-    const getAllTemplates = async() => {
+    const getAllTemplates = async(): Promise<Result<Template[]>> => {
         return templateRepositoryDb.list()
     }
 
-    const getOneTemplate = async(id: string) => {
+    const getOneTemplate = async(id: string): Promise<Result<Template>> => {
         const templateExist = await templateRepositoryDb.exist(id)
         if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
         
         return templateRepositoryDb.getById(id)
     }
 
-    const createTemplate = async(data: TemplateWithoutId) => {
+    const createTemplate = async(data: TemplateWithoutId): Promise<Result<Template>> => {
         if(!validateTemplateWithoutId(data).success)
             return ResultHandler.failure("Data does not match", "BAD_REQUEST")
 
         return templateRepositoryDb.create(data)
     }
 
-    const updateTemplate = async(data: Template) => {
+    const updateTemplate = async(data: Template): Promise<Result<Template>> => {
         const templateExist = await templateRepositoryDb.exist(data.id)
         if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
 
@@ -37,7 +38,7 @@ export const createTemplateService = (templateRepositoryDb: TemplateRepository) 
         
     }
 
-    const deleteTemplate = async(id: string) => {
+    const deleteTemplate = async(id: string): Promise<Result<string>> => {
         const templateExist = await templateRepositoryDb.exist(id)
         if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
 

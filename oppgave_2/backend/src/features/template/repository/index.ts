@@ -4,6 +4,7 @@ import { Template, TemplateWithoutId } from "../types";
 import { CreateTemplateToDb, ToTemplateArray, ToTemplateObject, UpdateTemplateToDb } from "../helpers/mappers";
 import { ResultHandler } from "@/lib/result";
 import { validateTemplate, validateTemplateWithoutId } from "../helpers/schema";
+import { Result } from "@/types";
 
 export const createTemplateRepository = (prismaDb: Prisma) => {
 
@@ -30,7 +31,7 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         return eventsWithTemplates.length > 0
     }
 
-    const list = async() => {
+    const list = async(): Promise<Result<Template[]>> => {
         try {
             const templates = await prismaDb.template.findMany();
 
@@ -40,33 +41,33 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const getById = async(id: string) => {
+    const getById = async(id: string): Promise<Result<Template>> => {
         try {
-            const template = await prismaDb.template.findUnique({
+            const template = await prismaDb.template.findUniqueOrThrow({
                 where: {
                     id: id
                 }
             })
 
-            return ResultHandler.success(template? ToTemplateObject(template): "")
+            return ResultHandler.success(ToTemplateObject(template))
         } catch (error) {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
         }
     }
 
-    const create = async (data: TemplateWithoutId) => {
+    const create = async (data: TemplateWithoutId): Promise<Result<Template>> => {
         try {
             const template = CreateTemplateToDb(data)
 
             const create = await prismaDb.template.create({data: template})
 
-            return ResultHandler.success(create)
+            return ResultHandler.success(ToTemplateObject(create))
         } catch (error) {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
         }
     }
 
-    const updateById = async (data: Template) => {
+    const updateById = async (data: Template): Promise<Result<Template>> => {
         try {
             const update = await prismaDb.template.update({
                 where: {
@@ -75,13 +76,13 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
                 data: UpdateTemplateToDb(data)
             })
 
-            return ResultHandler.success(update)
+            return ResultHandler.success(ToTemplateObject(update))
         } catch (error) {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
         }
     }
 
-    const deleteById = async (id: string) => {
+    const deleteById = async (id: string): Promise<Result<string>> => {
         try {
             const deletedTemplate = await prismaDb.template.delete({
                 where: {
@@ -89,7 +90,7 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
                 }
             })
 
-            return ResultHandler.success(ToTemplateObject(deletedTemplate))
+            return ResultHandler.success(id)
         } catch (error) {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
         }
