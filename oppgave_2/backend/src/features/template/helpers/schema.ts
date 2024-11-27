@@ -41,19 +41,23 @@ const dbTemplateSchemaWithoutId = dbTemplateSchema.omit({
 
 
 export function validateTemplate(data: unknown) {
-    return templateSchema.parse(data)
+    return templateSchema.safeParse(data)
 }
 
 export function validateTemplateArray(data: unknown) {
-    return templatesSchema.parse(data)
+    return templatesSchema.safeParse(data)
 }
 
 export function validateDbTemplate(data: unknown) {
-    return dbTemplateSchema.parse(data)
+    return dbTemplateSchema.safeParse(data)
+}
+
+export function validateTemplateWithoutId(data: unknown) {
+    return templateSchemaWithoutId.safeParse(data)
 }
 
 export function validateDbTemplateWithoutId(data: unknown) {
-    return dbTemplateSchemaWithoutId.parse(data)
+    return dbTemplateSchemaWithoutId.safeParse(data)
 }
 
 

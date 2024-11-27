@@ -1,4 +1,4 @@
-import { DbTemplate, DbTemplateWithoutId, Template } from "../types";
+import { DbTemplate, DbTemplateWithoutId, Template, TemplateWithoutId } from "../types";
 import { validateDbTemplate, validateDbTemplateWithoutId, validateTemplate, validateTemplateArray } from "./schema";
 
 export const ToTemplateObject = (dbTemplate : DbTemplate): Template => {
@@ -6,7 +6,7 @@ export const ToTemplateObject = (dbTemplate : DbTemplate): Template => {
         ...dbTemplate,
         weekdays: JSON.parse(dbTemplate.weekdays)
     }
-    return validateTemplate(template);
+    return template
 }
 
 export const ToTemplateArray = (dbTemplates : DbTemplate[]): Template[] => {
@@ -20,16 +20,16 @@ export const ToTemplateArray = (dbTemplates : DbTemplate[]): Template[] => {
         })
     })
 
-    return validateTemplateArray(templates)
+    return templates
 }
 
-export const CreateTemplateToDb = (template : Omit<Template, "id">): DbTemplate => {
+export const CreateTemplateToDb = (template : TemplateWithoutId): DbTemplate => {
     const dbTemplate: DbTemplate = {
         ...template,
         id: crypto.randomUUID(),
         weekdays: JSON.stringify(template.weekdays)
     }
-    return validateDbTemplate(dbTemplate)
+    return dbTemplate
 }
 
 export const UpdateTemplateToDb = (template : Template): DbTemplateWithoutId => {
@@ -37,5 +37,5 @@ export const UpdateTemplateToDb = (template : Template): DbTemplateWithoutId => 
         ...template,
         weekdays: JSON.stringify(template.weekdays)
     }
-    return validateDbTemplateWithoutId(dbTemplate)
+    return dbTemplate
 }

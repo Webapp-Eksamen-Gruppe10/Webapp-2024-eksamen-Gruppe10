@@ -3,6 +3,7 @@ import  prisma  from "@/lib/client/db";
 import { Template, TemplateWithoutId } from "../types";
 import { CreateTemplateToDb, ToTemplateArray, ToTemplateObject, UpdateTemplateToDb } from "../helpers/mappers";
 import { ResultHandler } from "@/lib/result";
+import { validateTemplate, validateTemplateWithoutId } from "../helpers/schema";
 
 export const createTemplateRepository = (prismaDb: Prisma) => {
 
@@ -59,7 +60,12 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const create = async (data: TemplateWithoutId) => {
         try {
+            
+            if(!validateTemplateWithoutId(data).success)
+                return ResultHandler.failure("Data does not match", "BAD_REQUEST")
+
             const template = CreateTemplateToDb(data)
+
             const create = await prismaDb.template.create({data: template})
 
             return ResultHandler.success(create)
@@ -68,13 +74,16 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const update = async (data: Template) => {
+    const updateById = async (data: Template) => {
         try {
             const templateExist = await exist(data.id)
             if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
-            
+
             const notAllowedUpdate = await eventsWithTemplate(data.id)
             if(notAllowedUpdate) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
+            
+            if(!validateTemplate(data).success)
+                return ResultHandler.failure("Data does not match", "BAD_REQUEST")
         
             const update = await prismaDb.template.update({
                 where: {
@@ -89,7 +98,25 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         }
     }
 
+    const deleteById = async (id: string) => {
+        try {
+            const templateExist = await exist(id)
+            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
 
+            const notAllowedDelete = await eventsWithTemplate(id)
+            if(notAllowedDelete) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
+            
+            const deletedTemplate = await prismaDb.template.delete({
+                where: {
+                    id: id
+                }
+            })
+
+            return ResultHandler.success(ToTemplateObject(deletedTemplate))
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
 }
 
 export const templateRepositoy = createTemplateRepository(prisma)
