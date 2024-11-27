@@ -42,10 +42,6 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const getById = async(id: string) => {
         try {
-            const templateExist = await exist(id)
-
-            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
-            
             const template = await prismaDb.template.findUnique({
                 where: {
                     id: id
@@ -60,10 +56,6 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const create = async (data: TemplateWithoutId) => {
         try {
-            
-            if(!validateTemplateWithoutId(data).success)
-                return ResultHandler.failure("Data does not match", "BAD_REQUEST")
-
             const template = CreateTemplateToDb(data)
 
             const create = await prismaDb.template.create({data: template})
@@ -117,6 +109,10 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
         }
     }
+
+    return { exist, eventsWithTemplate, create, list, getById, updateById, deleteById };
 }
 
-export const templateRepositoy = createTemplateRepository(prisma)
+export const templateRepository = createTemplateRepository(prisma)
+
+export type TemplateRepository = ReturnType<typeof createTemplateRepository>;
