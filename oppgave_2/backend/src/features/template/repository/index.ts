@@ -68,15 +68,6 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const updateById = async (data: Template) => {
         try {
-            const templateExist = await exist(data.id)
-            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
-
-            const notAllowedUpdate = await eventsWithTemplate(data.id)
-            if(notAllowedUpdate) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
-            
-            if(!validateTemplate(data).success)
-                return ResultHandler.failure("Data does not match", "BAD_REQUEST")
-        
             const update = await prismaDb.template.update({
                 where: {
                     id: data.id
@@ -92,12 +83,6 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const deleteById = async (id: string) => {
         try {
-            const templateExist = await exist(id)
-            if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
-
-            const notAllowedDelete = await eventsWithTemplate(id)
-            if(notAllowedDelete) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
-            
             const deletedTemplate = await prismaDb.template.delete({
                 where: {
                     id: id
