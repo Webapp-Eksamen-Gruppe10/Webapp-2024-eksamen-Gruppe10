@@ -1,11 +1,26 @@
 import { DbTemplate, Template } from "../types";
+import { validateDbTemplate, validateTemplate, validateTemplateArray } from "./schema";
 
-export const ToTemplate = (dbTemplate : DbTemplate): Template => {
+export const ToTemplateObject = (dbTemplate : DbTemplate): Template => {
     const template: Template = {
         ...dbTemplate,
         weekdays: JSON.parse(dbTemplate.weekdays)
     }
-    return template;
+    return validateTemplate(template);
+}
+
+export const ToTemplateArray = (dbTemplates : DbTemplate[]): Template[] => {
+
+    const templates : Template[] = []
+
+    dbTemplates.map((dBtemplate) => {
+        templates.push({
+            ...dBtemplate,
+            weekdays: JSON.parse(dBtemplate.weekdays)
+        })
+    })
+
+    return validateTemplateArray(templates)
 }
 
 export const CreateTemplateToDb = (template : Omit<Template, "id">): DbTemplate => {
@@ -14,7 +29,7 @@ export const CreateTemplateToDb = (template : Omit<Template, "id">): DbTemplate 
         id: crypto.randomUUID(),
         weekdays: JSON.stringify(template.weekdays)
     }
-    return dbTemplate
+    return validateDbTemplate(dbTemplate)
 }
 
 export const UpdateTemplateToDb = (template : Template): DbTemplate => {
@@ -22,5 +37,5 @@ export const UpdateTemplateToDb = (template : Template): DbTemplate => {
         ...template,
         weekdays: JSON.stringify(template.weekdays)
     }
-    return dbTemplate
+    return validateDbTemplate(dbTemplate)
 }
