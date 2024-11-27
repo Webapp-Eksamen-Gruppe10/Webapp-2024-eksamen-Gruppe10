@@ -3,7 +3,7 @@ import { z } from "zod";
 const registrationSchema = z.object({
   id: z.number(),
   name: z.string().max(45),
-  email: z.string().email().max(45),
+  email: z.string().email(),
   phoneNumber: z.string().max(70),
   status: z.string().max(45),
   event_id: z.string().max(45),
@@ -11,7 +11,7 @@ const registrationSchema = z.object({
 
 const registrationSchemaToDb = z.object({
   name: z.string().max(45),
-  email: z.string().email().max(45),
+  email: z.string().email(),
   phoneNumber: z.string().max(70),
   status: z.string().max(45),
   event_id: z.string().max(45),

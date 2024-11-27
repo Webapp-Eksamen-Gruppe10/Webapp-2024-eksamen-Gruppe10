@@ -11,8 +11,9 @@ const eventSchema = z.object({
   description: z.string().max(150),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  template_id: z.number(),
+  template_id: z.coerce.number(),
 });
+
 
 const eventSchemaToDb = z.object({
   capacity: z.string().max(45),
@@ -24,8 +25,9 @@ const eventSchemaToDb = z.object({
   description: z.string().max(150),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  template_id: z.number(),
+  template_id: z.coerce.number(),
 });
+
 
 const eventListSchema = z.array(eventSchema);
 const eventListSchemaToDb = z.array(eventSchemaToDb);

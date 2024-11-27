@@ -1,22 +1,9 @@
 import { useState, useCallback } from "react";
 import { templatesApi } from "@/features/template/services/api";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
+import { Template } from "@/features/template/lib/schema"
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
-
-type Template = {
-  id: number;
-  name: string;
-  description: string;
-  templatecol: string;
-  weekdays: string;
-  notSameDay: boolean;
-  private: boolean;
-  lim_attend: boolean;
-  fixed_price: boolean;
-  free: boolean;
-  waitinglist: boolean;
-};
 
 export function useTemplate() {
   const [templateStatus, setTemplateStatus] = useState<Status>("idle");
@@ -49,8 +36,7 @@ export function useTemplate() {
     }
   }, []);
 
-  const addTemplate = useCallback(
-    async (data: Omit<Template, "id">) => {
+  const addTemplate = async (data: Omit<Template, "id">) => {
       try {
         setTemplateStatus("loading");
         await templatesApi.create(data);
@@ -62,12 +48,9 @@ export function useTemplate() {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchTemplates, resetToIdle]
-  );
+    };
 
-  const updateTemplate = useCallback(
-    async (id: number, data: Partial<Template>) => {
+  const updateTemplate = async (id: number, data: Partial<Template>) => {
       try {
         setTemplateStatus("loading");
         await templatesApi.update(id.toString(), data);
@@ -79,12 +62,9 @@ export function useTemplate() {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchTemplates, resetToIdle]
-  );
+    };
 
-  const deleteTemplate = useCallback(
-    async (id: number) => {
+  const deleteTemplate = async (id: number) => {
       try {
         setTemplateStatus("loading");
         await templatesApi.remove(id.toString());
@@ -96,9 +76,7 @@ export function useTemplate() {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchTemplates, resetToIdle]
-  );
+    };
 
   useEffectOnce(fetchTemplates);
 

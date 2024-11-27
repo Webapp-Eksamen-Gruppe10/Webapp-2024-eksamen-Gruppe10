@@ -1,22 +1,9 @@
 import { useCallback, useState } from "react";
 import { eventsApi } from "@/features/event/services/api"; 
 import { useEffectOnce } from "@/hooks/useEffectOnce";
+import { Event } from "@/features/event/lib/schema"
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
-
-type Event = {
-    id: string;
-    capacity: string;
-    title: string;
-    datetime: Date;
-    location: string;
-    category: string;
-    price: number;
-    description: string;
-    private: boolean;
-    waitinglist: boolean;
-    template_id: number;
-  };
 
 export function useEvent() {
   const [eventStatus, setEventStatus] = useState<Status>("idle");
@@ -49,25 +36,25 @@ export function useEvent() {
     }
   }, []);
 
-  const addEvent = useCallback(
-    async (data: Partial<Event>) => {
-      try {
+  
+  const addEvent = async (data: Partial<Event>) => {
+    try {
         setEventStatus("loading");
-        await eventsApi.create(data);
-        await fetchEvents();
-        setEventStatus("success");
-      } catch (error) {
-        setEventStatus("error");
-        setEventError("Failed to create event");
-      } finally {
-        resetToIdle();
-      }
-    },
-    [fetchEvents, resetToIdle]
-  );
+      await eventsApi.create(data);
+      await fetchEvents();
+      setEventStatus("success");
+    } catch (error) {
+      setEventStatus("error");
+      setEventError("Failed to create event");
+    } finally {
+      resetToIdle();
+    }
+  }
 
-  const updateEvent = useCallback(
-    async (id: string, data: Partial<Event>) => {
+
+
+
+  const updateEvent = async (id: string, data: Partial<Event>) => {
       try {
         setEventStatus("loading");
         await eventsApi.update(id, data);
@@ -79,12 +66,11 @@ export function useEvent() {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchEvents, resetToIdle]
-  );
+    };
 
-  const deleteEvent = useCallback(
-    async (id: string) => {
+
+
+  const deleteEvent = async (id: string) => {
       try {
         setEventStatus("loading");
         await eventsApi.remove(id);
@@ -96,9 +82,7 @@ export function useEvent() {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchEvents, resetToIdle]
-  );
+    };
 
   useEffectOnce(fetchEvents);
 

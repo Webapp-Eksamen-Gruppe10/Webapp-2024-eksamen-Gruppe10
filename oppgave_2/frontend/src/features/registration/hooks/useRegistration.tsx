@@ -1,17 +1,10 @@
 import { useState, useCallback } from "react";
 import { registrationsApi } from "@/features/registration/services/api";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
+import { Registration } from "@/features/registration/lib/schema"
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
 
-type Registration = {
-  id: number;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  status: string;
-  event_id: string;
-};
 
 export function useRegistration(eventId: string) {
   const [registrationStatus, setRegistrationStatus] = useState<Status>("idle");
@@ -44,8 +37,7 @@ export function useRegistration(eventId: string) {
     }
   }, [eventId]);
 
-  const addRegistration = useCallback(
-    async (data: Omit<Registration, "id">) => {
+  const addRegistration = async (data: Omit<Registration, "id">) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.create(eventId, data);
@@ -57,12 +49,9 @@ export function useRegistration(eventId: string) {
       } finally {
         resetToIdle();
       }
-    },
-    [eventId, fetchRegistrations, resetToIdle]
-  );
+    };
 
-  const updateRegistration = useCallback(
-    async (id: number, data: Partial<Registration>) => {
+  const updateRegistration = async (id: number, data: Partial<Registration>) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.update(id.toString(), data);
@@ -74,12 +63,9 @@ export function useRegistration(eventId: string) {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchRegistrations, resetToIdle]
-  );
+    };
 
-  const deleteRegistration = useCallback(
-    async (id: number) => {
+  const deleteRegistration = async (id: number) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.remove(id.toString());
@@ -91,9 +77,7 @@ export function useRegistration(eventId: string) {
       } finally {
         resetToIdle();
       }
-    },
-    [fetchRegistrations, resetToIdle]
-  );
+    };
 
   useEffectOnce(fetchRegistrations);
 
