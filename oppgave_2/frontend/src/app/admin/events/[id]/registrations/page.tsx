@@ -1,6 +1,6 @@
 "use client"; 
+import AdminRegistrationForm from '../../../../../features/registration/components/AdminRegistrationForm';
 
 export default function AdminRegistrationsPage() {
-
-    return <h1>Admin registrations</h1>
+    return <AdminRegistrationForm />;
 }
