@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export { templateSchema, dbTemplateSchema}
+
 const templateSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -25,9 +27,6 @@ const dbTemplateSchema = z.object({
     free: z.boolean(),
     waitinglist: z.boolean(),
 })
-
-export type DbTemplate = z.infer<typeof dbTemplateSchema>;
-export type Template = z.infer<typeof templateSchema>;
 
 export function validateTemplate(data: unknown) {
     return templateSchema.parse(data)
