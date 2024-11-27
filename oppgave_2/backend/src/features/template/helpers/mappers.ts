@@ -1,5 +1,5 @@
-import { DbTemplate, Template } from "../types";
-import { validateDbTemplate, validateTemplate, validateTemplateArray } from "./schema";
+import { DbTemplate, DbTemplateWithoutId, Template } from "../types";
+import { validateDbTemplate, validateDbTemplateWithoutId, validateTemplate, validateTemplateArray } from "./schema";
 
 export const ToTemplateObject = (dbTemplate : DbTemplate): Template => {
     const template: Template = {
@@ -32,10 +32,10 @@ export const CreateTemplateToDb = (template : Omit<Template, "id">): DbTemplate 
     return validateDbTemplate(dbTemplate)
 }
 
-export const UpdateTemplateToDb = (template : Template): DbTemplate => {
-    const dbTemplate: DbTemplate = {
+export const UpdateTemplateToDb = (template : Template): DbTemplateWithoutId => {
+    const dbTemplate: DbTemplateWithoutId = {
         ...template,
         weekdays: JSON.stringify(template.weekdays)
     }
-    return validateDbTemplate(dbTemplate)
+    return validateDbTemplateWithoutId(dbTemplate)
 }

@@ -1,23 +1,9 @@
 import { z } from "zod";
 
-export { templateSchema, dbTemplateSchema, templateSchemaWithoutId}
+export { templateSchema, dbTemplateSchema, templateSchemaWithoutId, dbTemplateSchemaWithoutId}
 
 const templateSchema = z.object({
     id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    weekdays: z.string().array(),
-    notSameDay: z.boolean(),
-    private: z.boolean(),
-    lim_attend: z.boolean(),
-    fixed_price: z.boolean(),
-    free: z.boolean(),
-    waitinglist: z.boolean(),
-})
-
-const templatesSchema = z.array(templateSchema);
-
-const templateSchemaWithoutId = z.object({
     name: z.string(),
     description: z.string(),
     weekdays: z.string().array(),
@@ -42,6 +28,18 @@ const dbTemplateSchema = z.object({
     waitinglist: z.boolean(),
 })
 
+
+const templatesSchema = z.array(templateSchema);
+
+const templateSchemaWithoutId = templateSchema.omit({
+    id: true
+})
+
+const dbTemplateSchemaWithoutId = dbTemplateSchema.omit({
+    id: true
+})
+
+
 export function validateTemplate(data: unknown) {
     return templateSchema.parse(data)
 }
@@ -55,7 +53,7 @@ export function validateDbTemplate(data: unknown) {
 }
 
 export function validateDbTemplateWithoutId(data: unknown) {
-    return templateSchemaWithoutId.parse(data)
+    return dbTemplateSchemaWithoutId.parse(data)
 }
 
 
