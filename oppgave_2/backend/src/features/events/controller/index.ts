@@ -11,10 +11,13 @@ import { cors } from "hono/cors";
 import { errorResponse } from "../../../lib/error";
 import { validateEventWithoutId, validateEvent } from "../helpers/schema";
 import type { CreateEventDto, UpdateEventDto } from "../types";
+import { endpoint } from "../../../config/url";
+
 
 const EventController = new Hono();
 
 EventController.use("/*", cors());
+
 
 EventController.get("/", async (c) => {
   const result = await getAllEvents();

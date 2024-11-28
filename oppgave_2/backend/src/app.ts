@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { EventController } from "./features/events/controller";
+import { endpoint } from "./config/url";
 // import { templateController } from "./features/template/controller";
 
 const app = new Hono();
 
 app.use("/*", cors());
 
-app.route("/v1/events", EventController);
+app.route(endpoint.event, EventController);
 
 app.onError((err, c) => {
   console.error(err);
