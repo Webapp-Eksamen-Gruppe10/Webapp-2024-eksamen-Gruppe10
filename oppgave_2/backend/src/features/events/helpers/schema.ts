@@ -5,9 +5,9 @@ const eventSchema = z.object({
   id: z.string(),
   template_id: z.string(),
   title: z.string(),
-  dateTime: z.date(),
+  dateTime: z.coerce.date(),
   location: z.string(),
-  category: z.string().array(),
+  category: z.array(z.string()),
   capacity: z.number(),
   price: z.number(),
   description: z.string(),
@@ -17,11 +17,11 @@ const eventSchema = z.object({
   template: templateSchema.optional(),
 });
 
-const dbTemplateSchema = z.object({
+const dbEventSchema = z.object({
   id: z.string(),
   template_id: z.string(),
   title: z.string(),
-  dateTime: z.date(),
+  dateTime: z.coerce.date(),
   location: z.string(),
   category: z.string(),
   capacity: z.number().int(),
@@ -29,16 +29,20 @@ const dbTemplateSchema = z.object({
   description: z.string(),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  // Participants and template are handled via relations
 });
 
 const eventSchemaWithoutId = eventSchema.omit({
   id: true,
 });
 
-const dbTemplateSchemaWithoutId = dbTemplateSchema.omit({
+const dbEventSchemaWithoutId = dbEventSchema.omit({
   id: true,
 });
+
+export type Event = z.infer<typeof eventSchema>;
+export type DbEvent = z.infer<typeof dbEventSchema>;
+export type CreateEventDto = z.infer<typeof eventSchemaWithoutId>;
+export type UpdateEventDto = Partial<CreateEventDto>;
 
 export function validateEvent(data: unknown) {
   return eventSchema.safeParse(data);
@@ -49,11 +53,11 @@ export function validateEventWithoutId(data: unknown) {
 }
 
 export function validateDbEvent(data: unknown) {
-  return dbTemplateSchema.safeParse(data);
+  return dbEventSchema.safeParse(data);
 }
 
 export function validateDbEventWithoutId(data: unknown) {
-  return dbTemplateSchemaWithoutId.safeParse(data);
+  return dbEventSchemaWithoutId.safeParse(data);
 }
 
 export function validateEventArray(data: unknown) {
