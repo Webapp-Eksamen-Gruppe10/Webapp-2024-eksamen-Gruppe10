@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { TemplateService } from "../service";
+import { templateService, TemplateService } from "../service";
 import { cors } from "hono/cors";
 import { errorResponse } from "@/lib/error";
 import { Data } from "@/types";
@@ -57,3 +57,5 @@ export const createTemplateController = (templateServiceDb: TemplateService) => 
 
     return app;
 }
+
+export const templateController = createTemplateController(templateService)
