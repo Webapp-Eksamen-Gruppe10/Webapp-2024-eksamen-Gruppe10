@@ -9,7 +9,7 @@ type AdminEventProps = {
 export default function AdminEvents({events} : AdminEventProps) {
     
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 5;
+  const eventsPerPage = 6;
 
   // Pagination logic
   const indexOfLastEvent = currentPage * eventsPerPage;
@@ -29,42 +29,6 @@ export default function AdminEvents({events} : AdminEventProps) {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Arrangementoversikt</h1>
-
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="date-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Dato
-          </label>
-          <input
-            id="date-filter"
-            type="date"
-            className="w-full border border-gray-300 rounded p-2"
-          />
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="type-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Type
-          </label>
-          <select id="type-filter" className="w-full border border-gray-300 rounded p-2">
-            <option value="">Alle typer</option>
-            <option value="konsert">Konsert</option>
-            <option value="teater">Teater</option>
-            <option value="utstilling">Utstilling</option>
-          </select>
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="capacity-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Kapasitet
-          </label>
-          <input
-            id="capacity-filter"
-            type="number"
-            placeholder="Min. kapasitet"
-            className="w-full border border-gray-300 rounded p-2"
-          />
-        </div>
-      </div>
 
       {/* Create New Event */}
       <div className="mb-4">

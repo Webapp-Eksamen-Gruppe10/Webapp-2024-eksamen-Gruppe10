@@ -4,7 +4,7 @@ import { Event } from "@/features/event/lib/schema";
 
 type EventSectionProps = {
   events: Event[];
-};
+}
 
 
 
