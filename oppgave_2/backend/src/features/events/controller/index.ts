@@ -38,6 +38,8 @@ EventController.post("/", async (c) => {
   const parsed = validateEventWithoutId(body);
 
   if (!parsed.success) {
+    console.error("Validation Errors:", parsed.error.errors); // Log errors
+
     return errorResponse(c, "BAD_REQUEST", "Invalid event data");
   }
 
