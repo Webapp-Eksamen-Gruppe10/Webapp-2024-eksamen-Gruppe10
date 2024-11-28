@@ -1,8 +1,3 @@
-// src/features/events/types/index.ts
-
-import { Registration } from "@/features/registration/types";
-import { Template } from "@/features/template/types";
-
 export type Event = {
   id: string;
   template_id: string;
@@ -15,8 +10,6 @@ export type Event = {
   description: string;
   private: boolean;
   waitinglist: boolean;
-  participants?: Registration[];
-  template?: Template;
 };
 
 export type DbEvent = {
@@ -61,8 +54,6 @@ export const eventFields: (keyof Event)[] = [
   "description",
   "private",
   "waitinglist",
-  "participants",
-  "template",
 ];
 
 export type EventKeys = keyof Event;

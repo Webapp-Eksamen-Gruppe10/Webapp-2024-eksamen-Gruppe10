@@ -1,4 +1,3 @@
-import { templateSchema } from "@/features/template/helpers/schema";
 import { z } from "zod";
 
 const eventSchema = z.object({
@@ -13,8 +12,6 @@ const eventSchema = z.object({
   description: z.string(),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  participants: z.string().array().optional(),
-  template: templateSchema.optional(),
 });
 
 const dbEventSchema = z.object({
@@ -39,10 +36,10 @@ const dbEventSchemaWithoutId = dbEventSchema.omit({
   id: true,
 });
 
-export type Event = z.infer<typeof eventSchema>;
-export type DbEvent = z.infer<typeof dbEventSchema>;
-export type CreateEventDto = z.infer<typeof eventSchemaWithoutId>;
-export type UpdateEventDto = Partial<CreateEventDto>;
+// export type Event = z.infer<typeof eventSchema>;
+// export type DbEvent = z.infer<typeof dbEventSchema>;
+// export type CreateEventDto = z.infer<typeof eventSchemaWithoutId>;
+// export type UpdateEventDto = Partial<CreateEventDto>;
 
 export function validateEvent(data: unknown) {
   return eventSchema.safeParse(data);

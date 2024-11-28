@@ -9,8 +9,7 @@ import {
 } from "../service";
 import { cors } from "hono/cors";
 import { errorResponse } from "@/lib/error";
-import { eventCreateSchema } from "../helpers/schema";
-import type { CreateEvent, UpdateEvent } from "../types";
+import type { CreateEventDto, UpdateEventDto } from "../types";
 
 const EventController = new Hono();
 

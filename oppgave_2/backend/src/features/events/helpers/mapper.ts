@@ -1,5 +1,4 @@
-import type { Prisma } from "@prisma/client";
-import { CreateEventDto, DbEvent, Event } from "../types";
+import { CreateEventDto, DbEvent, Event, UpdateEventDto } from "../types";
 
 export const fromDb = (event: DbEvent) => {
   return {
@@ -21,6 +20,21 @@ export const toDb = (event: Event) => {
   return {
     ...event,
     id: crypto.randomUUID(),
+    category: JSON.stringify(event.category),
+  };
+};
+
+export const createEventToDb = (event: CreateEventDto) => {
+  return {
+    ...event,
+    id: crypto.randomUUID(),
+    category: JSON.stringify(event.category),
+  };
+};
+
+export const updateEventToDb = (event: UpdateEventDto) => {
+  return {
+    ...event,
     category: JSON.stringify(event.category),
   };
 };
