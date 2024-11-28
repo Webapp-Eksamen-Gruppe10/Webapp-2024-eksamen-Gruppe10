@@ -1,10 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { templateController } from "./features/template/controller";
+import { EventController } from "./features/events/controller";
+// import { templateController } from "./features/template/controller";
 
 const app = new Hono();
 
 app.use("/*", cors());
+
+app.route("/v1/events", EventController);
 
 app.onError((err, c) => {
   console.error(err);
@@ -18,7 +21,6 @@ app.onError((err, c) => {
     { status: 500 }
   );
 });
-
-app.route("/api/v1/templates", templateController)
+// app.route("/api/v1/templates", templateController)
 
 export default app;
