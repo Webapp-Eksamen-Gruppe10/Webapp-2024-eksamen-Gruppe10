@@ -2,7 +2,7 @@ import type { ResultFn } from "@/types";
 
 export const ResultHandler: ResultFn = {
   success(data) {
-    return { success: true, data};
+    return { success: true, data };
   },
   failure(error: unknown, code = "INTERNAL_SERVER_ERROR") {
     let err = "";
