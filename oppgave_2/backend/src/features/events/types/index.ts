@@ -27,7 +27,7 @@ export type DbEvent = {
 };
 
 export type EventWithNullableDateTime = Omit<Event, "datetime"> & {
-  dateTime: Date | null;
+  datetime: Date | null;
 };
 
 export type CreateEventDto = Pick<
