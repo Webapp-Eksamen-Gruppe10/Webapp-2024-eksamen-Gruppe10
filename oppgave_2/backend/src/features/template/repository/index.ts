@@ -67,11 +67,11 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const updateById = async (data: Template): Promise<Result<Template>> => {
+    const updateById = async (data: Template, id: string): Promise<Result<Template>> => {
         try {
             const update = await prismaDb.template.update({
                 where: {
-                    id: data.id
+                    id: id
                 },
                 data: UpdateTemplateToDb(data)
             })

@@ -24,17 +24,17 @@ export const createTemplateService = (templateRepositoryDb: TemplateRepository) 
         return templateRepositoryDb.create(data)
     }
 
-    const updateTemplate = async(data: Template): Promise<Result<Template>> => {
-        const templateExist = await templateRepositoryDb.exist(data.id)
+    const updateTemplate = async(data: Template, id: string): Promise<Result<Template>> => {
+        const templateExist = await templateRepositoryDb.exist(id)
         if(!templateExist) return ResultHandler.failure("Template not found", "NOT_FOUND")
 
-        const notAllowedUpdate = await templateRepositoryDb.eventsWithTemplate(data.id)
+        const notAllowedUpdate = await templateRepositoryDb.eventsWithTemplate(id)
         if(notAllowedUpdate) return ResultHandler.failure("Event(s) are using this template", "FORBIDDEN")
             
         if(!validateTemplate(data).success)
             return ResultHandler.failure("Data does not match", "BAD_REQUEST")
 
-        return templateRepositoryDb.updateById(data)
+        return templateRepositoryDb.updateById(data, id)
         
     }
 
