@@ -2,7 +2,7 @@ export type Event = {
   id: string;
   template_id: string;
   title: string;
-  dateTime: Date;
+  datetime: Date;
   location: string;
   category: string;
   capacity: number;
@@ -16,7 +16,7 @@ export type DbEvent = {
   id: string;
   template_id: string;
   title: string;
-  dateTime: Date;
+  datetime: Date;
   location: string;
   category: string;
   capacity: number;
@@ -26,7 +26,7 @@ export type DbEvent = {
   waitinglist: boolean;
 };
 
-export type EventWithNullableDateTime = Omit<Event, "dateTime"> & {
+export type EventWithNullableDateTime = Omit<Event, "datetime"> & {
   dateTime: Date | null;
 };
 
@@ -34,7 +34,7 @@ export type CreateEventDto = Pick<
   Event,
   | "template_id"
   | "title"
-  | "dateTime"
+  | "datetime"
   | "location"
   | "category"
   | "capacity"
@@ -50,7 +50,7 @@ export const eventFields: (keyof Event)[] = [
   "id",
   "template_id",
   "title",
-  "dateTime",
+  "datetime",
   "location",
   "category",
   "capacity",

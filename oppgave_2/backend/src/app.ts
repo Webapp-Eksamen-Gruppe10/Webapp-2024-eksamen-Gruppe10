@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { EventController } from "./features/events/controller";
 import { endpoint } from "./config/url";
-// import { templateController } from "./features/template/controller";
+import { templateController } from "./features/template/controller";
 
 const app = new Hono();
 
@@ -22,6 +22,7 @@ app.onError((err, c) => {
     { status: 500 }
   );
 });
-// app.route("/api/v1/templates", templateController)
+
+app.route(endpoint.template, templateController)
 
 export default app;

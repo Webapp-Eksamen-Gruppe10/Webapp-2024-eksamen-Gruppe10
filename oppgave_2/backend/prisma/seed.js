@@ -42,7 +42,7 @@ async function seedEvents() {
         data: {
           id: event.id,
           title: event.title,
-          dateTime: new Date(event.dateTime),
+          datetime: new Date(event.datetime),
           capacity: event.capacity,
           location: event.location,
           category: event.category,
