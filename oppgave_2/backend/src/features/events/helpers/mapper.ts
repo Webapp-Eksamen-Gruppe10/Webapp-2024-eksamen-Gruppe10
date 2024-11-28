@@ -5,7 +5,7 @@ export const fromDb = (event: DbEvent) => {
     id: event.id,
     template_id: event.template_id,
     title: event.title,
-    dateTime: event.dateTime ? new Date(event.dateTime) : null,
+    datetime: event.datetime ? new Date(event.datetime) : null,
     location: event.location,
     category: event.category,
     capacity: event.capacity,
