@@ -66,6 +66,6 @@ for å kunne slette et arrangement: fetch('/api/v1/events/{id}'): Metode DELETE
 
 ### AdminStatistics
 Funksjonalitet: Henter statistikk for antall påmeldte den siste måneden for ett arrangement.
-for å kunne hente antall påmeldte: fetch('/api/v1/events/id'): Metode GET
+for å kunne hente antall påmeldte: fetch('/api/v1/events/{id}'): Metode GET
 
 
