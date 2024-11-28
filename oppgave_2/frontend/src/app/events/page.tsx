@@ -1,6 +1,9 @@
-"use client"; 
+"use client";
+import EventsPage from "@/features/event/page/EventsPage";
 
-export default function EventsPage() {
-    return <h1>Alle events</h1>;
+ 
+
+export default function Page() {
+    return <EventsPage/>;
   }
   
