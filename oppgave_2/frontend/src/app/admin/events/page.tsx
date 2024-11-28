@@ -1,4 +1,8 @@
+import AdminEventsPage from "@/features/event/page/AdminEventsPage";
+
 export default function AdminPage() {
-    return <h1>Admin events</h1>;
+    return (
+      <AdminEventsPage/>
+    )
   }
   
