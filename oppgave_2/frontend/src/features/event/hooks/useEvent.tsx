@@ -26,6 +26,7 @@ export function useEvent() {
 
   const fetchEvents = useCallback(async () => {
     try {
+      console.log("FUNKER DENNE DA?")
       setEventStatus("loading");
       const result = await eventsApi.list();
       setEventData(result.data as Event[]);
@@ -36,7 +37,7 @@ export function useEvent() {
     }
   }, []);
 
-  
+  console.log(eventData)
   const addEvent = async (data: Partial<Event>) => {
     try {
         setEventStatus("loading");

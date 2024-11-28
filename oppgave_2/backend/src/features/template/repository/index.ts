@@ -1,10 +1,10 @@
-import { Prisma } from "@/lib/client/db";
-import  prisma  from "@/lib/client/db";
+import { Prisma } from "../../../lib/client/db";
+import  prisma  from "../../../lib/client/db";
 import { Template, TemplateWithoutId } from "../types";
 import { CreateTemplateToDb, ToTemplateArray, ToTemplateObject, UpdateTemplateToDb } from "../helpers/mappers";
-import { ResultHandler } from "@/lib/result";
+import { ResultHandler } from "../../../lib/result";
 import { validateTemplate, validateTemplateWithoutId } from "../helpers/schema";
-import { Result } from "@/types";
+import { Result } from "../../../types";
 
 export const createTemplateRepository = (prismaDb: Prisma) => {
 
