@@ -12,6 +12,7 @@ model Registration {
   event_id String
   name String
   email String
+  createdAt DateTime
   phoneNumber String
   status String
   event Event @relation(fields: [event_id], references: [id])

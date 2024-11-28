@@ -164,6 +164,7 @@ export const registrations = [
     email: "alice.brown@example.com",
     phoneNumber: "1234567890",
     status: "confirmed",
+    createdAt: "2024-01-15T10:30:00Z",
   },
   {
     event_id: "event1",
@@ -171,6 +172,7 @@ export const registrations = [
     email: "bob.johnson@example.com",
     phoneNumber: "9876543210",
     status: "pending",
+    createdAt: "2024-01-15T11:45:00Z",
   },
   {
     event_id: "event2",
@@ -178,6 +180,7 @@ export const registrations = [
     email: "cathy.lee@example.com",
     phoneNumber: "2345678901",
     status: "confirmed",
+    createdAt: "2024-02-10T08:20:00Z",
   },
   {
     event_id: "event2",
@@ -185,6 +188,7 @@ export const registrations = [
     email: "daniel.green@example.com",
     phoneNumber: "8765432190",
     status: "pending",
+    createdAt: "2024-02-10T09:10:00Z",
   },
   {
     event_id: "event3",
@@ -192,6 +196,7 @@ export const registrations = [
     email: "ella.white@example.com",
     phoneNumber: "3456789012",
     status: "confirmed",
+    createdAt: "2024-03-05T11:30:00Z",
   },
   {
     event_id: "event4",
@@ -199,6 +204,7 @@ export const registrations = [
     email: "frank.harris@example.com",
     phoneNumber: "7654321098",
     status: "confirmed",
+    createdAt: "2024-04-20T20:00:00Z",
   },
   {
     event_id: "event5",
@@ -206,6 +212,7 @@ export const registrations = [
     email: "grace.kim@example.com",
     phoneNumber: "4567890123",
     status: "pending",
+    createdAt: "2024-05-12T15:45:00Z",
   },
   {
     event_id: "event6",
@@ -213,6 +220,7 @@ export const registrations = [
     email: "henry.moore@example.com",
     phoneNumber: "6543210987",
     status: "confirmed",
+    createdAt: "2024-06-01T09:00:00Z",
   },
   {
     event_id: "event7",
@@ -220,6 +228,7 @@ export const registrations = [
     email: "ivy.scott@example.com",
     phoneNumber: "5678901234",
     status: "confirmed",
+    createdAt: "2024-07-08T12:15:00Z",
   },
   {
     event_id: "event8",
@@ -227,5 +236,6 @@ export const registrations = [
     email: "jack.taylor@example.com",
     phoneNumber: "5432109876",
     status: "pending",
+    createdAt: "2024-08-15T19:30:00Z",
   },
 ];

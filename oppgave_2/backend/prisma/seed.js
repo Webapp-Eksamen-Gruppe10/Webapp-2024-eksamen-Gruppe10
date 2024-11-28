@@ -71,6 +71,7 @@ async function seedRegistrations() {
           },
           name: registration.name,
           email: registration.email,
+          createdAt: registration.createdAt,
           phoneNumber: registration.phoneNumber,
           status: registration.status,
         },
