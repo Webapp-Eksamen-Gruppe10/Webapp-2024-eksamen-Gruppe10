@@ -1,6 +1,6 @@
 "use client"; 
-import AdminRegistrationForm from '../../../../../features/registration/components/AdminRegistrationForm';
+import AdminRegistrationPage from "@/features/registration/page/AdminRegistrationPage";
 
-export default function AdminRegistrationsPage() {
-    return <AdminRegistrationForm />;
+export default function Page() {
+    return <AdminRegistrationPage />
 }
