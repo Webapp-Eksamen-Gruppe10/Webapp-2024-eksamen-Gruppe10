@@ -1,8 +1,8 @@
-import { ResultHandler } from "@/lib/result"
+import { ResultHandler } from "../../../lib/result"
 import { templateRepository, type TemplateRepository } from "../repository"
 import { Template, TemplateWithoutId } from "../types"
 import { validateTemplate, validateTemplateWithoutId } from "../helpers/schema"
-import { Result } from "@/types"
+import { Result } from "../../../types"
 
 export const createTemplateService = (templateRepositoryDb: TemplateRepository) =>{
     

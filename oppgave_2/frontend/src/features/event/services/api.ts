@@ -4,7 +4,9 @@ import { endpoint } from "@/config/url";
 
 const list = async () => {
     try {
+        console.log("DENNE KJØRER")
         const events = await ofetch(endpoint.events.list);
+        console.log("DENNE KJØRER")
         
         if (events.length === 0) {
             console.warn('No events found.');

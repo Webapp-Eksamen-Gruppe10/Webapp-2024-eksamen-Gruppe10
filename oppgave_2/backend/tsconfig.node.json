@@ -8,16 +8,11 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noEmit": true,
+
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
+      "@/*": ["./src/*"]
+    }
   },
-  "include": [
-    "**/*.ts",
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
