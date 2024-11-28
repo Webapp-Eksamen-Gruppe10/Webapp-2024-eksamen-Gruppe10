@@ -8,7 +8,8 @@ import {
   deleteEvent,
 } from "../service";
 import { cors } from "hono/cors";
-import { errorResponse } from "@/lib/error";
+import { errorResponse } from "../../../lib/error";
+import { validateEventWithoutId, validateEvent } from "../helpers/schema";
 import type { CreateEventDto, UpdateEventDto } from "../types";
 
 const EventController = new Hono();
@@ -34,13 +35,13 @@ EventController.get("/:id", async (c) => {
 
 EventController.post("/", async (c) => {
   const body = await c.req.json();
-  const parsed = eventCreateSchema.safeParse(body);
+  const parsed = validateEventWithoutId(body);
 
   if (!parsed.success) {
     return errorResponse(c, "BAD_REQUEST", "Invalid event data");
   }
 
-  const result = await createEvent(parsed.data);
+  const result = await createEvent(parsed.data as CreateEventDto);
   if (!result.success) {
     return errorResponse(c, result.error.code, result.error.message);
   }
@@ -50,9 +51,13 @@ EventController.post("/", async (c) => {
 EventController.patch("/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
-  const data = body as UpdateEvent;
+  const parsed = validateEvent(body);
 
-  const result = await updateEvent(id, data);
+  if (!parsed.success) {
+    return errorResponse(c, "BAD_REQUEST", "Invalid event data");
+  }
+
+  const result = await updateEvent(id, parsed.data as UpdateEventDto);
   if (!result.success) {
     return errorResponse(c, result.error.code, result.error.message);
   }

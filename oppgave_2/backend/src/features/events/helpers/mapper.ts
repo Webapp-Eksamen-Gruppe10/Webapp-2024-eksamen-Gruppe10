@@ -7,7 +7,7 @@ export const fromDb = (event: DbEvent) => {
     title: event.title,
     dateTime: event.dateTime ? new Date(event.dateTime) : null,
     location: event.location,
-    category: JSON.parse(event.category),
+    category: event.category,
     capacity: event.capacity,
     price: event.price,
     description: event.description,
@@ -20,7 +20,6 @@ export const toDb = (event: Event) => {
   return {
     ...event,
     id: crypto.randomUUID(),
-    category: JSON.stringify(event.category),
   };
 };
 
@@ -28,13 +27,11 @@ export const createEventToDb = (event: CreateEventDto) => {
   return {
     ...event,
     id: crypto.randomUUID(),
-    category: JSON.stringify(event.category),
   };
 };
 
 export const updateEventToDb = (event: UpdateEventDto) => {
   return {
     ...event,
-    category: JSON.stringify(event.category),
   };
 };

@@ -1,18 +1,14 @@
 // src/features/events/repository/index.ts
-import { ResultHandler } from "@/lib/result";
-import prisma from "@/lib/client/db";
-import { toDbEvent, toDbEventUpdate, toEvent } from "../helpers/mapper";
-import type { CreateEvent, Event, UpdateEvent } from "../types";
+import { ResultHandler } from "../../../lib/result";
+import prisma from "../../../lib/client/db";
+import { fromDb, createEventToDb, updateEventToDb } from "../helpers/mapper";
+import type { CreateEventDto, Event, UpdateEventDto } from "../types";
 
-export const create = async (data: CreateEvent) => {
+export const create = async (data: CreateEventDto) => {
   try {
-    const eventData = toDbEvent(data);
+    const eventData = createEventToDb(data);
     const created = await prisma.event.create({
       data: eventData,
-      include: {
-        participants: true,
-        template: true,
-      },
     });
     return ResultHandler.success(created.id);
   } catch (error) {
@@ -22,13 +18,8 @@ export const create = async (data: CreateEvent) => {
 
 export const list = async () => {
   try {
-    const events = await prisma.event.findMany({
-      include: {
-        participants: true,
-        template: true,
-      },
-    });
-    return ResultHandler.success(events.map(toEvent));
+    const events = await prisma.event.findMany();
+    return ResultHandler.success(events.map(fromDb));
   } catch (error) {
     return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR");
   }
@@ -38,29 +29,21 @@ export const getById = async (id: string) => {
   try {
     const event = await prisma.event.findUniqueOrThrow({
       where: { id },
-      include: {
-        participants: true,
-        template: true,
-      },
     });
-    return ResultHandler.success(toEvent(event));
+    return ResultHandler.success(fromDb(event));
   } catch (error) {
     return ResultHandler.failure(error, "NOT_FOUND");
   }
 };
 
-export const updateById = async (data: Partial<UpdateEvent>, id: string) => {
+export const updateById = async (data: UpdateEventDto, id: string) => {
   try {
-    const updatedData = toDbEventUpdate(data);
+    const updatedData = updateEventToDb(data);
     const updated = await prisma.event.update({
       where: { id },
       data: updatedData,
-      include: {
-        participants: true,
-        template: true,
-      },
     });
-    return ResultHandler.success(toEvent(updated));
+    return ResultHandler.success(fromDb(updated));
   } catch (error) {
     return ResultHandler.failure(error, "NOT_FOUND");
   }

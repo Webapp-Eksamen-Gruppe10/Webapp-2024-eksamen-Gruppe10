@@ -4,7 +4,7 @@ export type Event = {
   title: string;
   dateTime: Date;
   location: string;
-  category: string[];
+  category: string;
   capacity: number;
   price: number;
   description: string;
@@ -24,6 +24,10 @@ export type DbEvent = {
   description: string;
   private: boolean;
   waitinglist: boolean;
+};
+
+export type EventWithNullableDateTime = Omit<Event, "dateTime"> & {
+  dateTime: Date | null;
 };
 
 export type CreateEventDto = Pick<

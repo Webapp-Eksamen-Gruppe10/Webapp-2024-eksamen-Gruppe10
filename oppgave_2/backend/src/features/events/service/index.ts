@@ -1,26 +1,35 @@
 // src/features/events/service/index.ts
 import { list, create, updateById, getById, deleteById } from "../repository";
 import type { Result } from "@/types";
-import type { CreateEvent, Event, UpdateEvent } from "../types";
+import type {
+  CreateEventDto,
+  Event,
+  EventWithNullableDateTime,
+  UpdateEventDto,
+} from "../types";
 
 export const createEvent = async (
-  data: CreateEvent
+  data: CreateEventDto
 ): Promise<Result<string>> => {
   return create(data);
 };
 
-export const getAllEvents = async (): Promise<Result<Event[]>> => {
+export const getAllEvents = async (): Promise<
+  Result<EventWithNullableDateTime[]>
+> => {
   return list();
 };
 
-export const findOneEvent = async (id: string): Promise<Result<Event>> => {
+export const findOneEvent = async (
+  id: string
+): Promise<Result<EventWithNullableDateTime>> => {
   return getById(id);
 };
 
 export const updateEvent = async (
   id: string,
-  data: UpdateEvent
-): Promise<Result<Event>> => {
+  data: UpdateEventDto
+): Promise<Result<EventWithNullableDateTime>> => {
   return updateById(data, id);
 };
 
