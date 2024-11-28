@@ -6,7 +6,9 @@ type EventSectionProps = {
   events: Event[];
 };
 
-const EventSection: React.FC<EventSectionProps> = ({ events }) => {
+
+
+export default function EventSection ({ events }: EventSectionProps)  {
   return (
     <main className="flex-grow">
       <section>
@@ -50,4 +52,3 @@ const EventSection: React.FC<EventSectionProps> = ({ events }) => {
   );
 };
 
-export default EventSection;

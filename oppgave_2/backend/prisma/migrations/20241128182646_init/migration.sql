@@ -15,7 +15,7 @@ CREATE TABLE "Event" (
     "template_id" TEXT NOT NULL,
     "capacity" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
-    "dateTime" DATETIME NOT NULL,
+    "datetime" DATETIME NOT NULL,
     "location" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "price" REAL NOT NULL,

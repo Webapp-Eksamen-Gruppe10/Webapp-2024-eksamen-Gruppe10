@@ -12,6 +12,7 @@ model Registration {
   event_id String
   name String
   email String
+  createdAt DateTime
   phoneNumber String
   status String
   event Event @relation(fields: [event_id], references: [id])
@@ -24,7 +25,7 @@ model Event {
   template_id String
   capacity Int
   title String
-  dateTime DateTime
+  datetime DateTime
   location String
   category String
   price Float

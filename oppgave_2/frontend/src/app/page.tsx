@@ -1,6 +1,7 @@
+import EventsSectionPage from "@/features/event/page/EventSectionPage";
 import React from "react";
 
 export default function Home() {
-  return <h1>Oppgave 2 test</h1>;
+  return <EventsSectionPage/>;
 }
 
