@@ -1,9 +1,12 @@
 import { DbRegistration, Registration, RegistrationStatus, RegistrationWithoutId } from "../types";
+import { status } from "./schema";
+import { z } from "zod"
   
     export const ToRegistrationObject = (dbRegistration: DbRegistration): Registration => {
         const registration: Registration = {
             ...dbRegistration,
             participants: JSON.parse(dbRegistration.participants),
+            status: status.parse(dbRegistration.status)
         };
         return registration;
     };
@@ -15,6 +18,7 @@ import { DbRegistration, Registration, RegistrationStatus, RegistrationWithoutId
         registrations.push({
             ...dBregistrations,
             participants: JSON.parse(dBregistrations.participants),
+            status: status.parse(dBregistrations.status)
         });
         });
   

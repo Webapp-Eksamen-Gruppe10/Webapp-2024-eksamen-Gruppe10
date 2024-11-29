@@ -6,7 +6,8 @@ export {
   registrationSchemaWithoutId,
   registrationStatus,
   dBregistrationSchema,
-  dBregistrationSchemaWithoutId
+  dBregistrationSchemaWithoutId,
+  status
 };
 
 const status = z.enum(["confirmed", "pending", "waitinglist", "denied"])
@@ -30,7 +31,7 @@ const dBregistrationSchema = z.object({
     createdAt: z.coerce.date(),
     participants: z.string(),
     phoneNumber: z.string(),
-    status: status,
+    status: z.string(),
   });
 
 const registrationSchemaWithoutId = registrationSchema.omit({
