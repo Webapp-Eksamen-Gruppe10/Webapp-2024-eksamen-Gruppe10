@@ -33,6 +33,20 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
+    const eventCurrentCap = async(eventId: string, newCap: number) => {
+        try {
+            const registration = await prismaDb.event.update({
+                where: {
+                    id: eventId
+                },
+                data: {
+                    currentCapacity: newCap
+                }
+            })
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
 
     const event = async(eventId: string) => {
         const eventData = prismaDb.event.findUnique({
@@ -106,7 +120,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    return { registrationExist, eventExist, event, create, list, getById, updateById, deleteById };
+    return { registrationExist, eventExist, event, eventCurrentCap, create, list, getById, updateById, deleteById };
 }
 
 export const registrationRepository = createRegistrationRepository(prisma)
