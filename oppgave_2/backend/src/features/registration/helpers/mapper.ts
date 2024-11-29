@@ -1,20 +1,38 @@
-import { Registration, RegistrationStatus, RegistrationWithoutId } from "../types";
+import { DbRegistration, Registration, RegistrationStatus, RegistrationWithoutId } from "../types";
   
-  export const CreateRegistrationToDb = (registration: RegistrationWithoutId[]): Registration[] => {
-    const registrationDb: Registration[] = []
-    registration.map((registration) => {
-        registrationDb.push({
-          ...registration,
-          id: crypto.randomUUID(),
+    export const ToRegistrationObject = (dbRegistration: DbRegistration): Registration => {
+        const registration: Registration = {
+            ...dbRegistration,
+            participants: JSON.parse(dbRegistration.participants),
+        };
+        return registration;
+    };
+  
+    export const ToRegistrationArray = (dbRegistrations: DbRegistration[]): Registration[] => {
+        const registrations: Registration[] = [];
+  
+        dbRegistrations.map((dBregistrations) => {
+        registrations.push({
+            ...dBregistrations,
+            participants: JSON.parse(dBregistrations.participants),
         });
-      });
-    
-    return registrationDb;
+        });
+  
+        return registrations;
+    };
+
+  export const CreateRegistrationToDb = (registration: RegistrationWithoutId): DbRegistration => {
+    const registrationDb: DbRegistration = {
+            ...registration,
+            id: crypto.randomUUID(),
+            participants: JSON.stringify(registration.participants),
+        }
+        return registrationDb;
   };
   
-  export const UpdateRegistrationStatusToDb = (registration: Registration): RegistrationStatus => {
-    const registrationStatus: RegistrationStatus = {
-        status: registration.status
-    };
-    return registrationStatus;
+    export const UpdateRegistrationStatusToDb = (registration: Registration): RegistrationStatus => {
+        const registrationStatus: RegistrationStatus = {
+            status: registration.status
+        };
+        return registrationStatus;
   };
