@@ -1,6 +1,7 @@
 import { Event } from "@/features/event/lib/schema";
 import { useState } from "react";
 import Link from "next/link";
+import { formatDate } from "@/features/registration/lib/helpers";
 
 type AdminEventProps = {
     events: Event[]
@@ -45,7 +46,7 @@ export default function AdminEvents({events} : AdminEventProps) {
           <div key={event.id} className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg">
             <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
             <p className="text-sm text-gray-600 mb-1">
-              <strong>Dato:</strong> {event.datetime}
+              <strong>Dato:</strong> {formatDate(event.datetime)}
             </p>
             <p className="text-sm text-gray-600 mb-1">
               <strong>Type:</strong> {event.category || "N/A"}
