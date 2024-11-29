@@ -12,7 +12,7 @@ type EventSectionProps = {
 export default function EventSection ({ events }: EventSectionProps)  {
 
   return (
-    <main className="flex-grow">
+    <main className="flex-grow pb-20">
       <section>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-36">
           <div className="max-w-3xl mx-auto text-center mb-12">
@@ -41,7 +41,7 @@ export default function EventSection ({ events }: EventSectionProps)  {
             ))}
           </div>
 
-          <div className="text-center">
+          <div className="text-center pb-20">
             <Link href="/events" passHref>
               <button className="px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                 See All Events
