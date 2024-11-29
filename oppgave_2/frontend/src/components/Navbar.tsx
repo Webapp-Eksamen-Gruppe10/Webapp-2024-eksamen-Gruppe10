@@ -56,7 +56,7 @@ const Navbar = () => {
                       href="/admin/statistics"
                       className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                     >
-                      Statestikk
+                      Statistikk
                     </Link>
                   </div>
                 )}

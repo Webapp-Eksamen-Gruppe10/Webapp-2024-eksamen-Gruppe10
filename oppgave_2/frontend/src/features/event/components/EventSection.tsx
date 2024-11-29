@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
-import { formatDate } from "@/features/registration/lib/helpers";
+import { formatDate } from "@/lib/helpers";
 
 type EventSectionProps = {
   events: Event[];
@@ -24,7 +24,7 @@ export default function EventSection({ events }: EventSectionProps) {
               >
                 <div className="p-4">
                   <h3 className="text-lg font-bold">{event.title}</h3>
-                  <p className="text-sm text-gray-500">{formatDate(event.datetime)}</p>
+                  <p className="text-sm text-gray-500">{formatDate(event.createdAt)}</p>
                   <p className="mt-2 text-gray-600">{event.description}</p>
                 </div>
                 <div className="border-t p-4 text-center">
@@ -41,7 +41,7 @@ export default function EventSection({ events }: EventSectionProps) {
           <div className="text-center pb-20">
             <Link href="/events" passHref>
               <button className="px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                Se Alle Arrengementer
+                Se alle arrengementer
               </button>
             </Link>
           </div>
