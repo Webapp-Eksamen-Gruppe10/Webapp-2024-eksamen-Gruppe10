@@ -25,7 +25,7 @@ model Event {
   template_id String?  
   capacity Int
   title String
-  datetime DateTime
+  createdAt DateTime
   location String
   category String
   price Float

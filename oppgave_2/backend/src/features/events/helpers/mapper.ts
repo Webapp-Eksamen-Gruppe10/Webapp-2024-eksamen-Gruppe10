@@ -9,7 +9,7 @@ import {
 export const fromDb = (dbEvent: DbEvent): Event => {
   const event: Event = {
     ...dbEvent,
-    dateTime: (dbEvent.dateTime = new Date(dbEvent.dateTime)),
+    createdAt: (dbEvent.createdAt = new Date(dbEvent.createdAt)),
   };
   return event;
 };
@@ -37,7 +37,7 @@ export const toDb = (event: EventWithoutId): DbEvent => {
 export const UpdateEventToDb = (event: DbEventWithoutIdAndTemplateId) => {
   return {
     title: event.title,
-    dateTime: event.dateTime,
+    dateTime: event.createdAt,
     location: event.location,
     category: event.category,
     capacity: event.capacity,
