@@ -3,7 +3,7 @@ import { ResultHandler } from "../../../lib/result";
 import prisma, { Prisma } from "../../../lib/client/db";
 import { Result } from "@/types";
 import { fromDb, toEventArray, toDb, UpdateEventToDb } from "../helpers/mapper";
-import { Event, EventWithoutId } from "../types";
+import { DbEventWithoutIdAndTemplateId, Event, EventWithoutId } from "../types";
 
 export const createEventRepository = async (prismaDb: Prisma) => {
   const exist = async (id: string) => {
@@ -50,7 +50,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
   };
 
   const updateById = async (
-    data: Event,
+    data: DbEventWithoutIdAndTemplateId,
     id: string
   ): Promise<Result<Event>> => {
     try {
@@ -58,6 +58,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         where: { id: id },
         data: UpdateEventToDb(data),
       });
+
       return ResultHandler.success(fromDb(update));
     } catch (error) {
       return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR");

@@ -10,8 +10,8 @@ const app = new Hono();
 app.use("/*", cors());
 
 // lagde ny events ettersom denne skal ikke ha med baseurl, men kun /api/v1/events
-app.route(endpoint.events, eventController);
-app.route(endpoint.templates, templateController);
+app.route(endpoint.event, eventController);
+app.route(endpoint.template, templateController);
 
 app.onError((err, c) => {
   console.error(err);

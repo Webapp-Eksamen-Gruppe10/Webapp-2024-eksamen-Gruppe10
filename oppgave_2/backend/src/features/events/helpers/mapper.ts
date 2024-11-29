@@ -1,4 +1,10 @@
-import { DbEvent, DbEventWithoutId, Event, EventWithoutId } from "../types";
+import {
+  DbEvent,
+  DbEventWithoutId,
+  DbEventWithoutIdAndTemplateId,
+  Event,
+  EventWithoutId,
+} from "../types";
 
 export const fromDb = (dbEvent: DbEvent): Event => {
   const event: Event = {
@@ -28,47 +34,16 @@ export const toDb = (event: EventWithoutId): DbEvent => {
   return dbEvent;
 };
 
-export const UpdateEventToDb = (event: Event): DbEventWithoutId => {
-  const dbEvent: DbEventWithoutId = {
-    ...event,
+export const UpdateEventToDb = (event: DbEventWithoutIdAndTemplateId) => {
+  return {
+    title: event.title,
+    dateTime: event.dateTime,
+    location: event.location,
+    category: event.category,
+    capacity: event.capacity,
+    price: event.price,
+    description: event.description,
+    private: event.private,
+    waitinglist: event.waitinglist,
   };
-  return dbEvent;
 };
-
-// import { CreateEventDto, DbEvent, Event, UpdateEventDto } from "../types";
-
-// export const fromDb = (event: DbEvent) => {
-//   return {
-//     id: event.id,
-//     template_id: event.template_id,
-//     title: event.title,
-//     dateTime: event.dateTime ? new Date(event.dateTime) : null,
-//     location: event.location,
-//     category: event.category,
-//     capacity: event.capacity,
-//     price: event.price,
-//     description: event.description,
-//     private: event.private,
-//     waitinglist: event.waitinglist,
-//   };
-// };
-
-// export const toDb = (event: Event) => {
-//   return {
-//     ...event,
-//     id: crypto.randomUUID(),
-//   };
-// };
-
-// export const createEventToDb = (event: CreateEventDto) => {
-//   return {
-//     ...event,
-//     id: crypto.randomUUID(),
-//   };
-// };
-
-// export const updateEventToDb = (event: UpdateEventDto) => {
-//   return {
-//     ...event,
-//   };
-// };

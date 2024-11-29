@@ -1,6 +1,10 @@
 import { ResultHandler } from "../../../lib/result";
-import { Event, EventWithoutId } from "../types";
-import { validateEvent, validateEventWithoutId } from "../helpers/schema";
+import { DbEventWithoutIdAndTemplateId, Event, EventWithoutId } from "../types";
+import {
+  validateEvent,
+  validateEventWithoutId,
+  validateEventWithoutIdAndTemplate_id,
+} from "../helpers/schema";
 import { Result } from "@/types";
 import { eventRepository, EventRepository } from "../repository";
 
@@ -25,14 +29,14 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
   };
 
   const updateEvent = async (
-    data: Event,
+    data: DbEventWithoutIdAndTemplateId,
     id: string
   ): Promise<Result<Event>> => {
     const eventExist = (await eventRepositoryDb).exist(id);
     if (!eventExist)
       return ResultHandler.failure("Event not found", "NOT_FOUND");
 
-    if (!validateEvent(data).success)
+    if (!validateEventWithoutIdAndTemplate_id(data).success)
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
 
     return (await eventRepositoryDb).updateById(data, id);

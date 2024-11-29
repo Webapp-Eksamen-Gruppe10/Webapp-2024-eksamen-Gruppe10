@@ -38,6 +38,7 @@ export const createEventController = (eventServiceDb: EventService) => {
   app.patch("/:id", async (c) => {
     const id = c.req.param("id");
     const data = await c.req.json();
+
     const result = await eventServiceDb.updateEvent(data, id);
     if (!result.success) {
       return errorResponse(c, result.error.code, result.error.message);

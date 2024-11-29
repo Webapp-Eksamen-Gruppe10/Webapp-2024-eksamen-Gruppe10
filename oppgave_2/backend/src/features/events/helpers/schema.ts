@@ -5,6 +5,7 @@ export {
   dbEventSchema,
   eventSchemaWithoutId,
   dbEventSchemaWithoutId,
+  dbEventSchemaWithoutIdAndTemplate_id,
 };
 
 const eventSchema = z.object({
@@ -45,8 +46,17 @@ const dbEventSchemaWithoutId = dbEventSchema.omit({
   id: true,
 });
 
+const dbEventSchemaWithoutIdAndTemplate_id = dbEventSchema.omit({
+  id: true,
+  template_id: true,
+});
+
 export function validateEvent(data: unknown) {
   return eventSchema.safeParse(data);
+}
+
+export function validateEventWithoutIdAndTemplate_id(data: unknown) {
+  return dbEventSchemaWithoutIdAndTemplate_id.safeParse(data);
 }
 
 export function validateEventArray(data: unknown) {
