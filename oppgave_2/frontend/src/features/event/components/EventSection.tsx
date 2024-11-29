@@ -7,10 +7,7 @@ type EventSectionProps = {
   events: Event[];
 }
 
-
-
-export default function EventSection ({ events }: EventSectionProps)  {
-
+export default function EventSection({ events }: EventSectionProps) {
   return (
     <main className="flex-grow pb-20">
       <section>
@@ -20,7 +17,7 @@ export default function EventSection ({ events }: EventSectionProps)  {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {events.map((event) => (
+            {events.slice(0, 3).map((event) => (
               <div
                 key={event.id}
                 className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200"
@@ -52,5 +49,4 @@ export default function EventSection ({ events }: EventSectionProps)  {
       </section>
     </main>
   );
-};
-
+}
