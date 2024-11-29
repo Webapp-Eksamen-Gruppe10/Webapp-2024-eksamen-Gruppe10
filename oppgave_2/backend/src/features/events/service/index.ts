@@ -9,9 +9,21 @@ import { Result } from "@/types";
 import { eventRepository, EventRepository } from "../repository";
 
 export const createEventService = (eventRepositoryDb: EventRepository) => {
-  const getAllEvents = async (): Promise<Result<Event[]>> => {
-    return (await eventRepositoryDb).list();
+  const getAllEvents = async (
+    filters: Record<string, string>
+  ): Promise<Result<Event[]>> => {
+    const { category, year, month } = filters;
+
+    return (await eventRepositoryDb).list({
+      category,
+      year,
+      month,
+    });
   };
+
+  // const getAllEvents = async (): Promise<Result<Event[]>> => {
+  //   return (await eventRepositoryDb).list();
+  // };
 
   const getOneEvent = async (id: string): Promise<Result<Event>> => {
     const eventExist = (await eventRepositoryDb).exist(id);
