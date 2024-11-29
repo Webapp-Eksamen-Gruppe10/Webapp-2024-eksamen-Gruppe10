@@ -25,6 +25,7 @@ model Event {
   id String @id @default(cuid())
   template_id String?
   capacity Int
+  currentCapacity Int
   title String
   createdAt DateTime
   location String

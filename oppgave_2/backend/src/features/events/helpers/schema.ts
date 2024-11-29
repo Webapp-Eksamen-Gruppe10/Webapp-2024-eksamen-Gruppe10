@@ -3,8 +3,8 @@ import { z } from "zod";
 export {
   eventSchema,
   dbEventSchema,
-  eventSchemaWithoutId,
-  dbEventSchemaWithoutId,
+  eventSchemaWithoutIdCurrentCap,
+  dbEventSchemaWithoutIdCurrentCap,
   dbEventSchemaWithoutIdAndTemplate_id,
 };
 
@@ -16,6 +16,7 @@ const eventSchema = z.object({
   location: z.string(),
   category: z.string(),
   capacity: z.number(),
+  currentCapacity: z.number(),
   price: z.number(),
   description: z.string(),
   private: z.boolean(),
@@ -30,6 +31,7 @@ const dbEventSchema = z.object({
   location: z.string(),
   category: z.string(),
   capacity: z.number(),
+  currentCapacity: z.number(),
   price: z.number(),
   description: z.string(),
   private: z.boolean(),
@@ -38,17 +40,20 @@ const dbEventSchema = z.object({
 
 const eventsSchema = z.array(eventSchema);
 
-const eventSchemaWithoutId = eventSchema.omit({
+const eventSchemaWithoutIdCurrentCap = eventSchema.omit({
   id: true,
+  currentCapacity: true
 });
 
-const dbEventSchemaWithoutId = dbEventSchema.omit({
+const dbEventSchemaWithoutIdCurrentCap = dbEventSchema.omit({
   id: true,
+  currentCapacity: true
 });
 
 const dbEventSchemaWithoutIdAndTemplate_id = dbEventSchema.omit({
   id: true,
   template_id: true,
+  currentCapacity: true
 });
 
 export function validateEvent(data: unknown) {
@@ -67,10 +72,10 @@ export function validateDbEvent(data: unknown) {
   return dbEventSchema.safeParse(data);
 }
 
-export function validateEventWithoutId(data: unknown) {
-  return eventSchemaWithoutId.safeParse(data);
+export function validateEventWithoutIdCurrentCap(data: unknown) {
+  return eventSchemaWithoutIdCurrentCap.safeParse(data);
 }
 
-export function validateDbEventWithoutId(data: unknown) {
-  return dbEventSchemaWithoutId.safeParse(data);
+export function validateDbEventWithoutIdCurrentCap(data: unknown) {
+  return dbEventSchemaWithoutIdCurrentCap.safeParse(data);
 }

@@ -44,6 +44,7 @@ async function seedEvents() {
           title: event.title,
           createdAt: new Date(event.createdAt),
           capacity: event.capacity,
+          currentCapacity: event.currentCapacity,
           location: event.location,
           category: event.category,
           price: event.price,
