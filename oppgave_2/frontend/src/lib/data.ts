@@ -106,3 +106,46 @@ export const dummyEvents = [
     }
   ]; 
   
+  export const dummyRegistrations = [
+    {
+      id: 1,
+      name: "Alice Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "123-456-7890",
+      status: "pending",
+      event_id: "event1",
+    },
+    {
+      id: 2,
+      name: "Bob Smith",
+      email: "bob.smith@example.com",
+      phoneNumber: "234-567-8901",
+      status: "approved",
+      event_id: "event1",
+    },
+    {
+      id: 3,
+      name: "Charlie Brown",
+      email: "charlie.brown@example.com",
+      phoneNumber: "345-678-9012",
+      status: "rejected",
+      event_id: "event1",
+    },
+    {
+      id: 4,
+      name: "Diana Prince",
+      email: "diana.prince@example.com",
+      phoneNumber: "456-789-0123",
+      status: "pending",
+      event_id: "event1",
+    },
+    {
+      id: 5,
+      name: "Eve Adams",
+      email: "eve.adams@example.com",
+      phoneNumber: "567-890-1234",
+      status: "approved",
+      event_id: "event1",
+    },
+  ];
+  
