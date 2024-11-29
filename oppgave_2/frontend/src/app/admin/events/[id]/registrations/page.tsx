@@ -1,6 +1,12 @@
 "use client"; 
-import AdminRegistrationForm from '../../../../../features/registration/components/AdminRegistrationForm';
+import AdminRegistrationPage from "@/features/registration/page/AdminRegistrationPage";
+import { useParams } from "next/navigation";
 
-export default function AdminRegistrationsPage() {
-    return <AdminRegistrationForm />;
+export default function Page() {
+    const { id } = useParams(); 
+    const eventId = Array.isArray(id) ? id[0] : id;
+    
+    return (
+    <AdminRegistrationPage eventId={eventId} />
+    )
 }

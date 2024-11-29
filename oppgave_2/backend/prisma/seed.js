@@ -20,7 +20,7 @@ async function seedTemplates() {
           id: template.id,
           name: template.name,
           description: template.description,
-          weekdays: template.weekdays,
+          weekdays: JSON.stringify(template.weekdays),
           notSameDay: template.notSameDay,
           private: template.private,
           lim_attend: template.lim_attend,
@@ -42,7 +42,7 @@ async function seedEvents() {
         data: {
           id: event.id,
           title: event.title,
-          datetime: new Date(event.datetime),
+          createdAt: new Date(event.createdAt),
           capacity: event.capacity,
           location: event.location,
           category: event.category,

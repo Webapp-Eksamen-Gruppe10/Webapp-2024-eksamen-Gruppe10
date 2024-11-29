@@ -1,9 +1,6 @@
 "use client";
-import { useParams } from "next/navigation";
+import RegistrationFormPage from '@/features/registration/page/RegistrationFormPage';
 
- 
 export default function RegistrationPage() {
-    const { id } = useParams();
-
-    return <h1> This is registration for event with id: {id}</h1>
-}  
+  return <RegistrationFormPage eventId={''} />;
+}

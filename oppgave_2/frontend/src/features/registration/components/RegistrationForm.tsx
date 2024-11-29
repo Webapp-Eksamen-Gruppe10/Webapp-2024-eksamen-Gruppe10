@@ -58,7 +58,7 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+    console.log('Submitting form:', formData);
     const registrants = [
       {
         name: formData.name,
