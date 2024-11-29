@@ -1,26 +1,13 @@
 import { z } from "zod";
 
-/*
-    id: event.id,
-    template_id: event.template_id,
-    title: event.title,
-    datetime: event.datetime ? new Date(event.datetime) : null,
-    location: event.location,
-    category: event.category,
-    capacity: event.capacity,
-    price: event.price,
-    description: event.description,
-    private: event.private,
-    waitinglist: event.waitinglist,
-*/
 const eventSchema = z.object({
-  id: z.string().uuid(),
-  template_id: z.coerce.number(),
-  title: z.string().max(50),
-  datetime: z.string().datetime({ offset: true }),
-  location: z.string().max(45),
-  category: z.string().max(45),
-  capacity: z.string().max(45),
+  id: z.string(),
+  template_id: z.string(),
+  title: z.string(),
+  datetime: z.string().datetime(),
+  location: z.string(),
+  category: z.string(),
+  capacity: z.number(),
   price: z.number(),
   description: z.string().max(150),
   private: z.boolean(),
@@ -30,16 +17,17 @@ const eventSchema = z.object({
 
 
 const eventSchemaToDb = z.object({
-  capacity: z.string().max(45),
-  title: z.string().max(50),
-  datetime: z.string().datetime({ offset: true }),
-  location: z.string().max(45),
-  category: z.string().max(45),
+  template_id: z.string(),
+  title: z.string(),
+  datetime: z.string().datetime(),
+  location: z.string(),
+  category: z.string(),
+  capacity: z.number(),
   price: z.number(),
   description: z.string().max(150),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  template_id: z.coerce.number(),
+
 });
 
 

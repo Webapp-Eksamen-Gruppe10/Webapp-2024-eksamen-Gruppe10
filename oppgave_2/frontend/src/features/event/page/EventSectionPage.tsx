@@ -8,6 +8,6 @@ export default function EventsSectionPage() {
 
 
     return (
-        <EventSection events={dummyEvents} />
+        <EventSection events={eventData} />
     )
 }

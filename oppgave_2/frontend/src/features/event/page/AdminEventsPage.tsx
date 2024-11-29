@@ -7,7 +7,7 @@ export default function AdminEventsPage() {
     const { eventData, eventStatus, get } = useEvent();
     
     return (
-        <AdminEvents events={dummyEvents}/> 
+        <AdminEvents events={eventData}/> 
     )
 
 }

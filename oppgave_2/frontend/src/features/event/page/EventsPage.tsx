@@ -7,6 +7,6 @@ export default function EventsPage() {
 
 
     return (
-        <Events events={dummyEvents} />
+        <Events events={eventData} />
     )
 }
