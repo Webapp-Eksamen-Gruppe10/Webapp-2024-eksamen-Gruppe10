@@ -8,7 +8,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noEmit": true,
-
     "paths": {
       "@/*": ["./src/*"]
     }
