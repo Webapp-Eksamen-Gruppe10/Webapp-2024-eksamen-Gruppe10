@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { dbTemplateSchema, dbTemplateSchemaWithoutId, templateSchema, templateSchemaWithoutId } from "../helpers/schema";
+import {
+  dbTemplateSchema,
+  dbTemplateSchemaWithoutId,
+  templateSchema,
+  templateSchemaWithoutId,
+} from "../helpers/schema";
 
 export type TemplateWithoutId = z.infer<typeof templateSchemaWithoutId>;
 export type DbTemplateWithoutId = z.infer<typeof dbTemplateSchemaWithoutId>;
