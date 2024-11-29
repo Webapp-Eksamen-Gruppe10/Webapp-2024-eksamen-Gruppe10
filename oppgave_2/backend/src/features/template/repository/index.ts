@@ -75,7 +75,7 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
                 },
                 data: UpdateTemplateToDb(data)
             })
-
+            console.log(UpdateTemplateToDb(data))
             return ResultHandler.success(ToTemplateObject(update))
         } catch (error) {
             return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")

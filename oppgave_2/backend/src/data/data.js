@@ -55,7 +55,8 @@ export const events = [
     id: "event1",
     title: "Leadership Training Program",
     createdAt: "2024-01-15T09:00:00Z",
-    capacity: 50,
+    capacity: 18,
+    currentCapacity: 18,
     location: "Oslo",
     category: "Corporate",
     price: 1500,
@@ -69,6 +70,7 @@ export const events = [
     title: "Yoga and Meditation Retreat",
     createdAt: "2024-02-10T07:00:00Z",
     capacity: 30,
+    currentCapacity: 14,
     location: "Bergen",
     category: "Wellness",
     price: 200,
@@ -82,6 +84,7 @@ export const events = [
     title: "Advanced Photography Workshop",
     createdAt: "2024-03-05T10:00:00Z",
     capacity: 20,
+    currentCapacity: 5,
     location: "Trondheim",
     category: "Creative",
     price: 500,
@@ -95,6 +98,7 @@ export const events = [
     title: "Exclusive Wine Tasting Evening",
     createdAt: "2024-04-20T19:00:00Z",
     capacity: 25,
+    currentCapacity: 5,
     location: "Stavanger",
     category: "Lifestyle",
     price: 100,
@@ -108,6 +112,7 @@ export const events = [
     title: "Personal Development Seminar",
     createdAt: "2024-05-12T14:00:00Z",
     capacity: 100,
+    currentCapacity: 5,
     location: "Oslo",
     category: "Corporate",
     price: 800,
@@ -121,6 +126,7 @@ export const events = [
     title: "Weekend Fitness Bootcamp",
     createdAt: "2024-06-01T08:00:00Z",
     capacity: 40,
+    currentCapacity: 7,
     location: "Kristiansand",
     category: "Fitness",
     price: 300,
@@ -134,6 +140,7 @@ export const events = [
     title: "Art and Creativity Workshop",
     createdAt: "2024-07-08T11:00:00Z",
     capacity: 30,
+    currentCapacity: 7,
     location: "Bergen",
     category: "Creative",
     price: 400,
@@ -147,6 +154,7 @@ export const events = [
     title: "Exclusive Networking Dinner",
     createdAt: "2024-08-15T18:00:00Z",
     capacity: 50,
+    currentCapacity: 7,
     location: "Trondheim",
     category: "Networking",
     price: 0,
@@ -165,6 +173,7 @@ export const registrations = [
     phoneNumber: "1234567890",
     status: "confirmed",
     createdAt: "2024-01-15T10:30:00Z",
+    participants: ["Astrid", "Bjørn", "Cecilia", "David", "Elise", "Fredrik", "Gunnhild", "Henrik"]
   },
   {
     event_id: "event1",
@@ -173,6 +182,7 @@ export const registrations = [
     phoneNumber: "9876543210",
     status: "pending",
     createdAt: "2024-01-15T11:45:00Z",
+    participants: ["Ingrid", "Jonas", "Kari", "Lars", "Maria", "Nikolai", "Olivia", "Petter"]
   },
   {
     event_id: "event2",
@@ -181,6 +191,7 @@ export const registrations = [
     phoneNumber: "2345678901",
     status: "confirmed",
     createdAt: "2024-02-10T08:20:00Z",
+    participants: ["Sara", "Thomas", "Unn", "Victor", "Wenche", "Xander", "Ylva", "Zackarias"]
   },
   {
     event_id: "event2",
@@ -189,6 +200,7 @@ export const registrations = [
     phoneNumber: "8765432190",
     status: "pending",
     createdAt: "2024-02-10T09:10:00Z",
+    participants: ["Aurora", "Felix", "Hannah", "Isak"]
   },
   {
     event_id: "event3",
@@ -197,6 +209,7 @@ export const registrations = [
     phoneNumber: "3456789012",
     status: "confirmed",
     createdAt: "2024-03-05T11:30:00Z",
+    participants: ["Filip", "Ida", "Ludvig", "Thea"]
   },
   {
     event_id: "event4",
@@ -205,6 +218,7 @@ export const registrations = [
     phoneNumber: "7654321098",
     status: "confirmed",
     createdAt: "2024-04-20T20:00:00Z",
+    participants: ["Elias", "Ella", "Jonathan", "Stella"]
   },
   {
     event_id: "event5",
@@ -213,6 +227,7 @@ export const registrations = [
     phoneNumber: "4567890123",
     status: "pending",
     createdAt: "2024-05-12T15:45:00Z",
+    participants: ["Adam", "Leah", "Oskar", "Pia"]
   },
   {
     event_id: "event6",
@@ -221,6 +236,7 @@ export const registrations = [
     phoneNumber: "6543210987",
     status: "confirmed",
     createdAt: "2024-06-01T09:00:00Z",
+    participants: ["Amalie", "Magnus", "Nora", "Sander", "Tiril", "Vetle"]
   },
   {
     event_id: "event7",
@@ -229,6 +245,7 @@ export const registrations = [
     phoneNumber: "5678901234",
     status: "confirmed",
     createdAt: "2024-07-08T12:15:00Z",
+    participants: ["David", "Emma", "Fredrik", "Julie", "Kristoffer", "Lisa"]
   },
   {
     event_id: "event8",
@@ -237,5 +254,6 @@ export const registrations = [
     phoneNumber: "5432109876",
     status: "pending",
     createdAt: "2024-08-15T19:30:00Z",
+    participants: ["Henrik", "Ingrid", "Jonas", "Karianne", "Lars", "Mia"]
   },
 ];
