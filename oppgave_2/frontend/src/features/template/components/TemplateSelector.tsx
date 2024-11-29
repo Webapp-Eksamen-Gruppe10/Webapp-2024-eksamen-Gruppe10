@@ -3,9 +3,10 @@ import { Template } from "../lib/schema";
 
 interface TemplateSelectorProps {
   templates?: Template[];
+  add: (data: Omit<Template, "id">) => Promise<void>,
 }
 
-export default function TemplateSelector({ templates = [] }: TemplateSelectorProps) {
+export default function TemplateSelector({ templates = [], add }: TemplateSelectorProps) {
   return (
     <div className="grid md:grid-cols-2 gap-6 p-6 max-w-5xl mx-auto">
       {/* Create Template Section */}
