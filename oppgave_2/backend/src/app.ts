@@ -1,13 +1,15 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { EventController } from "./features/events/controller";
+import { endpoint } from "./config/url";
 // import { templateController } from "./features/template/controller";
 
 const app = new Hono();
 
 app.use("/*", cors());
 
-app.route("/v1/events", EventController);
+// lagde ny events ettersom denne skal ikke ha med baseurl, men kun /api/v1/events
+app.route(endpoint.events, EventController);
 
 app.onError((err, c) => {
   console.error(err);
