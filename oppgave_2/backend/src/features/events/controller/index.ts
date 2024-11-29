@@ -1,76 +1,60 @@
+import { Event } from "./../types/index";
 // src/features/events/controller/index.ts
+
 import { Hono } from "hono";
-import {
-  createEvent,
-  getAllEvents,
-  findOneEvent,
-  updateEvent,
-  deleteEvent,
-} from "../service";
 
+import { EventService, eventService } from "../service";
 import { errorResponse } from "../../../lib/error";
-import { validateEventWithoutId, validateEvent } from "../helpers/schema";
-import type { CreateEventDto, UpdateEventDto } from "../types";
 
-const EventController = new Hono();
+export const createEventController = (eventServiceDb: EventService) => {
+  const app = new Hono();
 
-EventController.get("/", async (c) => {
-  const result = await getAllEvents();
-  if (!result.success) {
-    return errorResponse(c, result.error.code, result.error.message);
-  }
-  return c.json(result);
-});
+  app.get("/", async (c) => {
+    const result = await eventServiceDb.getAllEvents();
+    if (!result.success) {
+      return errorResponse(c, result.error.code, result.error.message);
+    }
+    return c.json(result);
+  });
 
-EventController.get("/:id", async (c) => {
-  const id = c.req.param("id");
-  const result = await findOneEvent(id);
-  if (!result.success) {
-    return errorResponse(c, result.error.code, result.error.message);
-  }
-  return c.json(result);
-});
+  app.get("/:id", async (c) => {
+    const id = c.req.param("id");
+    const result = await eventServiceDb.getOneEvent(id);
+    if (!result.success) {
+      return errorResponse(c, result.error.code, result.error.message);
+    }
+    return c.json(result);
+  });
 
-EventController.post("/", async (c) => {
-  const body = await c.req.json();
-  const parsed = validateEventWithoutId(body);
+  app.post("/", async (c) => {
+    const data = await c.req.json();
+    const result = await eventServiceDb.createEvent(data);
+    if (!result.success) {
+      return errorResponse(c, result.error.code, result.error.message);
+    }
+    return c.json(result, { status: 201 });
+  });
 
-  if (!parsed.success) {
-    console.error("Validation Errors:", parsed.error.errors); // Log errors
+  app.patch("/:id", async (c) => {
+    const id = c.req.param("id");
+    const data = await c.req.json();
+    const result = await eventServiceDb.updateEvent(data, id);
+    if (!result.success) {
+      return errorResponse(c, result.error.code, result.error.message);
+    }
+    return c.json(result);
+  });
 
-    return errorResponse(c, "BAD_REQUEST", "Invalid event data");
-  }
+  app.delete("/:id", async (c) => {
+    const id = c.req.param("id");
+    const result = await eventServiceDb.deleteEvent(id);
+    if (!result.success) {
+      return errorResponse(c, result.error.code, result.error.message);
+    }
+    return c.json(result);
+  });
 
-  const result = await createEvent(parsed.data as CreateEventDto);
-  if (!result.success) {
-    return errorResponse(c, result.error.code, result.error.message);
-  }
-  return c.json(result, { status: 201 });
-});
+  return app;
+};
 
-EventController.patch("/:id", async (c) => {
-  const id = c.req.param("id");
-  const body = await c.req.json();
-  const parsed = validateEvent(body);
-
-  if (!parsed.success) {
-    return errorResponse(c, "BAD_REQUEST", "Invalid event data");
-  }
-
-  const result = await updateEvent(id, parsed.data as UpdateEventDto);
-  if (!result.success) {
-    return errorResponse(c, result.error.code, result.error.message);
-  }
-  return c.json(result);
-});
-
-EventController.delete("/:id", async (c) => {
-  const id = c.req.param("id");
-  const result = await deleteEvent(id);
-  if (!result.success) {
-    return errorResponse(c, result.error.code, result.error.message);
-  }
-  return c.json(result);
-});
-
-export { EventController };
+export const eventController = createEventController(eventService);

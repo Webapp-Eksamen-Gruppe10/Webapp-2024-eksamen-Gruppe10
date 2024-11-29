@@ -1,61 +1,64 @@
-// import { Hono } from "hono";
-// import { templateService, TemplateService } from "../service";
-// import { cors } from "hono/cors";
-// import { errorResponse } from "@/lib/error";
-// import { Data } from "@/types";
-// import { Template } from "../types";
+import { Hono } from "hono";
+import { templateService, TemplateService } from "../service";
+import { cors } from "hono/cors";
+import { errorResponse } from "../../../lib/error";
 
-// export const createTemplateController = (templateServiceDb: TemplateService) => {
-//     const app = new Hono();
+import { Data } from "@/types";
+import { Template } from "../types";
 
-//     app.use("/*", cors())
+export const createTemplateController = (
+  templateServiceDb: TemplateService
+) => {
+  const app = new Hono();
 
-//     app.get("", async (c) => {
-//         const result = await templateServiceDb.getAllTemplates()
+  app.use("/*", cors());
 
-//         if(!result.success)
-//             return errorResponse(c, result.error.code, result.error.message)
-//         return c.json(result)
-//     });
+  app.get("", async (c) => {
+    const result = await templateServiceDb.getAllTemplates();
 
-//     app.get("/:id", async(c) => {
-//         const id = c.req.param("id")
-//         const result = await templateServiceDb.getOneTemplate(id)
+    if (!result.success)
+      return errorResponse(c, result.error.code, result.error.message);
+    return c.json(result);
+  });
 
-//         if(!result.success)
-//             return errorResponse(c, result.error.code, result.error.message)
-//         return c.json(result)
-//     })
+  app.get("/:id", async (c) => {
+    const id = c.req.param("id");
+    const result = await templateServiceDb.getOneTemplate(id);
 
-//     app.post("", async(c) => {
-//         const data = await c.req.json();
-//         const result = await templateServiceDb.createTemplate(data)
+    if (!result.success)
+      return errorResponse(c, result.error.code, result.error.message);
+    return c.json(result);
+  });
 
-//         if(!result.success)
-//             return errorResponse(c, result.error.code, result.error.message)
-//         return c.json<Data<Template>>(result, { status: 201 })
-//     })
+  app.post("", async (c) => {
+    const data = await c.req.json();
+    const result = await templateServiceDb.createTemplate(data);
 
-//     app.patch("/:id", async(c) => {
-//         const id = c.req.param("id");
-//         const data = await c.req.json();
-//         const result = await templateServiceDb.updateTemplate(data, id)
+    if (!result.success)
+      return errorResponse(c, result.error.code, result.error.message);
+    return c.json<Data<Template>>(result, { status: 201 });
+  });
 
-//         if(!result.success)
-//             return errorResponse(c, result.error.code, result.error.message)
-//         return c.json(result)
-//     })
+  app.patch("/:id", async (c) => {
+    const id = c.req.param("id");
+    const data = await c.req.json();
+    const result = await templateServiceDb.updateTemplate(data, id);
 
-//     app.delete("/:id", async(c) => {
-//         const id = c.req.param("id");
-//         const result = await templateServiceDb.deleteTemplate(id)
+    if (!result.success)
+      return errorResponse(c, result.error.code, result.error.message);
+    return c.json(result);
+  });
 
-//         if(!result.success)
-//             return errorResponse(c, result.error.code, result.error.message)
-//         return c.json(result)
-//     })
+  app.delete("/:id", async (c) => {
+    const id = c.req.param("id");
+    const result = await templateServiceDb.deleteTemplate(id);
 
-//     return app;
-// }
+    if (!result.success)
+      return errorResponse(c, result.error.code, result.error.message);
+    return c.json(result);
+  });
 
-// export const templateController = createTemplateController(templateService)
+  return app;
+};
+
+export const templateController = createTemplateController(templateService);

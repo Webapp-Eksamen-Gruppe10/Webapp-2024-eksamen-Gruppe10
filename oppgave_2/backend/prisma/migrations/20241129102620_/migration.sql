@@ -6,13 +6,13 @@ CREATE TABLE "Registration" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "status" TEXT NOT NULL,
-    CONSTRAINT "Registration_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "Event" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Registration_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "Event" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Event" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "template_id" TEXT NOT NULL,
+    "template_id" TEXT,
     "capacity" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "dateTime" DATETIME NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE "Event" (
     "description" TEXT NOT NULL,
     "private" BOOLEAN NOT NULL,
     "waitinglist" BOOLEAN NOT NULL,
-    CONSTRAINT "Event_template_id_fkey" FOREIGN KEY ("template_id") REFERENCES "Template" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Event_template_id_fkey" FOREIGN KEY ("template_id") REFERENCES "Template" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable

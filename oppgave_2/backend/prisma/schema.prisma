@@ -14,14 +14,14 @@ model Registration {
   email String
   phoneNumber String
   status String
-  event Event @relation(fields: [event_id], references: [id])
+  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
 
   @@index([event_id])
 }
 
 model Event {
   id String @id @default(cuid())
-  template_id String
+  template_id String?  
   capacity Int
   title String
   dateTime DateTime
@@ -32,7 +32,7 @@ model Event {
   private Boolean
   waitinglist Boolean
   participants Registration[]
-  template Template @relation(fields: [template_id], references: [id])
+  template Template? @relation(fields: [template_id], references: [id])
 
   @@index([template_id])
 }
