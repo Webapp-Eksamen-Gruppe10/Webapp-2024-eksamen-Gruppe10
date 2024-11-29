@@ -2,7 +2,9 @@ import { z } from "zod";
 
 export {
   registrationSchema,
-  registrationSchemaWithoutId
+  registrationsSchema,
+  registrationSchemaWithoutId,
+  registrationsSchemaWithoutId
 };
 
 const registrationSchema = z.object({
@@ -15,11 +17,12 @@ const registrationSchema = z.object({
   status: z.boolean(),
 });
 
-const registrationsSchema = z.array(registrationSchema);
-
 const registrationSchemaWithoutId = registrationSchema.omit({
   id: true,
 });
+
+const registrationsSchema = z.array(registrationSchema);
+const registrationsSchemaWithoutId = z.array(registrationSchemaWithoutId);
 
 export function validateRegistration(data: unknown) {
     return registrationSchema.safeParse(data);
@@ -31,4 +34,8 @@ export function validateRegistrationList(data: unknown) {
 
 export function validateRegistrationWithoutId(data: unknown) {
     return registrationSchemaWithoutId.safeParse(data);
+}
+
+export function validateRegistrationWithoutIdList(data: unknown) {
+    return registrationsSchemaWithoutId.safeParse(data);
 }
