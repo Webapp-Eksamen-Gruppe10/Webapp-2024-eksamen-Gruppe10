@@ -4,22 +4,29 @@ export {
   registrationSchema,
   registrationsSchema,
   registrationSchemaWithoutId,
-  registrationsSchemaWithoutId
+  registrationsSchemaWithoutId,
+  registrationStatus
 };
+
+const status = z.enum(["confirmed", "pending", "waitinglist", "denied"])
 
 const registrationSchema = z.object({
   id: z.string(),
   event_id: z.string(),
   name: z.string(),
-  email: z.string().array(),
-  createdAt: z.boolean(),
-  phoneNumber: z.boolean(),
-  status: z.boolean(),
+  email: z.string(),
+  createdAt: z.coerce.date(),
+  phoneNumber: z.string(),
+  status: status,
 });
 
 const registrationSchemaWithoutId = registrationSchema.omit({
   id: true,
 });
+
+const registrationStatus = registrationSchema.pick({
+    status: true,
+  });
 
 const registrationsSchema = z.array(registrationSchema);
 const registrationsSchemaWithoutId = z.array(registrationSchemaWithoutId);
