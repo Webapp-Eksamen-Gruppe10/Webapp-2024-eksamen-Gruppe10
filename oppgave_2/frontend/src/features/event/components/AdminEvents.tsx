@@ -5,11 +5,13 @@ import { formatDate } from "@/lib/helpers";
 import { useEvent } from "@/features/event/hooks/useEvent";
 
 type AdminEventProps = {
-  events: Event[];
-};
+    events: Event[],
+    remove: (id: string) => Promise<void>,
 
-export default function AdminEvents({ events }: AdminEventProps) {
-  const { update: updateEvent, remove: deleteEvent } = useEvent(); // Use update and delete functions
+}
+
+export default function AdminEvents({events, remove} : AdminEventProps) {
+    
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
@@ -86,10 +88,8 @@ export default function AdminEvents({ events }: AdminEventProps) {
               >
                 Rediger
               </button>
-              <button
-                onClick={() => handleDelete(event.id)}
-                className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
-              >
+              <button className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+              onClick={() => {remove(event.id)}}>
                 Slett
               </button>
             </div>
