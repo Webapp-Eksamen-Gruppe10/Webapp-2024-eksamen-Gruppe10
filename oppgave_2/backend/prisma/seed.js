@@ -20,7 +20,7 @@ async function seedTemplates() {
           id: template.id,
           name: template.name,
           description: template.description,
-          weekdays: JSON.stringify(template.weekdays),
+          weekdays: template.weekdays,
           notSameDay: template.notSameDay,
           private: template.private,
           lim_attend: template.lim_attend,
