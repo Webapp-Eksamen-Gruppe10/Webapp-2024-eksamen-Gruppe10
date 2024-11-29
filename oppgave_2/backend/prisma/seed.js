@@ -72,6 +72,7 @@ async function seedRegistrations() {
           name: registration.name,
           email: registration.email,
           createdAt: registration.createdAt,
+          participants: JSON.stringify(registration.participants),
           phoneNumber: registration.phoneNumber,
           status: registration.status,
         },
