@@ -1,61 +1,81 @@
-import { Event } from "./../types/index";
 // src/features/events/controller/index.ts
-
 import { Hono } from "hono";
-
-import { EventService, eventService } from "../service";
+import {
+  createEvent,
+  getAllEvents,
+  findOneEvent,
+  updateEvent,
+  deleteEvent,
+} from "../service";
+import { cors } from "hono/cors";
 import { errorResponse } from "../../../lib/error";
+import { validateEventWithoutId, validateEvent } from "../helpers/schema";
+import type { CreateEventDto, UpdateEventDto } from "../types";
+import { endpoint } from "../../../config/url";
 
-export const createEventController = (eventServiceDb: EventService) => {
-  const app = new Hono();
 
-  app.get("/", async (c) => {
-    const result = await eventServiceDb.getAllEvents();
-    if (!result.success) {
-      return errorResponse(c, result.error.code, result.error.message);
-    }
-    return c.json(result);
-  });
+const EventController = new Hono();
 
-  app.get("/:id", async (c) => {
-    const id = c.req.param("id");
-    const result = await eventServiceDb.getOneEvent(id);
-    if (!result.success) {
-      return errorResponse(c, result.error.code, result.error.message);
-    }
-    return c.json(result);
-  });
+EventController.use("/*", cors());
 
-  app.post("/", async (c) => {
-    const data = await c.req.json();
-    const result = await eventServiceDb.createEvent(data);
-    if (!result.success) {
-      return errorResponse(c, result.error.code, result.error.message);
-    }
-    return c.json(result, { status: 201 });
-  });
 
-  app.patch("/:id", async (c) => {
-    const id = c.req.param("id");
-    const data = await c.req.json();
+EventController.get("/", async (c) => {
+  const result = await getAllEvents();
+  if (!result.success) {
+    return errorResponse(c, result.error.code, result.error.message);
+  }
+  return c.json(result);
+});
 
-    const result = await eventServiceDb.updateEvent(data, id);
-    if (!result.success) {
-      return errorResponse(c, result.error.code, result.error.message);
-    }
-    return c.json(result);
-  });
+EventController.get("/:id", async (c) => {
+  const id = c.req.param("id");
+  const result = await findOneEvent(id);
+  if (!result.success) {
+    return errorResponse(c, result.error.code, result.error.message);
+  }
+  return c.json(result);
+});
 
-  app.delete("/:id", async (c) => {
-    const id = c.req.param("id");
-    const result = await eventServiceDb.deleteEvent(id);
-    if (!result.success) {
-      return errorResponse(c, result.error.code, result.error.message);
-    }
-    return c.json(result);
-  });
+EventController.post("/", async (c) => {
+  const body = await c.req.json();
+  const parsed = validateEventWithoutId(body);
 
-  return app;
-};
+  if (!parsed.success) {
+    console.error("Validation Errors:", parsed.error.errors); // Log errors
 
-export const eventController = createEventController(eventService);
+    return errorResponse(c, "BAD_REQUEST", "Invalid event data");
+  }
+
+  const result = await createEvent(parsed.data as CreateEventDto);
+  if (!result.success) {
+    return errorResponse(c, result.error.code, result.error.message);
+  }
+  return c.json(result, { status: 201 });
+});
+
+EventController.patch("/:id", async (c) => {
+  const id = c.req.param("id");
+  const body = await c.req.json();
+  const parsed = validateEvent(body);
+
+  if (!parsed.success) {
+    return errorResponse(c, "BAD_REQUEST", "Invalid event data");
+  }
+
+  const result = await updateEvent(id, parsed.data as UpdateEventDto);
+  if (!result.success) {
+    return errorResponse(c, result.error.code, result.error.message);
+  }
+  return c.json(result);
+});
+
+EventController.delete("/:id", async (c) => {
+  const id = c.req.param("id");
+  const result = await deleteEvent(id);
+  if (!result.success) {
+    return errorResponse(c, result.error.code, result.error.message);
+  }
+  return c.json(result);
+});
+
+export { EventController };
