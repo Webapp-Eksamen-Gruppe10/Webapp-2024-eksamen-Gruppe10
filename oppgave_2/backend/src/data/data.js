@@ -67,7 +67,7 @@ export const events = [
   {
     id: "event2",
     title: "Yoga and Meditation Retreat",
-    createdAt: "2024-02-10T07:00:00Z",
+    createdAt: "2021-04-10T07:00:00Z",
     capacity: 30,
     location: "Bergen",
     category: "Wellness",
@@ -80,7 +80,7 @@ export const events = [
   {
     id: "event3",
     title: "Advanced Photography Workshop",
-    createdAt: "2024-03-05T10:00:00Z",
+    createdAt: "2022-04-05T10:00:00Z",
     capacity: 20,
     location: "Trondheim",
     category: "Creative",
@@ -93,7 +93,7 @@ export const events = [
   {
     id: "event4",
     title: "Exclusive Wine Tasting Evening",
-    createdAt: "2024-04-20T19:00:00Z",
+    createdAt: "2023-04-20T19:00:00Z",
     capacity: 25,
     location: "Stavanger",
     category: "Lifestyle",

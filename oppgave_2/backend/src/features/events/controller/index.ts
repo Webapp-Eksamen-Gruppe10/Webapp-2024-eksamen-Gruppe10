@@ -10,7 +10,8 @@ export const createEventController = (eventServiceDb: EventService) => {
   const app = new Hono();
 
   app.get("/", async (c) => {
-    const result = await eventServiceDb.getAllEvents();
+    const queryParams = c.req.query();
+    const result = await eventServiceDb.getAllEvents(queryParams);
     if (!result.success) {
       return errorResponse(c, result.error.code, result.error.message);
     }
