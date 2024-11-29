@@ -15,7 +15,7 @@ model Registration {
   createdAt DateTime
   phoneNumber String
   status String
-  event Event @relation(fields: [event_id], references: [id])
+  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
 
   @@index([event_id])
 }

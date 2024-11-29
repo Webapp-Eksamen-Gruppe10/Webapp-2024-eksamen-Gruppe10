@@ -1,10 +1,18 @@
 import { z } from "zod";
 
+export {
+  eventSchema,
+  dbEventSchema,
+  eventSchemaWithoutId,
+  dbEventSchemaWithoutId,
+  dbEventSchemaWithoutIdAndTemplate_id,
+};
+
 const eventSchema = z.object({
   id: z.string(),
-  template_id: z.string(),
+  template_id: z.string().nullable(),
   title: z.string(),
-  datetime: z.coerce.date(),
+  dateTime: z.coerce.date(),
   location: z.string(),
   category: z.string(),
   capacity: z.number(),
@@ -16,12 +24,12 @@ const eventSchema = z.object({
 
 const dbEventSchema = z.object({
   id: z.string(),
-  template_id: z.string(),
+  template_id: z.string().nullable(),
   title: z.string(),
-  dateime: z.coerce.date(),
+  dateTime: z.coerce.date(),
   location: z.string(),
   category: z.string(),
-  capacity: z.number().int(),
+  capacity: z.number(),
   price: z.number(),
   description: z.string(),
   private: z.boolean(),
@@ -38,27 +46,31 @@ const dbEventSchemaWithoutId = dbEventSchema.omit({
   id: true,
 });
 
-// const updateEventSchema = eventSchemaWithoutId.partial();
+const dbEventSchemaWithoutIdAndTemplate_id = dbEventSchema.omit({
+  id: true,
+  template_id: true,
+});
 
 export function validateEvent(data: unknown) {
   return eventSchema.safeParse(data);
 }
 
-export function validateEventWithoutId(data: unknown) {
-  return eventSchemaWithoutId.safeParse(data);
+export function validateEventWithoutIdAndTemplate_id(data: unknown) {
+  return dbEventSchemaWithoutIdAndTemplate_id.safeParse(data);
+}
+
+export function validateEventArray(data: unknown) {
+  return eventsSchema.array().safeParse(data);
 }
 
 export function validateDbEvent(data: unknown) {
   return dbEventSchema.safeParse(data);
 }
 
+export function validateEventWithoutId(data: unknown) {
+  return eventSchemaWithoutId.safeParse(data);
+}
+
 export function validateDbEventWithoutId(data: unknown) {
   return dbEventSchemaWithoutId.safeParse(data);
 }
-
-export function validateEventArray(data: unknown) {
-  return eventSchema.array().safeParse(data);
-}
-// export function validateUpdateEvent(data: unknown) {
-//   return updateEventSchema.safeParse(data);
-// }
