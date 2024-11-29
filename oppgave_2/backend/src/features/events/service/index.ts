@@ -14,10 +14,6 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
   ): Promise<Result<Event[]>> => {
     const { category, year, month } = filters;
 
-    // // Validate and format `year` and `month` if needed
-    // const validYear = year && /^\d{4}$/.test(year) ? year : undefined;
-    // const validMonth = month && /^\d{1,2}$/.test(month) ? month : undefined;
-
     return (await eventRepositoryDb).list({
       category,
       year,
