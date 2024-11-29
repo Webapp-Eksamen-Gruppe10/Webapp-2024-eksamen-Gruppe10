@@ -4,7 +4,7 @@ const eventSchema = z.object({
   id: z.string(),
   template_id: z.string(),
   title: z.string(),
-  datetime: z.string().datetime({ offset: true }),
+  datetime: z.string().datetime(),
   location: z.string(),
   category: z.string(),
   capacity: z.number(),
@@ -19,7 +19,7 @@ const eventSchema = z.object({
 const eventSchemaToDb = z.object({
   template_id: z.string(),
   title: z.string(),
-  datetime: z.string().datetime({ offset: true }),
+  datetime: z.string().datetime(),
   location: z.string(),
   category: z.string(),
   capacity: z.number(),

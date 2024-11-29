@@ -3,8 +3,6 @@ import EventDetail from "../components/EventDetail";
 import useEvent from "../hooks/useEvent";
 
 
- 
-
 export default function EventDetailPage(props: {eventId: string}) {
     const {eventId} = props
     const { eventData} = useEvent();

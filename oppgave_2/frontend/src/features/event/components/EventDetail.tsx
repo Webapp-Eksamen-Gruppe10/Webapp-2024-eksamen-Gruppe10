@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
+import { formatDate, formatTime } from "@/features/registration/lib/helpers";
 
 export default function EventDetail(props: {event:Event}) {
     const {event} = props
@@ -7,17 +8,7 @@ export default function EventDetail(props: {event:Event}) {
     const eventDate = new Date(event.datetime);
 
 
-    const formattedDate = eventDate.toLocaleDateString("no-NO", { 
-      weekday: "long", 
-      year: "numeric", 
-      month: "long", 
-      day: "numeric",
-    });
-  
-    const formattedTime = eventDate.toLocaleTimeString("no-NO", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+
 
       return (
         <div className="container mx-auto px-4 py-8">
@@ -30,10 +21,10 @@ export default function EventDetail(props: {event:Event}) {
               <h2 className="text-2xl font-semibold mb-4">Event Details</h2>
               <ul className="space-y-4">
                 <li>
-                  <strong>Date:</strong> {formattedDate}
+                  <strong>Date:</strong> {formatDate(event.datetime)}
                 </li>
                 <li>
-                  <strong>Time:</strong> {formattedTime || "TBD"}
+                  <strong>Time:</strong> {formatTime(event.datetime)|| "TBD"}
                 </li>
                 <li>
                   <strong>Location:</strong> {event.location || "TBD"}
