@@ -8,7 +8,7 @@ type RegistrationFormProps = {
   eventId: string;
 };
 
-export default function RegistrationForm({ onSubmit, eventId }: RegistrationFormProps) {
+export default function RegistreringsSkjema({ onSubmit, eventId }: RegistrationFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,11 +45,11 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone number is required';
+    if (!formData.name) newErrors.name = 'Navn er påkrevd';
+    if (!formData.email) newErrors.email = 'E-post er påkrevd';
+    if (!formData.phoneNumber) newErrors.phoneNumber = 'Telefonnummer er påkrevd';
     if (formData.participants.some((participant) => !participant)) {
-      newErrors.participants = 'All participant names must be filled out';
+      newErrors.participants = 'Alle deltakerne må ha navn';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,49 +58,49 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-    console.log('Submitting form:', formData);
-    const registrants = [
+    console.log('Sender inn skjema:', formData);
+    const registranter = [
       {
         name: formData.name,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
-        status: 'pending',
+        status: 'venter',
         event_id: eventId,
       },
       ...formData.participants.map((participant) => ({
         name: participant,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
-        status: 'pending',
+        status: 'venter',
         event_id: eventId,
       })),
     ];
 
-    for (const registrant of registrants) {
+    for (const registrant of registranter) {
       const parsed = validateRegistrationToDb(registrant);
       if (!parsed.success) {
-        console.error('Validation failed:', parsed.error);
-        alert('Failed to submit registration. Check data and try again.');
+        console.error('Validering feilet:', parsed.error);
+        alert('Registrering mislyktes. Sjekk dataene og prøv igjen.');
         return;
       }
     }
 
     try {
-      await onSubmit(registrants);
-      alert('All registrations successfully submitted!');
+      await onSubmit(registranter);
+      alert('Alle registreringer ble sendt inn!');
     } catch (error) {
-      console.error('Error submitting registrations:', error);
-      alert('Failed to register. Please try again.');
+      console.error('Feil ved innsending av registreringer:', error);
+      alert('Registrering mislyktes. Vennligst prøv igjen.');
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-6 text-center">Registration Form</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Registreringsskjema</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block font-semibold mb-2">
-            Name
+            Navn
           </label>
           <input
             id="name"
@@ -114,7 +114,7 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
 
         <div>
           <label htmlFor="email" className="block font-semibold mb-2">
-            Email
+            E-post
           </label>
           <input
             id="email"
@@ -129,7 +129,7 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
 
         <div>
           <label htmlFor="phoneNumber" className="block font-semibold mb-2">
-            Phone Number
+            Telefonnummer
           </label>
           <input
             id="phoneNumber"
@@ -149,7 +149,7 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
               name="participants"
               value={participant}
               onChange={(e) => handleChange(e, index)}
-              placeholder={`Participant ${index + 1}`}
+              placeholder={`Deltaker ${index + 1}`}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
             />
             <button
@@ -157,7 +157,7 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
               onClick={() => removeParticipant(index)}
               className="ml-2 bg-red-500 text-white px-3 py-2 rounded"
             >
-              Remove
+              Fjern
             </button>
           </div>
         ))}
@@ -167,14 +167,14 @@ export default function RegistrationForm({ onSubmit, eventId }: RegistrationForm
           onClick={addParticipant}
           className="w-full px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
         >
-          Add Participant
+          Legg til deltaker
         </button>
 
         <button
           type="submit"
           className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          Submit Registration
+          Send inn registrering
         </button>
       </form>
     </div>

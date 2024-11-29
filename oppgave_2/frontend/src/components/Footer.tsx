@@ -6,15 +6,15 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between items-center">
           <div className="w-full md:w-1/3 text-center md:text-left mb-4 md:mb-0">
-            <h2 className="text-2xl font-bold">web apps 2024</h2>
+            <h4 className=" text-white text-lg">Webapplikasjoner</h4>
           </div>
 
           <div className="w-full md:w-1/3 text-center mb-4 md:mb-0">
-            <h3 className="text-lg font-bold">gruppe 10</h3>
+            <h4 className=" text-white text-lg">Eksamen høsten 2024</h4>
           </div>
 
           <div className="w-full md:w-1/3 text-center md:text-right mb-2">
-            <p className="font-bold">Eksamen</p>
+            <h4 className=" text-white text-lg">Gruppe 10</h4>
           </div>
         </div>
       </div>

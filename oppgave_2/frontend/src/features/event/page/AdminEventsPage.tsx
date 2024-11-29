@@ -10,4 +10,4 @@ export default function AdminEventsPage() {
         <AdminEvents events={eventData} remove={remove}/> 
     )
 
-}
+}   
