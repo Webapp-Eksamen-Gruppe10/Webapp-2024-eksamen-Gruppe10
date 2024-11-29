@@ -54,7 +54,7 @@ export const events = [
   {
     id: "event1",
     title: "Leadership Training Program",
-    datetime: "2024-01-15T09:00:00Z",
+    createdAt: "2024-01-15T09:00:00Z",
     capacity: 50,
     location: "Oslo",
     category: "Corporate",
@@ -67,7 +67,7 @@ export const events = [
   {
     id: "event2",
     title: "Yoga and Meditation Retreat",
-    datetime: "2024-02-10T07:00:00Z",
+    createdAt: "2024-02-10T07:00:00Z",
     capacity: 30,
     location: "Bergen",
     category: "Wellness",
@@ -80,7 +80,7 @@ export const events = [
   {
     id: "event3",
     title: "Advanced Photography Workshop",
-    datetime: "2024-03-05T10:00:00Z",
+    createdAt: "2024-03-05T10:00:00Z",
     capacity: 20,
     location: "Trondheim",
     category: "Creative",
@@ -93,7 +93,7 @@ export const events = [
   {
     id: "event4",
     title: "Exclusive Wine Tasting Evening",
-    datetime: "2024-04-20T19:00:00Z",
+    createdAt: "2024-04-20T19:00:00Z",
     capacity: 25,
     location: "Stavanger",
     category: "Lifestyle",
@@ -106,7 +106,7 @@ export const events = [
   {
     id: "event5",
     title: "Personal Development Seminar",
-    datetime: "2024-05-12T14:00:00Z",
+    createdAt: "2024-05-12T14:00:00Z",
     capacity: 100,
     location: "Oslo",
     category: "Corporate",
@@ -119,7 +119,7 @@ export const events = [
   {
     id: "event6",
     title: "Weekend Fitness Bootcamp",
-    datetime: "2024-06-01T08:00:00Z",
+    createdAt: "2024-06-01T08:00:00Z",
     capacity: 40,
     location: "Kristiansand",
     category: "Fitness",
@@ -132,7 +132,7 @@ export const events = [
   {
     id: "event7",
     title: "Art and Creativity Workshop",
-    datetime: "2024-07-08T11:00:00Z",
+    createdAt: "2024-07-08T11:00:00Z",
     capacity: 30,
     location: "Bergen",
     category: "Creative",
@@ -145,7 +145,7 @@ export const events = [
   {
     id: "event8",
     title: "Exclusive Networking Dinner",
-    datetime: "2024-08-15T18:00:00Z",
+    createdAt: "2024-08-15T18:00:00Z",
     capacity: 50,
     location: "Trondheim",
     category: "Networking",

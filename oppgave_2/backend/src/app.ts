@@ -9,6 +9,7 @@ const app = new Hono();
 app.use("/*", cors());
 
 app.route(endpoint.event, eventController);
+app.route(endpoint.template, templateController);
 
 app.onError((err, c) => {
   console.error(err);
@@ -22,7 +23,5 @@ app.onError((err, c) => {
     { status: 500 }
   );
 });
-
-app.route(endpoint.template, templateController);
 
 export default app;
