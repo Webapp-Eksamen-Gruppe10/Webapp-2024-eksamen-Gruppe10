@@ -4,10 +4,12 @@ import Link from "next/link";
 import { formatDate } from "@/features/registration/lib/helpers";
 
 type AdminEventProps = {
-    events: Event[]
+    events: Event[],
+    remove: (id: string) => Promise<void>,
+
 }
 
-export default function AdminEvents({events} : AdminEventProps) {
+export default function AdminEvents({events, remove} : AdminEventProps) {
     
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
@@ -58,7 +60,8 @@ export default function AdminEvents({events} : AdminEventProps) {
               <button className="px-3 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
                 Rediger
               </button>
-              <button className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">
+              <button className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+              onClick={() => {remove(event.id)}}>
                 Slett
               </button>
             </div>
