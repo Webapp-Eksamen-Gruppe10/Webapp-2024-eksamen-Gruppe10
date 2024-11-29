@@ -28,7 +28,8 @@ export function useEvent() {
     try {
       setEventStatus("loading");
       const result = await eventsApi.list();
-      setEventData(result.data as Event[]);
+      const events = Array.isArray(result.data) ? (result.data as Event[]) : [];
+      setEventData(events);
       setEventStatus("success");
     } catch (error) {
       setEventStatus("error");
@@ -36,7 +37,7 @@ export function useEvent() {
     }
   }, []);
 
-  
+ 
   const addEvent = async (data: Partial<Event>) => {
     try {
         setEventStatus("loading");

@@ -1,4 +1,4 @@
-import type { ErrorCode } from "@/lib/error";
+import type { ErrorCode } from "../lib/error";
 
 export type Data<T> = {
   success: true;

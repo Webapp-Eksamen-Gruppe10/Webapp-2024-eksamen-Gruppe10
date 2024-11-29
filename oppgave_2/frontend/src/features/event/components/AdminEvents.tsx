@@ -1,6 +1,7 @@
 import { Event } from "@/features/event/lib/schema";
 import { useState } from "react";
 import Link from "next/link";
+import { formatDate } from "@/features/registration/lib/helpers";
 
 type AdminEventProps = {
     events: Event[]
@@ -9,7 +10,7 @@ type AdminEventProps = {
 export default function AdminEvents({events} : AdminEventProps) {
     
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 5;
+  const eventsPerPage = 6;
 
   // Pagination logic
   const indexOfLastEvent = currentPage * eventsPerPage;
@@ -30,42 +31,6 @@ export default function AdminEvents({events} : AdminEventProps) {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Arrangementoversikt</h1>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="date-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Dato
-          </label>
-          <input
-            id="date-filter"
-            type="date"
-            className="w-full border border-gray-300 rounded p-2"
-          />
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="type-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Type
-          </label>
-          <select id="type-filter" className="w-full border border-gray-300 rounded p-2">
-            <option value="">Alle typer</option>
-            <option value="konsert">Konsert</option>
-            <option value="teater">Teater</option>
-            <option value="utstilling">Utstilling</option>
-          </select>
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <label htmlFor="capacity-filter" className="block text-sm font-medium text-gray-700 mb-1">
-            Kapasitet
-          </label>
-          <input
-            id="capacity-filter"
-            type="number"
-            placeholder="Min. kapasitet"
-            className="w-full border border-gray-300 rounded p-2"
-          />
-        </div>
-      </div>
-
       {/* Create New Event */}
       <div className="mb-4">
         <Link href="/admin/events/new">
@@ -81,7 +46,7 @@ export default function AdminEvents({events} : AdminEventProps) {
           <div key={event.id} className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg">
             <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
             <p className="text-sm text-gray-600 mb-1">
-              <strong>Dato:</strong> {event.datetime}
+              <strong>Dato:</strong> {formatDate(event.datetime)}
             </p>
             <p className="text-sm text-gray-600 mb-1">
               <strong>Type:</strong> {event.category || "N/A"}

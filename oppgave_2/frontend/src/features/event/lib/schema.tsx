@@ -1,31 +1,33 @@
 import { z } from "zod";
 
 const eventSchema = z.object({
-  id: z.string().uuid(),
-  capacity: z.string().max(45),
-  title: z.string().max(50),
-  datetime: z.string().datetime({ offset: true }),
-  location: z.string().max(45),
-  category: z.string().max(45),
+  id: z.string(),
+  template_id: z.string(),
+  title: z.string(),
+  datetime: z.string().datetime(),
+  location: z.string(),
+  category: z.string(),
+  capacity: z.number(),
   price: z.number(),
   description: z.string().max(150),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  template_id: z.coerce.number(),
+
 });
 
 
 const eventSchemaToDb = z.object({
-  capacity: z.string().max(45),
-  title: z.string().max(50),
-  datetime: z.string().datetime({ offset: true }),
-  location: z.string().max(45),
-  category: z.string().max(45),
+  template_id: z.string(),
+  title: z.string(),
+  datetime: z.string().datetime(),
+  location: z.string(),
+  category: z.string(),
+  capacity: z.number(),
   price: z.number(),
   description: z.string().max(150),
   private: z.boolean(),
   waitinglist: z.boolean(),
-  template_id: z.coerce.number(),
+
 });
 
 

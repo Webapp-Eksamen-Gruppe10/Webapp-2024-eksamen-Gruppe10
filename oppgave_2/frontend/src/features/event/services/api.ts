@@ -1,28 +1,19 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
-
+import { validateEventList } from '../lib/schema';
+import {Event } from "@/features/event/lib/schema"
 
 const list = async () => {
     try {
-        const events = await ofetch(endpoint.events.list);
-        
-        if (events.length === 0) {
-            console.warn('No events found.');
-            return {
-                status: 204,
-                message: 'No Content (ingen arrangementer)',
-                data: [],
-            };
-        }
 
-        return {
-            status: 200,
-            message: 'OK',
-            data: events,
-        };
+        const events = await ofetch(endpoint.events.list);
+    
+        return validateEventList(events.data.map((event:Event) => ({
+            ...event,
+        })));
+        
     } catch (error) {
         console.error('Error fetching events:', error);
-
         throw {
             status: 500,
             message: 'Internal Server Error',
@@ -30,7 +21,6 @@ const list = async () => {
         };
     }
 };
-
 
 
 const details = async (id: string) => {

@@ -1,4 +1,5 @@
 "use client"; 
+import { dummyEvents } from "@/lib/data";
 import EventSection from "../components/EventSection";
 import useEvent from "../hooks/useEvent";
 

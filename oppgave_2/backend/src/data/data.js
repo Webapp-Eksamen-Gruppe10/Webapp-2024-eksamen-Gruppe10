@@ -54,7 +54,7 @@ export const events = [
   {
     id: "event1",
     title: "Leadership Training Program",
-    dateTime: "2024-01-15T09:00:00Z",
+    datetime: "2024-01-15T09:00:00Z",
     capacity: 50,
     location: "Oslo",
     category: "Corporate",
@@ -67,7 +67,7 @@ export const events = [
   {
     id: "event2",
     title: "Yoga and Meditation Retreat",
-    dateTime: "2024-02-10T07:00:00Z",
+    datetime: "2024-02-10T07:00:00Z",
     capacity: 30,
     location: "Bergen",
     category: "Wellness",
@@ -80,7 +80,7 @@ export const events = [
   {
     id: "event3",
     title: "Advanced Photography Workshop",
-    dateTime: "2024-03-05T10:00:00Z",
+    datetime: "2024-03-05T10:00:00Z",
     capacity: 20,
     location: "Trondheim",
     category: "Creative",
@@ -93,7 +93,7 @@ export const events = [
   {
     id: "event4",
     title: "Exclusive Wine Tasting Evening",
-    dateTime: "2024-04-20T19:00:00Z",
+    datetime: "2024-04-20T19:00:00Z",
     capacity: 25,
     location: "Stavanger",
     category: "Lifestyle",
@@ -106,7 +106,7 @@ export const events = [
   {
     id: "event5",
     title: "Personal Development Seminar",
-    dateTime: "2024-05-12T14:00:00Z",
+    datetime: "2024-05-12T14:00:00Z",
     capacity: 100,
     location: "Oslo",
     category: "Corporate",
@@ -119,7 +119,7 @@ export const events = [
   {
     id: "event6",
     title: "Weekend Fitness Bootcamp",
-    dateTime: "2024-06-01T08:00:00Z",
+    datetime: "2024-06-01T08:00:00Z",
     capacity: 40,
     location: "Kristiansand",
     category: "Fitness",
@@ -132,7 +132,7 @@ export const events = [
   {
     id: "event7",
     title: "Art and Creativity Workshop",
-    dateTime: "2024-07-08T11:00:00Z",
+    datetime: "2024-07-08T11:00:00Z",
     capacity: 30,
     location: "Bergen",
     category: "Creative",
@@ -145,7 +145,7 @@ export const events = [
   {
     id: "event8",
     title: "Exclusive Networking Dinner",
-    dateTime: "2024-08-15T18:00:00Z",
+    datetime: "2024-08-15T18:00:00Z",
     capacity: 50,
     location: "Trondheim",
     category: "Networking",
@@ -164,6 +164,7 @@ export const registrations = [
     email: "alice.brown@example.com",
     phoneNumber: "1234567890",
     status: "confirmed",
+    createdAt: "2024-01-15T10:30:00Z",
   },
   {
     event_id: "event1",
@@ -171,6 +172,7 @@ export const registrations = [
     email: "bob.johnson@example.com",
     phoneNumber: "9876543210",
     status: "pending",
+    createdAt: "2024-01-15T11:45:00Z",
   },
   {
     event_id: "event2",
@@ -178,6 +180,7 @@ export const registrations = [
     email: "cathy.lee@example.com",
     phoneNumber: "2345678901",
     status: "confirmed",
+    createdAt: "2024-02-10T08:20:00Z",
   },
   {
     event_id: "event2",
@@ -185,6 +188,7 @@ export const registrations = [
     email: "daniel.green@example.com",
     phoneNumber: "8765432190",
     status: "pending",
+    createdAt: "2024-02-10T09:10:00Z",
   },
   {
     event_id: "event3",
@@ -192,6 +196,7 @@ export const registrations = [
     email: "ella.white@example.com",
     phoneNumber: "3456789012",
     status: "confirmed",
+    createdAt: "2024-03-05T11:30:00Z",
   },
   {
     event_id: "event4",
@@ -199,6 +204,7 @@ export const registrations = [
     email: "frank.harris@example.com",
     phoneNumber: "7654321098",
     status: "confirmed",
+    createdAt: "2024-04-20T20:00:00Z",
   },
   {
     event_id: "event5",
@@ -206,6 +212,7 @@ export const registrations = [
     email: "grace.kim@example.com",
     phoneNumber: "4567890123",
     status: "pending",
+    createdAt: "2024-05-12T15:45:00Z",
   },
   {
     event_id: "event6",
@@ -213,6 +220,7 @@ export const registrations = [
     email: "henry.moore@example.com",
     phoneNumber: "6543210987",
     status: "confirmed",
+    createdAt: "2024-06-01T09:00:00Z",
   },
   {
     event_id: "event7",
@@ -220,6 +228,7 @@ export const registrations = [
     email: "ivy.scott@example.com",
     phoneNumber: "5678901234",
     status: "confirmed",
+    createdAt: "2024-07-08T12:15:00Z",
   },
   {
     event_id: "event8",
@@ -227,5 +236,6 @@ export const registrations = [
     email: "jack.taylor@example.com",
     phoneNumber: "5432109876",
     status: "pending",
+    createdAt: "2024-08-15T19:30:00Z",
   },
 ];

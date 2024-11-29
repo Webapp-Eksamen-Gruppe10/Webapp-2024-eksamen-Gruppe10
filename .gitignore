@@ -24,9 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 *.db
-oppgave_1/backend/prisma/migrations
-<<<<<<< HEAD
+oppgave_1/backend/prisma/migrations/*
 oppgave_1/backend/prisma/dev.db
-=======
+oppgave_2/backend/prisma/migrations/*
 
->>>>>>> 7dca1b4f1d4923630b2cb727f827bee0089b8d17
