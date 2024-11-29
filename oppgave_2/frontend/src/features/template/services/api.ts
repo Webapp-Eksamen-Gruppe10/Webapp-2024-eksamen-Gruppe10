@@ -1,24 +1,18 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
+import { Template, validateTemplateList } from '../lib/schema';
 
 const list = async () => {
+
     try {
         const templates = await ofetch(endpoint.templates.listByTemplates);
-
-        if (!templates || templates.length === 0) {
-            console.warn('No templates found.');
-            return {
-                status: 204,
-                message: 'No Content (ingen templates)',
-                data: [],
-            };
-        }
-
-        return {
-            status: 200,
-            message: 'OK',
-            data: templates,
-        };
+        console.log(JSON.stringify(templates))
+       
+        return validateTemplateList(templates.data.map((template:Template) => ({
+            ...template,
+        })));
+        
+   
     } catch (error: unknown) {
         console.error('Error fetching templates:', error);
 

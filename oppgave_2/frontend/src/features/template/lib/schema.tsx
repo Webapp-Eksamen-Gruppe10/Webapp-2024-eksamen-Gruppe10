@@ -1,11 +1,10 @@
 import { z } from "zod";
 
 const templateSchema = z.object({
-  id: z.number(),
-  name: z.string().max(45),
-  description: z.string().max(45),
-  templatecol: z.string().max(45),
-  weekdays: z.string().max(100),
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  weekdays: z.array(z.string()),
   notSameDay: z.boolean(),
   private: z.boolean(),
   lim_attend: z.boolean(),
@@ -15,10 +14,9 @@ const templateSchema = z.object({
 });
 
 const templateSchemaToDb = z.object({
-  name: z.string().max(45),
-  description: z.string().max(45),
-  templatecol: z.string().max(45),
-  weekdays: z.string().max(100),
+  name: z.string(),
+  description: z.string(),
+  weekdays: z.array(z.string()),
   notSameDay: z.boolean(),
   private: z.boolean(),
   lim_attend: z.boolean(),

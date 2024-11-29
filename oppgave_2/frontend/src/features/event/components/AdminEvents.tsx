@@ -7,10 +7,11 @@ import { useEvent } from "@/features/event/hooks/useEvent";
 type AdminEventProps = {
     events: Event[],
     remove: (id: string) => Promise<void>,
+    update: (id: string, data: Partial<Event>) => Promise<void>,
 
 }
 
-export default function AdminEvents({events, remove} : AdminEventProps) {
+export default function AdminEvents({events, remove, update} : AdminEventProps) {
     
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
@@ -40,7 +41,7 @@ export default function AdminEvents({events, remove} : AdminEventProps) {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editData) {
-      await updateEvent(editData.id, editData);
+      await update(editData.id, editData);
       setShowEditModal(false);
     }
   };
