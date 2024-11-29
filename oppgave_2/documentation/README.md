@@ -71,7 +71,7 @@ for å kunne hente antall påmeldte: fetch('/api/v1/events/{id}'): Metode GET
 # 2.1.6 Hvordan filtrering løses i frontend og backend 
 
 ### Frontend 
-i frontend tenker vi å lagre brukerens valg av type, måned og år i en useState, og deretter bruke URLSearchParams() for å konvertere filters til en URL-søkestreng som vi bruker i fetch('/api/v1/events?${params}'). Vi tenker også bruke router.push('/events?${params}') for å vise det i URL-en til frontend. 
+i frontend tenker vi å lagre brukerens valg av kategori, måned og år i en useState, og deretter bruke URLSearchParams() for å konvertere filters til en URL-søkestreng som vi bruker i fetch('/api/v1/events?${params}'). Vi tenker også bruke router.push('/events?${params}') for å vise det i URL-en til frontend. 
 
 ### Backend 
 I backend henter vi parametere (måned, år, og kategori) fra URL-en (for eksempel type=sport&year=2024&month=april) som sendes inn fra frontend. Vi bruker disse parameterene
