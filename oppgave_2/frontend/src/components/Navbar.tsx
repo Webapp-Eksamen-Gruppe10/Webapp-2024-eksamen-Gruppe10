@@ -21,18 +21,18 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/" className="text-white text-lg font-bold">
+              <Link href="/" className="text-white hover:text-gray-200 text-lg">
                 Gruppe 10
               </Link>
             </div>
 
             {/* selve nav for pc skjermer */}
             <nav className="hidden md:flex space-x-6 items-center">
-              <Link href="/" className="text-white hover:text-gray-200">
-                Home
+              <Link href="/" className="text-white hover:text-gray-200 text-lg">
+                Hjem
               </Link>
-              <Link href="/events" className="text-white hover:text-gray-200">
-                Events
+              <Link href="/events" className="text-white hover:text-gray-200 text-lg">
+                Arrangementer
               </Link>
 
 
@@ -40,7 +40,7 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="text-white hover:text-gray-200 focus:outline-none"
+                  className="text-white hover:text-gray-200 focus:outline-none text-lg"
                 >
                   Admin
                 </button>
@@ -48,15 +48,15 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 bg-white rounded-md shadow-lg w-48 z-10">
                     <Link
                       href="/admin/events"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                      className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                     >
-                      Events
+                      Arrangementer
                     </Link>
                     <Link
                       href="/admin/statistics"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                      className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                     >
-                      Statistics
+                      Statestikk
                     </Link>
                   </div>
                 )}

@@ -16,7 +16,7 @@ export default function EventSection ({ events }: EventSectionProps)  {
       <section>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-36">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Upcoming Events</h1>
+            <h1 className="text-4xl font-bold mb-4">Kommende Arrangementer</h1>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -33,7 +33,7 @@ export default function EventSection ({ events }: EventSectionProps)  {
                 <div className="border-t p-4 text-center">
                   <Link href={`/events/${event.id}`} passHref>
                     <button className="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-600 hover:text-white">
-                      Learn More
+                      Les mer 
                     </button>
                   </Link>
                 </div>
@@ -44,7 +44,7 @@ export default function EventSection ({ events }: EventSectionProps)  {
           <div className="text-center pb-20">
             <Link href="/events" passHref>
               <button className="px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                See All Events
+                Se Alle Arrengementer
               </button>
             </Link>
           </div>

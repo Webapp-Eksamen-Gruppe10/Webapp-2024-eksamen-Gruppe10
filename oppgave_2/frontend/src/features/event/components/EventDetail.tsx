@@ -18,39 +18,39 @@ export default function EventDetail(props: {event:Event}) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Event Details */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Event Details</h2>
+              <h2 className="text-2xl font-semibold mb-4">Arrangement Detaljer</h2>
               <ul className="space-y-4">
                 <li>
-                  <strong>Date:</strong> {formatDate(event.datetime)}
+                  <strong>Dato:</strong> {formatDate(event.datetime)}
                 </li>
                 <li>
-                  <strong>Time:</strong> {formatTime(event.datetime)|| "TBD"}
+                  <strong>Tid:</strong> {formatTime(event.datetime)|| "TBD"}
                 </li>
                 <li>
-                  <strong>Location:</strong> {event.location || "TBD"}
+                  <strong>Lokasjon:</strong> {event.location || "TBD"}
                 </li>
                 <li>
-                  <strong>Type:</strong> {event.category || "General"}
+                  <strong>Kategori:</strong> {event.category || "General"}
                 </li>
                 <li>
-                  <strong>Capacity:</strong> {event.capacity || "Unlimited"} people
+                  <strong>Kapasitet:</strong> {event.capacity || "Unlimited"} deltagere
                 </li>
                 <li>
-                  <strong>Price:</strong> {event.price || "Free"}
+                  <strong>Pris:</strong> {`${event.price} kr`|| "Free"}
                 </li>
               </ul>
             </div>
     
             {/* Registration Section */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Registration</h2>
+              <h2 className="text-2xl font-semibold mb-4">Påmelding</h2>
               <p className="mb-4">
-                Ready to join us? Click the button below to sign up for this event!
+                Har du lyst å bli med? Klikk på knappen nedenfor for påmelding!
               </p>
               <div className="flex space-x-4">
                 <Link href={`/events/${event.id}/registration`}>
                   <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-                    Sign up
+                    Påmelding
                   </button>
                 </Link>
                 <Link href={`/admin/events/${event.id}/registrations`}>
