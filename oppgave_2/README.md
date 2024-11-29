@@ -1,4 +1,4 @@
-# 2.1.2 - 2.1.4 API-endepunkter som skal brukes
+### 2.1.2 - 2.1.4 API-endepunkter som skal brukes
 
 ### Event-ressurs
 
@@ -32,7 +32,7 @@
 | `DELETE`    | `/api/v1/templates/{id}` | Slett en spesifikk template.               | `200 OK`, Slettet template-JSON  | `404 Not Found`, `500 Internal Server Error` |
 
 
-# 2.1.5 Hvilke sider(frontend) som skal benytte de ulike API-ene 
+### 2.1.5 Hvilke sider(frontend) som skal benytte de ulike API-ene 
 
 ### Homepage 
 Funksjonalitet: Se alle events (uten filtrering) og navigerer brukeren til eventspage. 
@@ -68,12 +68,4 @@ for å kunne slette et arrangement: fetch('/api/v1/events/{id}'): Metode DELETE
 Funksjonalitet: Henter statistikk for antall påmeldte den siste måneden for ett arrangement.
 for å kunne hente antall påmeldte: fetch('/api/v1/events/{id}'): Metode GET
 
-# 2.1.6 Hvordan filtrering løses i frontend og backend 
-
-### Frontend 
-i frontend tenker vi å lagre brukerens valg av kategori, måned og år i en useState, og deretter bruke URLSearchParams() for å konvertere filters til en URL-søkestreng som vi bruker i fetch('/api/v1/events?${params}'). Vi tenker også bruke router.push('/events?${params}') for å vise det i URL-en til frontend. 
-
-### Backend 
-I backend henter vi parametere (måned, år, og kategori) fra URL-en (for eksempel type=sport&year=2024&month=april) som sendes inn fra frontend. Vi bruker disse parameterene
-for å gjøre spørringer til databasen og sender ferdig filtrert data til frontend.
 

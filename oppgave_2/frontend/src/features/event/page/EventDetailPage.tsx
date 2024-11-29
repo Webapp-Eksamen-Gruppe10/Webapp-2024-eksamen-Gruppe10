@@ -12,8 +12,8 @@ export default function EventDetailPage(props: {eventId: string}) {
     if (!event) {
         return (
           <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-4">Event Not Found</h1>
-            <p className="text-lg">We couldn't find the event you're looking for.</p>
+            <h1 className="text-3xl font-bold mb-4">Arrangement ble ikke funnet</h1>
+            <p className="text-lg">Vi kunne ikke finne arrangementet du så etter.</p>
           </div>
         );
     }
