@@ -136,6 +136,7 @@ export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEven
                 id="private"
                 type="checkbox"
                 className="w-5 h-5 border-gray-300 rounded text-blue-600 focus:ring focus:ring-blue-500"
+                checked={selectedTemplate?.private}
               />
               <label htmlFor="private" className="text-sm font-medium text-gray-700">
                 Privat arrangement
@@ -146,6 +147,7 @@ export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEven
                 id="waitlist"
                 type="checkbox"
                 className="w-5 h-5 border-gray-300 rounded text-blue-600 focus:ring focus:ring-blue-500"
+                checked={selectedTemplate?.waitinglist}
               />
               <label htmlFor="waitlist" className="text-sm font-medium text-gray-700">
                 Aktiver venteliste
