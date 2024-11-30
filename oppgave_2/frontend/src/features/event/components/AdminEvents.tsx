@@ -47,7 +47,7 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Er du sikker pÃ¥ at du vil slette dette arrangementet?")) {
+    if (confirm("Er du sikker på at du vil slette dette arrangementet?")) {
       await deleteEvent(id);
     }
   };
