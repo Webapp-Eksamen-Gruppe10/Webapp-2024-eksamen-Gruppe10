@@ -30,6 +30,7 @@ export const toDb = (event: EventWithoutId): DbEvent => {
   const dbEvent: DbEvent = {
     ...event,
     id: crypto.randomUUID(),
+    currentCapacity: 0
   };
   return dbEvent;
 };

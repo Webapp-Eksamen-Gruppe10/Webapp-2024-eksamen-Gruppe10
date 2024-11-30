@@ -4,12 +4,6 @@ import {
   Template,
   TemplateWithoutId,
 } from "../types";
-import {
-  validateDbTemplate,
-  validateDbTemplateWithoutId,
-  validateTemplate,
-  validateTemplateArray,
-} from "./schema";
 
 export const ToTemplateObject = (dbTemplate: DbTemplate): Template => {
   const template: Template = {
@@ -43,7 +37,14 @@ export const CreateTemplateToDb = (template: TemplateWithoutId): DbTemplate => {
 
 export const UpdateTemplateToDb = (template: Template): DbTemplateWithoutId => {
   const dbTemplate: DbTemplateWithoutId = {
-    ...template,
+    description: template.description,
+    private: template.private,
+    waitinglist: template.waitinglist,
+    name: template.name,
+    notSameDay: template.notSameDay,
+    lim_attend: template.lim_attend,
+    fixed_price: template.fixed_price,
+    free: template.free,
     weekdays: JSON.stringify(template.weekdays),
   };
   return dbTemplate;
