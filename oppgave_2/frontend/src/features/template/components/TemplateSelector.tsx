@@ -9,7 +9,7 @@ interface TemplateSelectorProps {
   onSkip: () => void
 }
 
-const defaultTemplate = {
+export const defaultTemplate = {
   name: "",
   description: "",
   weekdays: [],

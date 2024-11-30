@@ -1,10 +1,13 @@
+import { Template } from "@/features/template/lib/schema";
+
 type AdminCreateEventFormProps = {
-  onSelectTemplate: (template: any) => void,
+  selectedTemplate: Template,
 }
 
-export default function AdminCreateEventForm({onSelectTemplate}: AdminCreateEventFormProps) {
-  
+export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEventFormProps) {
+  console.log("VALGT TEMPLATE: ", selectedTemplate)
     return (
+
       <div className="w-full max-w-lg border border-gray-300 rounded-lg shadow-md p-6">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Opprett nytt arrangement</h2>
@@ -19,6 +22,7 @@ export default function AdminCreateEventForm({onSelectTemplate}: AdminCreateEven
               type="text"
               required
               className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+              value={selectedTemplate?.name}
             />
           </div>
   
@@ -91,6 +95,7 @@ export default function AdminCreateEventForm({onSelectTemplate}: AdminCreateEven
               id="description"
               required
               className="block w-full border border-gray-300 rounded-md px-3 py-2 min-h-[100px] focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+              value={selectedTemplate?.description}
             ></textarea>
           </div>
   

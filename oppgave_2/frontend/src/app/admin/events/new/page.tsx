@@ -4,11 +4,12 @@ import AdminCreateEventPage from "@/features/event/page/AdminCreateEventPage";
 import TemplateSelectorPage from "@/features/template/page/TemplateSelectorPage";
 import useTemplate from "@/features/template/hooks/useTemplate";
 import { Template } from "@/features/template/lib/schema";
+import { defaultTemplate } from "@/features/template/components/TemplateSelector";
 
 export default function NewEventPage() {
 
   const [currentStep, setCurrentStep] = useState(1); 
-  const [selectedTemplate, setSelectedTemplate] = useState<Template| null>(null); 
+  const [selectedTemplate, setSelectedTemplate] = useState<Template>(defaultTemplate); 
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);

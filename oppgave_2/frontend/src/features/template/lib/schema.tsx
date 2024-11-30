@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const templateSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string(),
   description: z.string(),
   weekdays: z.array(z.string()),
