@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { registrationsApi } from "@/features/registration/services/api";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
-import { Registration } from "@/features/registration/lib/schema"
+import { CreateRegistration, Registration } from "@/features/registration/lib/schema"
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
 
@@ -37,7 +37,7 @@ export function useRegistration(eventId: string) {
     }
   }, [eventId]);
 
-  const addRegistration = async (data: Omit<Registration, "id">) => {
+  const addRegistration = async (data: CreateRegistration) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.create(eventId, data);

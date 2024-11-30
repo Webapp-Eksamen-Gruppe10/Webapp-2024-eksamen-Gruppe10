@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { validateRegistrationToDb } from '@/features/registration/lib/schema';
+import { CreateRegistration, validateRegistrationToDb } from '@/features/registration/lib/schema';
 
 type RegistrationFormProps = {
-  onSubmit: (data: any[]) => Promise<void>;
+  onSubmit: (data: CreateRegistration) => Promise<void>;
   eventId: string;
 };
 
@@ -58,41 +58,33 @@ export default function RegistreringsSkjema({ onSubmit, eventId }: RegistrationF
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     console.log('Sender inn skjema:', formData);
-    const registranter = [
-      {
+
+    const registranter = {
         name: formData.name,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
-        status: 'venter',
-        event_id: eventId,
-      },
-      ...formData.participants.map((participant) => ({
-        name: participant,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        status: 'venter',
-        event_id: eventId,
-      })),
-    ];
+        participants: formData.participants,
+    };
 
-    for (const registrant of registranter) {
-      const parsed = validateRegistrationToDb(registrant);
-      if (!parsed.success) {
+    const parsed = validateRegistrationToDb(registranter);
+    if (!parsed.success) {
         console.error('Validering feilet:', parsed.error);
         alert('Registrering mislyktes. Sjekk dataene og prøv igjen.');
         return;
-      }
     }
 
+
     try {
-      await onSubmit(registranter);
-      alert('Alle registreringer ble sendt inn!');
+        await onSubmit(registranter);
+        alert('Registrering ble sendt inn!');
     } catch (error) {
-      console.error('Feil ved innsending av registreringer:', error);
-      alert('Registrering mislyktes. Vennligst prøv igjen.');
+        console.error('Feil ved innsending av registrering:', error);
+        alert('Registrering mislyktes. Vennligst prøv igjen.');
     }
-  };
+};
+
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
