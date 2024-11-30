@@ -11,6 +11,6 @@ export default function TemplateSelectorPage({onSelectTemplate, onSkip}: Templat
   const {templateData, add} = useTemplate()
 
   return (
-    <TemplateSelector templates={templateData} add={add} selectedTemplate={onSelectTemplate}/>
+    <TemplateSelector templates={templateData} add={add} finalSelectedTemplate={onSelectTemplate} onSkip={onSkip}/>
   );
 }

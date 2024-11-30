@@ -4,7 +4,8 @@ import React, { useState } from "react";
 interface TemplateSelectorProps {
   templates?: Template[];
   add: (data: Omit<Template, "id">) => Promise<void>,
-  selectedTemplate:  (template: any) => void
+  finalSelectedTemplate:  (template: any) => void, 
+  onSkip: () => void
 }
 
 const defaultTemplate = {
@@ -20,8 +21,10 @@ const defaultTemplate = {
 }
 
 
-export default function TemplateSelector({ templates = [], add, selectedTemplate }: TemplateSelectorProps) {
+export default function TemplateSelector({ templates = [], add, finalSelectedTemplate, onSkip }: TemplateSelectorProps) {
   const [formData, setFormData] = useState(defaultTemplate)
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+   
 
   const handleWeekdayChange = (day: string, isChecked: boolean) => {
     setFormData((prev) => {
@@ -237,7 +240,7 @@ export default function TemplateSelector({ templates = [], add, selectedTemplate
                   className="w-full border border-gray-300 rounded px-4 py-2 text-left hover:bg-gray-100"
                   onClick={() => {
                     console.log("Valgt template:", template);
-                    selectedTemplate(template); 
+                    setSelectedTemplate(template); 
                   }}
               >
                     
@@ -248,11 +251,18 @@ export default function TemplateSelector({ templates = [], add, selectedTemplate
           )}
         </div>
         <button className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
-          onClick={() => selectedTemplate(defaultTemplate)}>
+          onClick={() => {
+          onSkip
+          finalSelectedTemplate(defaultTemplate)}}>
           Hopp over valg av mal
         </button>
-        <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() => {
+          
+            finalSelectedTemplate(selectedTemplate); 
+          }}> 
           Fortsett med valgte alternativer -{'>'}
+
         </button>
       </div>
     </div>
