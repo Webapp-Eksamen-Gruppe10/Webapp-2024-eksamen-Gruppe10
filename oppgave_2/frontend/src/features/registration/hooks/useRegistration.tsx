@@ -29,7 +29,8 @@ export function useRegistration(eventId: string) {
     try {
       setRegistrationStatus("loading");
       const result = await registrationsApi.listByEvent(eventId);
-      setRegistrationData(result.data as Registration[]);
+      const registrations = Array.isArray(result.data) ? (result.data as Registration[]) : [];
+      setRegistrationData(registrations);
       setRegistrationStatus("success");
     } catch (error) {
       setRegistrationStatus("error");
@@ -51,7 +52,7 @@ export function useRegistration(eventId: string) {
       }
     };
 
-  const updateRegistration = async (id: number, data: Partial<Registration>) => {
+  const updateRegistration = async (id: string, data: Partial<Registration>) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.update(id.toString(), data);
@@ -65,7 +66,7 @@ export function useRegistration(eventId: string) {
       }
     };
 
-  const deleteRegistration = async (id: number) => {
+  const deleteRegistration = async (id: string) => {
       try {
         setRegistrationStatus("loading");
         await registrationsApi.remove(id.toString());

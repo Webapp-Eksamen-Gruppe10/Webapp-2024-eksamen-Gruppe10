@@ -2,13 +2,15 @@
 
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CreateRegistration, validateRegistrationToDb } from '@/features/registration/lib/schema';
+import { Event } from '@/features/event/lib/schema';
 
 type RegistrationFormProps = {
   onSubmit: (data: CreateRegistration) => Promise<void>;
-  eventId: string;
+  event: Event;
 };
 
-export default function RegistreringsSkjema({ onSubmit, eventId }: RegistrationFormProps) {
+
+export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -161,6 +163,13 @@ export default function RegistreringsSkjema({ onSubmit, eventId }: RegistrationF
         >
           Legg til deltaker
         </button>
+
+        <div className="mt-4">
+          <p className="text-lg font-semibold">
+            Totalpris: <span className="text-blue-600">{(event.price * (formData.participants.length + 1)).toString()} NOK</span>
+          </p>
+        </div>
+
 
         <button
           type="submit"
