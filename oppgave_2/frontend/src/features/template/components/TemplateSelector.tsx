@@ -25,6 +25,22 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
   const [formData, setFormData] = useState<TemplateToDb>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
+
+  const getCurrentTemplateData = () => {
+    return {
+      name: formData.name,
+      description: formData.description,
+      weekdays: formData.weekdays,
+      notSameDay: formData.notSameDay,
+      private: formData.private,
+      lim_attend: formData.lim_attend,
+      fixed_price: formData.fixed_price,
+      free: formData.free,
+      waitinglist: formData.waitinglist,
+    };
+  }
+
+
   const handleWeekdayChange = (day: string, isChecked: boolean) => {
     setFormData((prev) => {
       const updatedWeekdays = isChecked
@@ -57,20 +73,8 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const templateData = {
-      name: formData.name,
-      description: formData.description,
-      weekdays: formData.weekdays,
-      notSameDay: formData.notSameDay,
-      private: formData.private,
-      lim_attend: formData.lim_attend,
-      fixed_price: formData.fixed_price,
-      free: formData.free,
-      waitinglist: formData.waitinglist,
-    };
-
     try {
-      await add(templateData);
+      await add(getCurrentTemplateData());
       alert("Lagring av template vellykket!");
       setFormData(defaultTemplate);
     } catch (error) {
