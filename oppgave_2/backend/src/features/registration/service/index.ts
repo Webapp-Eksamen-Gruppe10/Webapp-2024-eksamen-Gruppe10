@@ -1,9 +1,9 @@
 import { ResultHandler } from "../../../lib/result";
 import { Result } from "../../../types";
 import { ToRegistrationObject } from "../helpers/mapper";
-import { status, validateRegistration, validateRegistrationWithoutId } from "../helpers/schema";
+import { status, validateRegistration, validateCreateRegistration } from "../helpers/schema";
 import { registrationRepository, RegistrationRepository } from "../repository";
-import { Registration, RegistrationWithoutId } from "../types";
+import { Registration, CreateRegistration } from "../types";
 
 
 export const createRegistrationService = (registrationRepositoryDb: RegistrationRepository) => {
@@ -28,31 +28,31 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
       };
 
     const createRegistration = async (
-        data: RegistrationWithoutId, eventId: string
+        data: CreateRegistration, eventId: string
         ): Promise<Result<Registration>> => {
         const eventExist = await registrationRepositoryDb.eventExist(eventId)
         if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
 
-        if (!validateRegistrationWithoutId(data).success) return ResultHandler.failure("Data does not match", "BAD_REQUEST");
+        if (!validateCreateRegistration(data).success) return ResultHandler.failure("Data does not match", "BAD_REQUEST");
 
-        const event = await registrationRepositoryDb.event(data.event_id)
+        const event = await registrationRepositoryDb.event(eventId)
         if(!event?.waitinglist && ((event?.capacity?? 0) - (event?.currentCapacity?? 0)) < data.participants.length+1)
             return ResultHandler.failure("The event is full, and waiting list is not allowed", "FORBIDDEN")
 
         if (event?.waitinglist && ((event?.capacity?? 0) - (event?.currentCapacity?? 0)) < data.participants.length+1) {
-            registrationRepositoryDb.eventCurrentCap(data.event_id, (event?.currentCapacity ?? 0)+(data.participants.length+1))
-            return registrationRepositoryDb.create({
-                ...data,
-                event_id: eventId,
-                status: status.Enum.waitinglist
-            })
+            registrationRepositoryDb.eventCurrentCap(eventId, (event?.currentCapacity ?? 0)+(data.participants.length+1))
+            return registrationRepositoryDb.create(
+                data,
+                eventId,
+                status.Enum.waitinglist
+            )
         } else {
-            registrationRepositoryDb.eventCurrentCap(data.event_id, (event?.currentCapacity ?? 0)+(data.participants.length+1))
-            return registrationRepositoryDb.create({
-                ...data,
-                event_id: eventId,
-                status: status.Enum.pending
-            });
+            registrationRepositoryDb.eventCurrentCap(eventId, (event?.currentCapacity ?? 0)+(data.participants.length+1))
+            return registrationRepositoryDb.create(
+                data,
+                eventId,
+                status.Enum.pending
+            );
         }
       };
     

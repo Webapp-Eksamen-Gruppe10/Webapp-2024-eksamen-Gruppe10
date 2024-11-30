@@ -3,7 +3,7 @@ import { z } from "zod";
 export {
   registrationSchema,
   registrationsSchema,
-  registrationSchemaWithoutId,
+  createRegistrationSchema,
   registrationStatus,
   dBregistrationSchema,
   dBregistrationSchemaWithoutId,
@@ -34,8 +34,11 @@ const dBregistrationSchema = z.object({
     status: z.string(),
   });
 
-const registrationSchemaWithoutId = registrationSchema.omit({
+const createRegistrationSchema = registrationSchema.omit({
   id: true,
+  event_id: true,
+  createdAt: true,
+  status: true
 });
 
 const dBregistrationSchemaWithoutId = dBregistrationSchema.omit({
@@ -60,8 +63,8 @@ export function validateDbRegistration(data: unknown) {
     return dBregistrationSchema.safeParse(data);
 }
 
-export function validateRegistrationWithoutId(data: unknown) {
-    return registrationSchemaWithoutId.safeParse(data);
+export function validateCreateRegistration(data: unknown) {
+    return createRegistrationSchema.safeParse(data);
 }
 
 export function validateDbRegistrationWithoutId(data: unknown) {
