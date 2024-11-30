@@ -1,42 +1,24 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
+import { Registration, validateRegistrationList } from '../lib/schema';
+
 
 const listByEvent = async (eventId: string) => {
     try {
-        const registrations = await ofetch(endpoint.registrations.listByEvent.replace('{eventId}', eventId));
-        
-        if (!registrations || registrations.length === 0) {
-            console.warn(`No registrations found for event ID ${eventId}.`);
-            return {
-                status: 204,
-                message: 'No Content (ingen påmeldinger)',
-                data: [],
-            };
-        }
-
-        return {
-            status: 200,
-            message: 'OK',
-            data: registrations,
-        };
-    } catch (error: unknown) {
+        const registrations = await ofetch(endpoint.registrations.listByEvent.replace('{eventId}', eventId))
+        return validateRegistrationList(registrations.data.map((registration:Registration) => ({
+            ...registration,
+        })));
+ 
+    } catch (error) {
         console.error(`Error fetching registrations for event ID ${eventId}:`, error);
-
-        if (error instanceof Error) {
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
         throw {
             status: 500,
             message: 'Internal Server Error',
             error: 'An unknown error occurred',
-        };
+            };      
     }
-};
+}; 
 
 
 const details = async (eventId: string, id: string) => {

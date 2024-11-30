@@ -53,7 +53,7 @@ export default function EventDetail(props: {event:Event}) {
               <div className="flex space-x-4">
                 {event.currentCapacity >= event.capacity ? (
                   event.waitinglist ? (
-                    <Link href={`/events/${event.id}/waitlist`}>
+                    <Link href={`/events/${event.id}/registration`}>
                       <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
                         Meld deg på venteliste
                       </button>
