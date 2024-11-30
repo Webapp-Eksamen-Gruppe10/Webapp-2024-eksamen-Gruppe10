@@ -28,9 +28,9 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
       };
 
     const createRegistration = async (
-        data: RegistrationWithoutId
+        data: RegistrationWithoutId, eventId: string
         ): Promise<Result<Registration>> => {
-        const eventExist = await registrationRepositoryDb.eventExist(data.event_id)
+        const eventExist = await registrationRepositoryDb.eventExist(eventId)
         if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
 
         if (!validateRegistrationWithoutId(data).success) return ResultHandler.failure("Data does not match", "BAD_REQUEST");
@@ -43,12 +43,14 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
             registrationRepositoryDb.eventCurrentCap(data.event_id, (event?.currentCapacity ?? 0)+(data.participants.length+1))
             return registrationRepositoryDb.create({
                 ...data,
+                event_id: eventId,
                 status: status.Enum.waitinglist
             })
         } else {
             registrationRepositoryDb.eventCurrentCap(data.event_id, (event?.currentCapacity ?? 0)+(data.participants.length+1))
             return registrationRepositoryDb.create({
                 ...data,
+                event_id: eventId,
                 status: status.Enum.pending
             });
         }
@@ -56,8 +58,13 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
     
     const updateRegistration = async (
         data: Registration,
-        id: string
+        id: string,
+        eventId: string
       ): Promise<Result<Registration>> => {
+
+        const eventExist = await registrationRepositoryDb.eventExist(eventId)
+        if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
+
         const registrationExist = await registrationRepositoryDb.registrationExist(id);
         if (!registrationExist)
           return ResultHandler.failure("Registration not found", "NOT_FOUND");
@@ -65,10 +72,13 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
         if (!validateRegistration(data).success)
           return ResultHandler.failure("Data does not match", "BAD_REQUEST");
     
-        return registrationRepositoryDb.updateById(data, id);
+        return registrationRepositoryDb.updateById(data, id, eventId);
       };
     
-    const deleteRegistration = async (id: string): Promise<Result<string>> => {
+    const deleteRegistration = async (id: string, eventId: string): Promise<Result<string>> => {
+        const eventExist = await registrationRepositoryDb.eventExist(eventId)
+        if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
+
         const registrationExist = await registrationRepositoryDb.registrationExist(id);
         if (!registrationExist)
           return ResultHandler.failure("Registration not found", "NOT_FOUND");
@@ -77,7 +87,7 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
         const event = await registrationRepositoryDb.event(registration?.event_id??"")
         registrationRepositoryDb.eventCurrentCap(registration?.event_id??"", (event?.currentCapacity?? 0) - ((JSON.parse(registration?.participants?? "").length)+1))
 
-        return registrationRepositoryDb.deleteById(id);
+        return registrationRepositoryDb.deleteById(id, eventId);
       };
     
       return {

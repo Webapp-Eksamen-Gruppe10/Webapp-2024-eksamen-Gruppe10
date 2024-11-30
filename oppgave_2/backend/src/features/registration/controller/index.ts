@@ -31,28 +31,31 @@ export const createRegistrationController = (
         return c.json(result);
       });
 
-      app.post("/", async (c) => {
+      app.post("/:eventId", async (c) => {
         const data = await c.req.json();
-        const result = await registrationServiceDb.createRegistration(data);
+        const eventId = c.req.param("eventId");
+        const result = await registrationServiceDb.createRegistration(data, eventId);
     
         if (!result.success)
           return errorResponse(c, result.error.code, result.error.message);
         return c.json<Data<Registration>>(result, { status: 201 });
       });
     
-      app.patch("/:id", async (c) => {
+      app.patch("/:eventId/:id", async (c) => {
         const id = c.req.param("id");
+        const eventId = c.req.param("eventId");
         const data = await c.req.json();
-        const result = await registrationServiceDb.updateRegistration(data, id);
+        const result = await registrationServiceDb.updateRegistration(data, id, eventId);
     
         if (!result.success)
           return errorResponse(c, result.error.code, result.error.message);
         return c.json(result);
       });
     
-      app.delete("/:id", async (c) => {
+      app.delete("/:eventId/:id", async (c) => {
         const id = c.req.param("id");
-        const result = await registrationServiceDb.deleteRegistration(id);
+        const eventId = c.req.param("eventId");
+        const result = await registrationServiceDb.deleteRegistration(id, eventId);
     
         if (!result.success)
           return errorResponse(c, result.error.code, result.error.message);

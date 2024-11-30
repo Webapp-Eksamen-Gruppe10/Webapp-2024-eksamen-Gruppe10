@@ -107,11 +107,12 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const updateById = async (data: Registration, id: string): Promise<Result<Registration>> => {
+    const updateById = async (data: Registration, id: string, eventId: string): Promise<Result<Registration>> => {
         try {
             const update = await prismaDb.registration.update({
                 where: {
-                    id: id
+                    id: id,
+                    event_id: eventId
                 },
                 data: UpdateRegistrationStatusToDb(data)
             })
@@ -121,11 +122,12 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const deleteById = async (id: string): Promise<Result<string>> => {
+    const deleteById = async (id: string, eventId: string): Promise<Result<string>> => {
         try {
             const deletedRegistration = await prismaDb.registration.delete({
                 where: {
-                    id: id
+                    id: id,
+                    event_id: eventId
                 }
             })
             return ResultHandler.success(id)
