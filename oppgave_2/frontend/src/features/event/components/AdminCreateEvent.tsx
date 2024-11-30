@@ -1,16 +1,29 @@
 import { Template } from "@/features/template/lib/schema";
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import nb from "date-fns/locale/nb"; 
 
-
+registerLocale("nb", nb);
 
 type AdminCreateEventFormProps = {
   selectedTemplate: Template,
 }
 
 export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEventFormProps) {
-  const [startDate, setStartDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(null);
+
+  // Tillatte ukedager fra template (forventes som ["monday", "wednesday", ...])
+  const allowedWeekdays = selectedTemplate.weekdays.map((day) =>
+    day.toLowerCase()
+  );
+
+
+  const isDayAllowed = (date: Date) => {
+    const days = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
+    const weekday = days[date.getDay()];
+    return allowedWeekdays.includes(weekday);
+  };
   
   console.log("VALGT TEMPLATE: ", selectedTemplate)
     return (
@@ -38,14 +51,22 @@ export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEven
               Dato & Tid
             </label>
             <DatePicker
-              id="datetime"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              selected={date}
+              onChange={(newDate) => setDate(newDate)}
+              locale="nb"
               showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={30}
               dateFormat="Pp"
               className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-              required
+              dayClassName={(date) =>
+                isDayAllowed(date)
+                  ? "text-green-700 bg-green-100 hover:bg-green-200" // Tillatte dager
+                  : "text-red-700 bg-red-100 hover:bg-red-200" // Ikke-tillatte dager
+              }
+              filterDate={isDayAllowed} // Blokker datoer som ikke er tillatt
             />
+       
           </div>
   
           <div className="space-y-2">

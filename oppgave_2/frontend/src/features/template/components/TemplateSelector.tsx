@@ -142,7 +142,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
                   Begrenset ukedager
                 </label>
                 <div className="grid grid-cols-2 gap-4 border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                  {["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"].map((day) => (
                     <div key={day} className="flex items-center space-x-2">
                       <input
                         id={`weekday-${day}`}
