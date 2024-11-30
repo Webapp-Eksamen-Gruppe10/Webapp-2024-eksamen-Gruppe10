@@ -30,6 +30,7 @@ import { z } from "zod"
             ...registration,
             id: crypto.randomUUID(),
             participants: JSON.stringify(registration.participants),
+            createdAt: new Date()
         }
         return registrationDb;
   };
