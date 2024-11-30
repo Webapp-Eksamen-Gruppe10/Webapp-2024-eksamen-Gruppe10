@@ -8,6 +8,13 @@ import { Registration, CreateRegistration } from "../types";
 
 export const createRegistrationService = (registrationRepositoryDb: RegistrationRepository) => {
 
+  const getAllRegistrationsAllEvents = async (): Promise<Result<Registration[]>> => {
+    const allRegistrations = await registrationRepositoryDb.getAllRegistrationsAllEvents()
+    if (!allRegistrations) return ResultHandler.failure("Could not find any registrations", "NOT_FOUND")
+
+    return allRegistrations;
+  };
+
     const getAllRegistrations = async (eventId: string): Promise<Result<Registration[]>> => {
         const eventExist = await registrationRepositoryDb.eventExist(eventId)
         if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
@@ -91,6 +98,7 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
       };
     
       return {
+        getAllRegistrationsAllEvents,
         getAllRegistrations,
         getOneRegistration,
         createRegistration,

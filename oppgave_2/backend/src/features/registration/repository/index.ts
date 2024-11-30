@@ -7,6 +7,17 @@ import { ResultHandler } from "../../../lib/result";
 import { CreateRegistrationToDb, ToRegistrationArray, ToRegistrationObject, UpdateRegistrationStatusToDb } from "../helpers/mapper";
 
 export const createRegistrationRepository = (prismaDb: Prisma) => {
+
+    const getAllRegistrationsAllEvents = async (): Promise<Result<Registration[]>> => {
+        try {
+            const registrations = await prismaDb.registration.findMany();
+    
+            return ResultHandler.success(ToRegistrationArray(registrations))
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR");
+        }
+    };
+
     const registrationExist = async(id: string) => {
         try {
             await prismaDb.registration.findUniqueOrThrow({
@@ -136,7 +147,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    return { registrationExist, eventExist, event, eventCurrentCap, regData, create, list, getById, updateById, deleteById };
+    return { registrationExist, eventExist, event, eventCurrentCap, regData, create, list, getById, updateById, deleteById, getAllRegistrationsAllEvents};
 }
 
 export const registrationRepository = createRegistrationRepository(prisma)

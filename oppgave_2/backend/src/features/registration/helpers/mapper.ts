@@ -10,19 +10,23 @@ import { z } from "zod"
         };
         return registration;
     };
-  
+
+    // Hentet logikk for dette fra chatGPT
+    // src: https://chatgpt.com/share/674b2fe2-2f08-8013-8a5d-5c75e19939dd
     export const ToRegistrationArray = (dbRegistrations: DbRegistration[]): Registration[] => {
-        const registrations: Registration[] = [];
-  
-        dbRegistrations.map((dBregistrations) => {
-        registrations.push({
+        return dbRegistrations.map((dBregistrations) => ({
             ...dBregistrations,
-            participants: JSON.parse(dBregistrations.participants),
-            status: status.parse(dBregistrations.status)
-        });
-        });
-  
-        return registrations;
+            participants: dBregistrations.participants
+              ? JSON.parse(dBregistrations.participants)
+              : [],
+            status: (() => {
+              try {
+                return status.parse(dBregistrations.status);
+              } catch {
+                return "pending";
+              }
+            })(),
+        }));
     };
 
   export const CreateRegistrationToDb = (registration: CreateRegistration, event_id: string, status: RegStatus): DbRegistration => {
