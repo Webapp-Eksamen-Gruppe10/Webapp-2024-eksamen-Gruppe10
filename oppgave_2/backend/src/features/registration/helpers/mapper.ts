@@ -1,4 +1,4 @@
-import { DbRegistration, Registration, RegistrationStatus, RegistrationWithoutId } from "../types";
+import { CreateRegistration, DbRegistration, Registration, RegistrationStatus, RegStatus } from "../types";
 import { status } from "./schema";
 import { z } from "zod"
   
@@ -25,12 +25,14 @@ import { z } from "zod"
         return registrations;
     };
 
-  export const CreateRegistrationToDb = (registration: RegistrationWithoutId): DbRegistration => {
+  export const CreateRegistrationToDb = (registration: CreateRegistration, event_id: string, status: RegStatus): DbRegistration => {
     const registrationDb: DbRegistration = {
             ...registration,
             id: crypto.randomUUID(),
             participants: JSON.stringify(registration.participants),
-            createdAt: new Date()
+            createdAt: new Date(),
+            event_id: event_id,
+            status: status
         }
         return registrationDb;
   };
