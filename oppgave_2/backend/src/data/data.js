@@ -69,7 +69,7 @@ export const events = [
     id: "event2",
     title: "Yoga and Meditation Retreat",
     createdAt: "2021-04-10T07:00:00Z",
-    capacity: 30,
+    capacity: 14,
     currentCapacity: 14,
     location: "Bergen",
     category: "Wellness",
@@ -167,6 +167,7 @@ export const events = [
 
 export const registrations = [
   {
+    id: "registration1",
     event_id: "event1",
     name: "Alice Brown",
     email: "alice.brown@example.com",
@@ -185,6 +186,7 @@ export const registrations = [
     ],
   },
   {
+    id: "registration2",
     event_id: "event1",
     name: "Bob Johnson",
     email: "bob.johnson@example.com",
@@ -203,6 +205,7 @@ export const registrations = [
     ],
   },
   {
+    id: "registration3",
     event_id: "event2",
     name: "Cathy Lee",
     email: "cathy.lee@example.com",
@@ -221,6 +224,7 @@ export const registrations = [
     ],
   },
   {
+    id: "registration4",
     event_id: "event2",
     name: "Daniel Green",
     email: "daniel.green@example.com",
@@ -230,6 +234,7 @@ export const registrations = [
     participants: ["Aurora", "Felix", "Hannah", "Isak"],
   },
   {
+    id: "registration5",
     event_id: "event3",
     name: "Ella White",
     email: "ella.white@example.com",
@@ -239,6 +244,7 @@ export const registrations = [
     participants: ["Filip", "Ida", "Ludvig", "Thea"],
   },
   {
+    id: "registration6",
     event_id: "event4",
     name: "Frank Harris",
     email: "frank.harris@example.com",
@@ -248,6 +254,7 @@ export const registrations = [
     participants: ["Elias", "Ella", "Jonathan", "Stella"],
   },
   {
+    id: "registration7",
     event_id: "event5",
     name: "Grace Kim",
     email: "grace.kim@example.com",
@@ -257,6 +264,7 @@ export const registrations = [
     participants: ["Adam", "Leah", "Oskar", "Pia"],
   },
   {
+    id: "registration8",
     event_id: "event6",
     name: "Henry Moore",
     email: "henry.moore@example.com",
@@ -266,6 +274,7 @@ export const registrations = [
     participants: ["Amalie", "Magnus", "Nora", "Sander", "Tiril", "Vetle"],
   },
   {
+    id: "registration9",
     event_id: "event7",
     name: "Ivy Scott",
     email: "ivy.scott@example.com",
@@ -275,6 +284,7 @@ export const registrations = [
     participants: ["David", "Emma", "Fredrik", "Julie", "Kristoffer", "Lisa"],
   },
   {
+    id: "registration10",
     event_id: "event8",
     name: "Jack Taylor",
     email: "jack.taylor@example.com",

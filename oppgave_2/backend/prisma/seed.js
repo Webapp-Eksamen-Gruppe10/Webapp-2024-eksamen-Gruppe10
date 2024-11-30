@@ -70,6 +70,7 @@ async function seedRegistrations() {
           event: {
             connect: { id: registration.event_id },
           },
+          id: registration.id,
           name: registration.name,
           email: registration.email,
           createdAt: registration.createdAt,
