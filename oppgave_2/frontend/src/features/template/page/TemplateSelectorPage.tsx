@@ -9,9 +9,8 @@ type  TemplateSelectorPageProps = {
 
 export default function TemplateSelectorPage({onSelectTemplate, onSkip}: TemplateSelectorPageProps) {
     const {templateData, add} = useTemplate()
-
-
+   
   return (
-    <TemplateSelector templates={templateData} add={add} />
+    <TemplateSelector templates={templateData} add={add} selectedTemplate={onSelectTemplate}/>
   );
 }
