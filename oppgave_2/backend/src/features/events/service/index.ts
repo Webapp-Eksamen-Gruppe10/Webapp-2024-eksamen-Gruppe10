@@ -6,16 +6,23 @@ import {
   validateEventWithoutIdAndTemplate_id,
 } from "../helpers/schema";
 import { Result } from "@/types";
+import { CategoryType } from "../types";
 import { eventRepository, EventRepository } from "../repository";
 
 export const createEventService = (eventRepositoryDb: EventRepository) => {
+  // const getAllEvents = async (
+  //   filters: { category?: CategoryType; year?: string; month?: string } // Specify CategoryType
+  // ): Promise<Result<Event[]>> => {
+  //   return await (await eventRepositoryDb).list(filters);
+  // };
+
   const getAllEvents = async (
     filters: Record<string, string>
   ): Promise<Result<Event[]>> => {
     const { category, year, month } = filters;
 
     return (await eventRepositoryDb).list({
-      category,
+      category: category as CategoryType,
       year,
       month,
     });

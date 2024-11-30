@@ -3,7 +3,12 @@ import { ResultHandler } from "../../../lib/result";
 import prisma, { Prisma } from "../../../lib/client/db";
 import { Result } from "@/types";
 import { fromDb, toEventArray, toDb, UpdateEventToDb } from "../helpers/mapper";
-import { DbEventWithoutIdAndTemplateId, Event, EventWithoutId } from "../types";
+import {
+  CategoryType,
+  DbEventWithoutIdAndTemplateId,
+  Event,
+  EventWithoutId,
+} from "../types";
 
 export const createEventRepository = async (prismaDb: Prisma) => {
   const exist = async (id: string) => {
@@ -31,7 +36,8 @@ export const createEventRepository = async (prismaDb: Prisma) => {
   };
 
   const list = async (filters: {
-    category?: string;
+    // category?: string;
+    category?: CategoryType;
     year?: string;
     month?: string;
   }): Promise<Result<Event[]>> => {

@@ -5,6 +5,7 @@ import {
   dbEventSchemaWithoutIdAndTemplate_id,
   eventSchema,
   eventSchemaWithoutIdCurrentCap,
+  Category,
 } from "../helpers/schema";
 
 export type EventWithoutId = z.infer<typeof eventSchemaWithoutIdCurrentCap>;
@@ -14,3 +15,5 @@ export type DbEventWithoutIdAndTemplateId = z.infer<
 >;
 export type DbEvent = z.infer<typeof dbEventSchema>;
 export type Event = z.infer<typeof eventSchema>;
+
+export type CategoryType = z.infer<typeof Category>;
