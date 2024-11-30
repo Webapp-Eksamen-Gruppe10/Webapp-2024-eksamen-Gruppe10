@@ -4,6 +4,7 @@ import React, { useState } from "react";
 interface TemplateSelectorProps {
   templates?: Template[];
   add: (data: Omit<Template, "id">) => Promise<void>,
+  deleteTemplate: (id: number) => Promise<void>,
 }
 
 const defaultTemplate = {
@@ -19,7 +20,7 @@ const defaultTemplate = {
 }
 
 
-export default function TemplateSelector({ templates = [], add }: TemplateSelectorProps) {
+export default function TemplateSelector({ templates = [], add, deleteTemplate}: TemplateSelectorProps) {
   const [formData, setFormData] = useState(defaultTemplate)
 
   const handleWeekdayChange = (day: string, isChecked: boolean) => {
@@ -231,12 +232,21 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
           ) : (
             <div className="space-y-2">
               {templates.map((template) => (
-                <button
-                  key={template.id}
-                  className="w-full border border-gray-300 rounded px-4 py-2 text-left hover:bg-gray-100"
-                >
-                  {template.name}
-                </button>
+                <div key={template.id} className="relative group">
+                  {/* Select Template Button */}
+                  <button
+                    className="w-full border border-gray-300 rounded px-4 py-2 text-left hover:bg-gray-100"
+                  >
+                    {template.name}
+                  </button>
+                  {/* Delete Template Button */}
+                  <button
+                    className="absolute top-1/2 right-[-19%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
+                    onClick={() => deleteTemplate(template.id)}
+                  >
+                    Slett?
+                  </button>
+                </div>
               ))}
             </div>
           )}
