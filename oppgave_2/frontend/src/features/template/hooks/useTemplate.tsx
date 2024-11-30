@@ -66,6 +66,7 @@ export function useTemplate() {
       }
     };
 
+  {/* TODO: Legg til validering. Ikke tillat sletting av MAL hvis den allerede er brukt i en event. */}
   const deleteTemplate = async (id: number) => {
       try {
         setTemplateStatus("loading");
