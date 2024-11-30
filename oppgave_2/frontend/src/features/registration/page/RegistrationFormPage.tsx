@@ -1,14 +1,16 @@
+'use client';
 import useRegistration from '@/features/registration/hooks/useRegistration';
 import RegistrationForm from '../components/RegistrationForm';
+import { useParams } from 'next/navigation';
+import { CreateRegistration } from '../lib/schema';
 
-export default function RegistrationFormPage({ eventId }: { eventId: string }) {
-  const { add } = useRegistration(eventId);
+export default function RegistrationFormPage() {
+  const { id } = useParams() as { id: string }
+  const { add } = useRegistration(id);
 
-  const handleFormSubmit = async (formDataArray: { name: string; email: string; phoneNumber: string; status: string; event_id: string }[]) => {
+  const handleFormSubmit = async (fromdata: CreateRegistration) => {
     try {
-      for (const formData of formDataArray) {
-        await add(formData);
-      }
+        await add(fromdata);
       alert('All registrations added successfully!');
     } catch (error) {
       console.error('Failed to add registration:', error);
@@ -17,6 +19,6 @@ export default function RegistrationFormPage({ eventId }: { eventId: string }) {
   };
 
   return (
-  <RegistrationForm onSubmit={handleFormSubmit} eventId={eventId} />
+  <RegistrationForm onSubmit={handleFormSubmit} eventId={id} />
   );
 }

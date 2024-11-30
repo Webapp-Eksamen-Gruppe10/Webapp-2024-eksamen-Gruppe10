@@ -44,14 +44,14 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
             return registrationRepositoryDb.create(
                 data,
                 eventId,
-                status.Enum.waitinglist
+                status.Enum.venteliste
             )
         } else {
             registrationRepositoryDb.eventCurrentCap(eventId, (event?.currentCapacity ?? 0)+(data.participants.length+1))
             return registrationRepositoryDb.create(
                 data,
                 eventId,
-                status.Enum.pending
+                status.Enum.ventende
             );
         }
       };
