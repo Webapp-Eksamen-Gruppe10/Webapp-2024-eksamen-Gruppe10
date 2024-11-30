@@ -1,5 +1,12 @@
 import { ResultHandler } from "../../../lib/result";
-import { DbEventWithoutIdAndTemplateId, Event, EventWithoutId } from "../types";
+import {
+  CategoryEnum,
+  DbEvent,
+  DbEventWithoutIdAndTemplateId,
+  Event,
+  EventWithoutId,
+} from "../types";
+
 import {
   validateEvent,
   validateEventWithoutIdCurrentCap,
@@ -11,15 +18,26 @@ import { eventRepository, EventRepository } from "../repository";
 export const createEventService = (eventRepositoryDb: EventRepository) => {
   const getAllEvents = async (
     filters: Record<string, string>
-  ): Promise<Result<Event[]>> => {
+  ): Promise<Result<DbEvent[]>> => {
     const { category, year, month } = filters;
-
     return (await eventRepositoryDb).list({
-      category,
+      category: category as CategoryEnum,
       year,
       month,
     });
   };
+
+  // const getAllEvents = async (
+  //   filters: Record<string, string>
+  // ): Promise<Result<Event[]>> => {
+  //   const { category, year, month } = filters;
+
+  //   return (await eventRepositoryDb).list({
+  //     category,
+  //     year,
+  //     month,
+  //   });
+  // };
 
   // const getAllEvents = async (): Promise<Result<Event[]>> => {
   //   return (await eventRepositoryDb).list();

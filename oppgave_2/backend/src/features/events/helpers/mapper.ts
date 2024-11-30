@@ -5,10 +5,12 @@ import {
   Event,
   EventWithoutId,
 } from "../types";
+import { Category } from "./schema";
 
 export const fromDb = (dbEvent: DbEvent): Event => {
   const event: Event = {
     ...dbEvent,
+    category: Category.parse(dbEvent.category),
     createdAt: (dbEvent.createdAt = new Date(dbEvent.createdAt)),
   };
   return event;
@@ -20,6 +22,7 @@ export const toEventArray = (dbEvents: DbEvent[]): Event[] => {
   dbEvents.map((dbEvent) => {
     events.push({
       ...dbEvent,
+      category: Category.parse(dbEvent.category),
     });
   });
 
@@ -30,7 +33,7 @@ export const toDb = (event: EventWithoutId): DbEvent => {
   const dbEvent: DbEvent = {
     ...event,
     id: crypto.randomUUID(),
-    currentCapacity: 0
+    currentCapacity: 0,
   };
   return dbEvent;
 };
