@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export const Category = z.enum([
+  "Konsert",
+  "Workshop",
+  "Konferanse",
+  "Festival",
+  "Teater",
+  "Sport",
+  "Trening", 
+  "Kunstutstilling",
+  "Webinar",
+  "Lansering",
+])
+
 export {
   eventSchema,
   dbEventSchema,
@@ -14,7 +27,7 @@ const eventSchema = z.object({
   title: z.string(),
   createdAt: z.coerce.date(),
   location: z.string(),
-  category: z.string(),
+  category: Category,
   capacity: z.number(),
   currentCapacity: z.number(),
   price: z.number(),
@@ -29,7 +42,7 @@ const dbEventSchema = z.object({
   title: z.string(),
   createdAt: z.coerce.date(),
   location: z.string(),
-  category: z.string(),
+  category: Category,
   capacity: z.number(),
   currentCapacity: z.number(),
   price: z.number(),

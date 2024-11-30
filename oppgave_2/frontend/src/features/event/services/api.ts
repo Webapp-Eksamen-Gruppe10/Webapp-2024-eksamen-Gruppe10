@@ -1,15 +1,16 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
-import { validateEventList } from '../lib/schema';
+import { Category, validateEventList } from '../lib/schema';
 import {Event } from "@/features/event/lib/schema"
 
 const list = async () => {
     try {
 
         const events = await ofetch(endpoint.events.list);
-    
+        
         return validateEventList(events.data.map((event:Event) => ({
             ...event,
+            category: Category.parse(event.category)
         })));
         
     } catch (error) {
