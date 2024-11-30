@@ -9,10 +9,10 @@ const endpoint = {
   },
   registrations: {
     listByEvent: `${baseUrl}/api/v1/registrations/{eventId}`,
-    details: `${baseUrl}/api/v1/registrations/{id}`,
+    details: `${baseUrl}/api/v1/registrations/{eventId}/{id}`,
     create: `${baseUrl}/api/v1/registrations/{eventId}`,
-    delete: `${baseUrl}/api/v1/registrations/{id}`,
-    update: `${baseUrl}/api/v1/registrations/{id}`
+    delete: `${baseUrl}/api/v1/registrations/{eventId}/{id}`,
+    update: `${baseUrl}/api/v1/registrations/{eventId}/{id}`
   },
   templates: {
     listByTemplates: `${baseUrl}/api/v1/templates`,

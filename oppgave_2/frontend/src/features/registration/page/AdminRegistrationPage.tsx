@@ -11,7 +11,7 @@ export default function AdminRegistrationsPage(props: {eventId: string}) {
     return (
         <AdminRegistrationForm
         eventId={eventId}
-        registrationData={dummyRegistrations}
+        registrationData={registrationData}
         registrationStatus={registrationStatus}
         addRegistration={add}
         updateRegistration={update}

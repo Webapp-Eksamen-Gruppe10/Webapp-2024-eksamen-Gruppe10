@@ -39,9 +39,11 @@ const listByEvent = async (eventId: string) => {
 };
 
 
-const details = async (id: string) => {
+const details = async (eventId: string, id: string) => {
     try {
-        const registration = await ofetch(endpoint.registrations.details.replace('{id}', id));
+        const url = endpoint.registrations.details.replace('{eventId}', eventId).replace('{id}', id);
+
+        const registration = await ofetch(url);
 
         return {
             status: 200,
@@ -50,12 +52,12 @@ const details = async (id: string) => {
         };
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error(`Error fetching registration details for ID ${id}:`, error.message);
+            console.error(`Error fetching registration details for Event ID ${eventId} and ID ${id}:`, error.message);
 
             if (error.message.includes('404')) {
                 throw {
                     status: 404,
-                    message: `Registration with ID ${id} not found`,
+                    message: `Registration with Event ID ${eventId} and ID ${id} not found`,
                 };
             }
 
@@ -66,7 +68,7 @@ const details = async (id: string) => {
             };
         }
 
-        console.error(`Unknown error occurred while fetching details for ID ${id}:`, error);
+        console.error(`Unknown error occurred while fetching details for Event ID ${eventId} and ID ${id}:`, error);
         throw {
             status: 500,
             message: 'Internal Server Error',
@@ -74,6 +76,7 @@ const details = async (id: string) => {
         };
     }
 };
+
 
 
 const create = async (eventId: string, data: Record<string, any>) => {

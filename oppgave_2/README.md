@@ -15,6 +15,7 @@
 
 | HTTP Metode | Endepunkt                                       | Beskrivelse                                | Respons ved suksess                    | Respons ved feil                      |
 |-------------|-------------------------------------------------|--------------------------------------------|----------------------------------------|---------------------------------------|
+| `GET`       | `/api/v1/registrations`                       | Hent alle påmeldinger for alle arrangementer.  | `200 OK`, JSON-liste av påmeldinger    | `204 No Content` (ingen påmeldinger) |
 | `GET`       | `/api/v1/registrations/{eventId}`             | Hent alle påmeldinger for et arrangement.  | `200 OK`, JSON-liste av påmeldinger    | `204 No Content` (ingen påmeldinger) |
 | `GET`       | `/api/v1/registrations/{eventId}/{id}`        | Hent en spesifikk påmelding for et arrangement. | `200 OK`, JSON av påmelding         | `404 Not Found`, `500 Internal Server Error` |
 | `POST`      | `/api/v1/registrations/{eventId}`             | Opprett en ny påmelding for et arrangement. | `200 OK`, Ny påmelding-JSON          | `404 Not Found`, `500 Internal Server Error` |
@@ -65,7 +66,8 @@ for å kunne redigere et arrangement:  fetch('/api/v1/events/{id}'): Metode PATC
 for å kunne slette et arrangement: fetch('/api/v1/events/{id}'): Metode DELETE 
 
 ### AdminStatistics
-Funksjonalitet: Henter statistikk for antall påmeldte den siste måneden for ett arrangement.
-for å kunne hente antall påmeldte: fetch('/api/v1/events/{id}'): Metode GET
+Funksjonalitet: Henter statistikk for antall påmeldte per arrangement.
+For å hente ut alle arrangementer: fetch('/api/v1/events'): Metode GET
+for å kunne hente alle registreringer: fetch('/api/v1/registrations'): Metode GET
 
 
