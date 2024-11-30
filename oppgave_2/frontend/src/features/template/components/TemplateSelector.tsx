@@ -1,4 +1,4 @@
-import { Template } from "../lib/schema";
+import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
 
 interface TemplateSelectorProps {
@@ -22,7 +22,7 @@ const defaultTemplate = {
 
 
 export default function TemplateSelector({ templates = [], add, finalSelectedTemplate, onSkip }: TemplateSelectorProps) {
-  const [formData, setFormData] = useState(defaultTemplate)
+  const [formData, setFormData] = useState<TemplateToDb>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
    
 
@@ -229,36 +229,37 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
       {/* Existing Templates Section */}
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold">Eksisterende mal</h2>
-        <div className="min-h-[200px]">
-          {templates.length === 0 ? (
-            <p className="text-gray-500">Ingen mal laget enda</p>
-          ) : (
-            <div className="space-y-2">
-              {templates.map((template) => (
-                <button
-                  key={template.id}
-                  className="w-full border border-gray-300 rounded px-4 py-2 text-left hover:bg-gray-100"
-                  onClick={() => {
-                    console.log("Valgt template:", template);
-                    setSelectedTemplate(template); 
-                  }}
-              >
-                    
-                  {template.name}
-                </button>
-              ))}
-            </div>
-          )}
+        <div className="space-y-2">
+          {templates.map((template) => (
+            <button
+              key={template.id}
+              className={`w-full border border-gray-300 rounded px-4 py-2 text-left ${
+                selectedTemplate?.id === template.id ? "bg-gray-300" : "hover:bg-gray-100"
+              }`}
+              onClick={() => {
+                console.log("Valgt template:", template);
+                setSelectedTemplate(template);
+                setFormData(template); 
+              }}
+            >
+              {template.name}
+            </button>
+          ))}
         </div>
-        <button className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
-          onClick={() => {
-          onSkip
-          finalSelectedTemplate(defaultTemplate)}}>
-          Hopp over valg av mal
+
+        <button
+            className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
+            onClick={() => {
+              setSelectedTemplate(null); 
+              setFormData(defaultTemplate); 
+              onSkip();
+            }}
+          >
+            Hopp over valg av mal
         </button>
+
         <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => {
-          
+          onClick={() => {    
             finalSelectedTemplate(selectedTemplate); 
           }}> 
           Fortsett med valgte alternativer -{'>'}

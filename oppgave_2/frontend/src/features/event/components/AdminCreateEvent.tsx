@@ -1,5 +1,9 @@
+type AdminCreateEventFormProps = {
+  onSelectTemplate: (template: any) => void,
+}
 
-export default function AdminCreateEventForm() {
+export default function AdminCreateEventForm({onSelectTemplate}: AdminCreateEventFormProps) {
+  
     return (
       <div className="w-full max-w-lg border border-gray-300 rounded-lg shadow-md p-6">
         <div className="mb-4">
