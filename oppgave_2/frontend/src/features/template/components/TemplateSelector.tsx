@@ -75,6 +75,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
 
     try {
       await add(getCurrentTemplateData());
+      await add(getCurrentTemplateData());
       alert("Lagring av template vellykket!");
       setFormData(defaultTemplate);
     } catch (error) {

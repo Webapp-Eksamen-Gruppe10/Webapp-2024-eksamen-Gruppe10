@@ -1,10 +1,17 @@
 import { Template } from "@/features/template/lib/schema";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 type AdminCreateEventFormProps = {
   selectedTemplate: Template,
 }
 
 export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEventFormProps) {
+  const [startDate, setStartDate] = useState(new Date());
+  
   console.log("VALGT TEMPLATE: ", selectedTemplate)
     return (
 
@@ -30,11 +37,14 @@ export default function AdminCreateEventForm({selectedTemplate}: AdminCreateEven
             <label htmlFor="datetime" className="block text-sm font-medium text-gray-700">
               Dato & Tid
             </label>
-            <input
+            <DatePicker
               id="datetime"
-              type="datetime-local"
-              required
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              showTimeSelect
+              dateFormat="Pp"
               className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+              required
             />
           </div>
   
