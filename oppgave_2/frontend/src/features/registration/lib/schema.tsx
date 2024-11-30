@@ -7,6 +7,8 @@ const registrationSchema = z.object({
   phoneNumber: z.string().max(70),
   status: z.string().max(45),
   event_id: z.string().max(45),
+  createAt: z.coerce.date(),
+  participants: z.string().array()
 });
 
 const registrationSchemaToDb = z.object({
@@ -15,6 +17,8 @@ const registrationSchemaToDb = z.object({
   phoneNumber: z.string().max(70),
   status: z.string().max(45),
   event_id: z.string().max(45),
+  createAt: z.coerce.date(),
+  participants: z.string().array()
 });
 
 const registrationListSchema = z.array(registrationSchema);
