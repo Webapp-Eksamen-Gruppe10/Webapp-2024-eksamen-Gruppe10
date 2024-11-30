@@ -8,16 +8,23 @@ import { Registration, RegistrationWithoutId } from "../types";
 
 export const createRegistrationService = (registrationRepositoryDb: RegistrationRepository) => {
 
-    const getAllRegistrations = async (): Promise<Result<Registration[]>> => {
-        return registrationRepositoryDb.list();
+    const getAllRegistrations = async (eventId: string): Promise<Result<Registration[]>> => {
+        const eventExist = await registrationRepositoryDb.eventExist(eventId)
+        if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
+    
+        return registrationRepositoryDb.list(eventId);
       };
     
-    const getOneRegistration = async (id: string): Promise<Result<Registration>> => {
+    const getOneRegistration = async (id: string, eventId: string): Promise<Result<Registration>> => {
+
+        const eventExist = await registrationRepositoryDb.eventExist(eventId)
+        if (!eventExist) return ResultHandler.failure("No event with this event_id", "NOT_FOUND")
+
         const registrationExist = await registrationRepositoryDb.registrationExist(id);
         if (!registrationExist)
           return ResultHandler.failure("Registration not found", "NOT_FOUND");
     
-        return registrationRepositoryDb.getById(id);
+        return registrationRepositoryDb.getById(id, eventId);
       };
 
     const createRegistration = async (

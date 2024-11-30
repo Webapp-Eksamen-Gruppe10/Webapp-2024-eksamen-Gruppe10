@@ -66,9 +66,13 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         return reg
     }
 
-    const list = async(): Promise<Result<Registration[]>> => {
+    const list = async(eventId: string): Promise<Result<Registration[]>> => {
         try {
-            const registrations = await prismaDb.registration.findMany();
+            const registrations = await prismaDb.registration.findMany({
+                where: {
+                    event_id: eventId
+                }
+            });
 
             return ResultHandler.success(ToRegistrationArray(registrations))
         } catch (error) {
@@ -76,11 +80,12 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const getById = async(id: string): Promise<Result<Registration>> => {
+    const getById = async(id: string, eventId: string): Promise<Result<Registration>> => {
         try {
             const registration = await prismaDb.registration.findUniqueOrThrow({
                 where: {
-                    id: id
+                    id: id,
+                    event_id: eventId
                 }
             })
 
