@@ -1,7 +1,7 @@
 import { nullable } from "zod";
 import { Prisma } from "../../../lib/client/db";
 import  prisma  from "../../../lib/client/db";
-import { Registration, RegistrationWithoutId } from "../types";
+import { CreateRegistration, Registration, RegStatus } from "../types";
 import { Result } from "../../../types";
 import { ResultHandler } from "../../../lib/result";
 import { CreateRegistrationToDb, ToRegistrationArray, ToRegistrationObject, UpdateRegistrationStatusToDb } from "../helpers/mapper";
@@ -95,9 +95,9 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    const create = async (data: RegistrationWithoutId): Promise<Result<Registration>> => {
+    const create = async (data: CreateRegistration, eventId: string, status: RegStatus): Promise<Result<Registration>> => {
         try {
-            const registration = CreateRegistrationToDb(data)
+            const registration = CreateRegistrationToDb(data, eventId, status)
 
             const create = await prismaDb.registration.create({data: registration})
 
