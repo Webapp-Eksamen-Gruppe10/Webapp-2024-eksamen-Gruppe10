@@ -10,7 +10,7 @@ export {
   status
 };
 
-const status = z.enum(["confirmed", "pending", "waitinglist", "denied"])
+const status = z.enum(["bekreftet", "ventende", "venteliste", "nektet"])
 
 const registrationSchema = z.object({
   id: z.string(),
