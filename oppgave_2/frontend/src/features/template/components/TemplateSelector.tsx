@@ -40,7 +40,6 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
     };
   }
 
-
   const handleWeekdayChange = (day: string, isChecked: boolean) => {
     setFormData((prev) => {
       const updatedWeekdays = isChecked
