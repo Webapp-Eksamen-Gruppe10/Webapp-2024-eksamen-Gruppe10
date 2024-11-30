@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 const registrationSchema = z.object({
-  id: z.number(),
+  id: z.string(),
+  event_id: z.string().max(45),
   name: z.string().max(45),
   email: z.string().email(),
+  createdAt: z.string().datetime(),
+  participants: z.string().array(),
   phoneNumber: z.string().max(70),
-  status: z.string().max(45),
-  event_id: z.string().max(45),
-  createAt: z.coerce.date(),
-  participants: z.string().array()
+  status: z.string().max(45)
 });
 
 const registrationSchemaToDb = registrationSchema.omit({
   id: true,
-  createAt: true,
+  createdAt: true,
   status: true,
   event_id: true
 })
