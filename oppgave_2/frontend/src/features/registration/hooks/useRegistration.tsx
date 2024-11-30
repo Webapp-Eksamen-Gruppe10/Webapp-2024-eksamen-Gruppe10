@@ -10,6 +10,7 @@ export function useRegistration(eventId: string) {
   const [registrationStatus, setRegistrationStatus] = useState<Status>("idle");
   const [registrationData, setRegistrationData] = useState<Registration[]>([]);
   const [registrationError, setRegistrationError] = useState<string | null>(null);
+  const [allRegistrationsData, setAllRegistrationsData] = useState()
 
   const isFetching = registrationStatus === "fetching";
   const isLoading = registrationStatus === "loading" || isFetching;
@@ -24,6 +25,16 @@ export function useRegistration(eventId: string) {
       }, timeout),
     []
   );
+
+  const fetchAllRegistrationsForAllEvents = async () => {
+    try {
+      const result = await registrationsApi.listAll();
+      console.log("useRegistration -> "+JSON.stringify(result))
+      setAllRegistrationsData(result.data as Registration[]);
+      return result
+    } catch (error) {
+    }
+  };
 
   const fetchRegistrations = useCallback(async () => {
     try {
@@ -82,6 +93,7 @@ export function useRegistration(eventId: string) {
   useEffectOnce(fetchRegistrations);
 
   return {
+    getAll: fetchAllRegistrationsForAllEvents,
     add: addRegistration,
     get: fetchRegistrations,
     update: updateRegistration,

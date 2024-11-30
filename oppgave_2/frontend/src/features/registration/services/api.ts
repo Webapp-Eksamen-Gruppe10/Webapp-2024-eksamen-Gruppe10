@@ -203,9 +203,48 @@ const remove = async (id: string) => {
     }
 };
 
+const listAll = async () => {
+    try {
+        const url = endpoint.registrations.listAll
+
+        const registration = await ofetch(url);
+        console.log("REGDATA ->" + JSON.stringify(registration))
+        return {
+            status: 200,
+            message: 'OK',
+            data: registration,
+        };
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error(`Error fetching registration details for all registrations`, error.message);
+
+            if (error.message.includes('404')) {
+                throw {
+                    status: 404,
+                    message: `Registrations not found`,
+                };
+            }
+
+            throw {
+                status: 500,
+                message: 'Internal Server Error',
+                error: error.message,
+            };
+        }
+
+        console.error(`Unknown error occurred while fetching all registrations`, error);
+        throw {
+            status: 500,
+            message: 'Internal Server Error',
+            error: 'An unknown error occurred',
+        };
+    }
+};
+
 
 export const registrationsApi = {
     listByEvent,
+    listAll,
     details,
     create,
     update,

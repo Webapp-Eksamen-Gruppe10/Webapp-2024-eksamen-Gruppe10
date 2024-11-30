@@ -8,6 +8,7 @@ const endpoint = {
     update: `${baseUrl}/api/v1/events/{id}`
   },
   registrations: {
+    listAll: `${baseUrl}/api/v1/registrations`,
     listByEvent: `${baseUrl}/api/v1/registrations/{eventId}`,
     details: `${baseUrl}/api/v1/registrations/{eventId}/{id}`,
     create: `${baseUrl}/api/v1/registrations/{eventId}`,
