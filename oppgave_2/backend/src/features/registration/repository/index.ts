@@ -9,7 +9,7 @@ import { CreateRegistrationToDb, ToRegistrationArray, ToRegistrationObject, Upda
 export const createRegistrationRepository = (prismaDb: Prisma) => {
     const registrationExist = async(id: string) => {
         try {
-            prismaDb.registration.findUniqueOrThrow({
+            await prismaDb.registration.findUniqueOrThrow({
                 where: {
                     id: id
                 }
@@ -22,7 +22,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
 
     const eventExist = async(eventId: string) => {
         try {
-            prismaDb.event.findUniqueOrThrow({
+            await prismaDb.event.findUniqueOrThrow({
                 where: {
                     id: eventId
                 }
@@ -55,6 +55,15 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
             }
         })
         return eventData
+    }
+
+    const regData = async(id: string) => {
+        const reg = prismaDb.registration.findUnique({
+            where: {
+                id: id
+            }
+        })
+        return reg
     }
 
     const list = async(): Promise<Result<Registration[]>> => {
@@ -120,7 +129,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    return { registrationExist, eventExist, event, eventCurrentCap, create, list, getById, updateById, deleteById };
+    return { registrationExist, eventExist, event, eventCurrentCap, regData, create, list, getById, updateById, deleteById };
 }
 
 export const registrationRepository = createRegistrationRepository(prisma)

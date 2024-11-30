@@ -1,5 +1,6 @@
 import { ResultHandler } from "../../../lib/result";
 import { Result } from "../../../types";
+import { ToRegistrationObject } from "../helpers/mapper";
 import { status, validateRegistration, validateRegistrationWithoutId } from "../helpers/schema";
 import { registrationRepository, RegistrationRepository } from "../repository";
 import { Registration, RegistrationWithoutId } from "../types";
@@ -32,7 +33,7 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
             return ResultHandler.failure("The event is full, and waiting list is not allowed", "FORBIDDEN")
 
         if (event?.waitinglist && ((event?.capacity?? 0) - (event?.currentCapacity?? 0)) < data.participants.length+1) {
-            registrationRepositoryDb.eventCurrentCap(data.event_id, event.capacity)
+            registrationRepositoryDb.eventCurrentCap(data.event_id, (event?.currentCapacity ?? 0)+(data.participants.length+1))
             return registrationRepositoryDb.create({
                 ...data,
                 status: status.Enum.waitinglist
@@ -64,6 +65,10 @@ export const createRegistrationService = (registrationRepositoryDb: Registration
         const registrationExist = await registrationRepositoryDb.registrationExist(id);
         if (!registrationExist)
           return ResultHandler.failure("Registration not found", "NOT_FOUND");
+        
+        const registration = await registrationRepositoryDb.regData(id)
+        const event = await registrationRepositoryDb.event(registration?.event_id??"")
+        registrationRepositoryDb.eventCurrentCap(registration?.event_id??"", (event?.currentCapacity?? 0) - ((JSON.parse(registration?.participants?? "").length)+1))
 
         return registrationRepositoryDb.deleteById(id);
       };
