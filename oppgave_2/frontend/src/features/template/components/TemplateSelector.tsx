@@ -217,7 +217,7 @@ export default function TemplateSelector({ templates = [], add, selectedTemplate
               </div>
             </div>
             <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Lag mal
+              Lagre denne malen
             </button>
           </div>
         </form>
@@ -247,9 +247,12 @@ export default function TemplateSelector({ templates = [], add, selectedTemplate
             </div>
           )}
         </div>
-        <button className="w-full border border-gray-300 rounded px-4 py-2 hover:bg-gray-100"
+        <button className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
           onClick={() => selectedTemplate(defaultTemplate)}>
-          Hopp over mal
+          Hopp over valg av mal
+        </button>
+        <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Fortsett med valgte alternativer -{'>'}
         </button>
       </div>
     </div>
