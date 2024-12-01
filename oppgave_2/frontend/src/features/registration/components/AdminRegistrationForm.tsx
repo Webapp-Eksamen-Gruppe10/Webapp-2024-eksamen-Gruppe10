@@ -111,7 +111,7 @@ export default function AdminRegistrationForm({
                 <p className="text-sm text-gray-500">{participant.email}</p>
               </div>
               <span
-                className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                className={`px-2 py-1 text-xs font-medium rounded-full flex items-center justify-center ${
                   participant.status === "approved"
                     ? "bg-green-100 text-green-800"
                     : participant.status === "rejected"
@@ -120,7 +120,8 @@ export default function AdminRegistrationForm({
                 }`}
               >
                 {participant.status}
-              </span>
+                </span>
+
             </div>
             <div className="flex space-x-2">
               <button
