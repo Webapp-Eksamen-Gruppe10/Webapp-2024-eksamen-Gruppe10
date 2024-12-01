@@ -1,6 +1,6 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
-import { Template, validateTemplateList } from '../lib/schema';
+import { Template, validateTemplate, validateTemplateList } from '../lib/schema';
 
 const list = async () => {
 
@@ -28,34 +28,16 @@ const details = async (id: string) => {
     try {
         const template = await ofetch(endpoint.templates.details.replace('{id}', id));
 
-        return {
-            status: 200,
-            message: 'OK',
-            data: template,
-        };
+        return validateTemplate(template);
+        
+       
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error(`Error fetching template details for ID ${id}:`, error.message);
+        console.error('Error fetching templates:', error);
 
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: `Template with ID ${id} not found`,
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
-        console.error(`Unknown error occurred while fetching details for ID ${id}:`, error);
         throw {
             status: 500,
             message: 'Internal Server Error',
-            error: 'An unknown error occurred',
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
         };
     }
 };

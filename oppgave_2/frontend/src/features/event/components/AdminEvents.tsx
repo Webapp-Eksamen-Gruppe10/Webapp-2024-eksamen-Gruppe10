@@ -1,22 +1,27 @@
 import { Event } from "@/features/event/lib/schema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatDate } from "@/lib/helpers";
-import { useEvent } from "@/features/event/hooks/useEvent";
+import { Template } from "@/features/template/lib/schema";
+import { SafeParseReturnType } from "zod";
 
 type AdminEventProps = {
     events: Event[],
     remove: (id: string) => Promise<void>,
     update: (id: string, data: Partial<Event>) => Promise<void>,
+    templates: Template[]
+     
 
 }
 
-export default function AdminEvents({events, remove, update} : AdminEventProps) {
+export default function AdminEvents({events, remove, update, templates} : AdminEventProps) {
     
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState<Event | null>(null);
+  const [editDataTemplate, setEditDataTemplate] = useState<Template | null>(null); 
+ 
 
   // Pagination logic
   const indexOfLastEvent = currentPage * eventsPerPage;
@@ -25,6 +30,19 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
 
   const totalPages = Math.ceil(events.length / eventsPerPage);
 
+  const template_id = editData?.template_id
+
+
+  useEffect(() => {
+    if (editData?.template_id) {
+      const template = templates.find((template) => template.id === editData.template_id);
+      if (template) {
+        setEditDataTemplate(template);
+      }
+    }
+  }, [editData, templates]);
+  
+  
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
@@ -77,10 +95,10 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
               <strong>Dato:</strong> {formatDate(event.createdAt)}
             </p>
             <p className="text-sm text-gray-600 mb-1">
-              <strong>Kategori:</strong> {event.category || "N/A"}
+              <strong>Kategori:</strong> {event.category} 
             </p>
             <p className="text-sm text-gray-600 mb-3">
-              <strong>Kapasitet:</strong> {event.capacity || "N/A"}
+              <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"} deltagere
             </p>
             <div className="flex space-x-2">
               <button
@@ -180,18 +198,23 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div className="mb-4">
-                <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
-                  Kapasitet
-                </label>
-                <input
-                  type="number"
-                  id="capacity"
-                  value={editData.capacity}
-                  onChange={(e) => setEditData({ ...editData, capacity: Number(e.target.value) })}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
+              {editData.capacity !== null && (
+                <div className="mb-4">
+                  <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
+                    Kapasitet
+                  </label>
+                  <input
+                    type="number"
+                    id="capacity"
+                    value={editData.capacity}
+                    onChange={(e) =>
+                      setEditData({ ...editData, capacity: e.target.value ? Number(e.target.value) : null })
+                    }
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              )}
+              {editDataTemplate?.fixed_price === false ? (
               <div className="mb-4">
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                   Pris
@@ -204,6 +227,21 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
+            ) : (
+              <div className="mb-4">
+                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                  Pris
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  value={editData.price}
+                  disabled  
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
+                />
+              </div>
+            )}
+
               <div className="mb-4">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                   Beskrivelse

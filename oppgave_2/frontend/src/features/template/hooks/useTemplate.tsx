@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { templatesApi } from "@/features/template/services/api";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
-import { Template } from "@/features/template/lib/schema"
+import { Template, validateTemplate } from "@/features/template/lib/schema"
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
 
@@ -37,6 +37,24 @@ export function useTemplate() {
     }
   }, []);
 
+
+  const fetchTemplateDetails = useCallback(async (id: string) => {
+    try {
+      setTemplateStatus("loading");
+      const template = await templatesApi.details(id);
+      const template2 = template.data
+      if (template2)setTemplateData([template2]);
+      setTemplateStatus("success");
+    } catch (error: unknown) {
+      console.error("Error fetching template details:", error);
+      setTemplateStatus("error");
+      setTemplateError(
+        error instanceof Error ? error.message : "Failed to fetch template details"
+      );
+    }
+  }, []);
+
+  
   const addTemplate = async (data: Omit<Template, "id">) => {
       try {
         setTemplateStatus("loading");
@@ -87,6 +105,7 @@ export function useTemplate() {
     get: fetchTemplates,
     update: updateTemplate,
     remove: deleteTemplate,
+    getOne: fetchTemplateDetails, 
     templateData,
     templateError,
     templateStatus: {
