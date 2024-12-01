@@ -52,15 +52,15 @@ export function useRegistration(eventId: string) {
       }
     };
 
-  const updateRegistration = async (id: string, data: Partial<Registration>) => {
+  const updateRegistration = async (registrationId: string, eventId: string, data: Partial<Registration>) => {
       try {
         setRegistrationStatus("loading");
-        await registrationsApi.update(id.toString(), data);
+        await registrationsApi.update(registrationId, eventId, data);
         await fetchRegistrations();
         setRegistrationStatus("success");
       } catch (error) {
         setRegistrationStatus("error");
-        setRegistrationError(`Failed to update registration with ID: ${id}`);
+        setRegistrationError(`Failed to update registration with ID: ${registrationId}`);
       } finally {
         resetToIdle();
       }
@@ -69,7 +69,7 @@ export function useRegistration(eventId: string) {
   const deleteRegistration = async (id: string) => {
       try {
         setRegistrationStatus("loading");
-        await registrationsApi.remove(id.toString());
+        await registrationsApi.remove(id.toString(), eventId);
         await fetchRegistrations();
         setRegistrationStatus("success");
       } catch (error) {

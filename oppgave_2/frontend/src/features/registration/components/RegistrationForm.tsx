@@ -4,6 +4,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { CreateRegistration, validateRegistrationToDb } from '@/features/registration/lib/schema';
 import { Event } from '@/features/event/lib/schema';
 import { emailRegex, formatPhoneNumberNorwegian, validatePhoneNumber} from '@/lib/helpers';
+import { useRouter } from 'next/navigation';
 
 type RegistrationFormProps = {
   onSubmit: (data: CreateRegistration) => Promise<void>;
@@ -12,6 +13,7 @@ type RegistrationFormProps = {
 
 
 export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFormProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -105,6 +107,7 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
     try {
         await onSubmit(registranter);
         alert('Registrering ble sendt inn!');
+        router.push('/');
     } catch (error) {
         console.error('Feil ved innsending av registrering:', error);
         alert('Registrering mislyktes. Vennligst prøv igjen.');
@@ -123,7 +126,7 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
           <input
             id="name"
             name="name"
-            pattern="[A-Za-zÆØÅæøå]+"
+            pattern="^\p{L}+(?:-\p{L}+)?(?: \p{L}+(?:-\p{L}+)?)?$"
             title="Kun bokstaver er tillatt"
             required
             value={formData.name}

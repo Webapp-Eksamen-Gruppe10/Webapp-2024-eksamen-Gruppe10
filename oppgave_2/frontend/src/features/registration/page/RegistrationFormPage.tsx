@@ -11,14 +11,8 @@ export default function RegistrationFormPage() {
   const { eventData} = useEvent();
   const event = eventData.find((event) => event.id === id);
 
-  const handleFormSubmit = async (fromdata: CreateRegistration) => {
-    try {
-        await add(fromdata);
-      alert('All registrations added successfully!');
-    } catch (error) {
-      console.error('Failed to add registration:', error);
-      alert('Failed to register.');
-    }
+  const handleFormSubmit = async (data: CreateRegistration) => {
+    await add(data);
   };
 
   return (
