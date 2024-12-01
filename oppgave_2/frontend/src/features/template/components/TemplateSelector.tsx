@@ -152,6 +152,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                         className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200"
                         checked={formData.weekdays.includes(day)}
                         onChange={(e) => handleWeekdayChange(day, e.target.checked)}
+                        disabled={!!selectedTemplate}
                       />
                       <label htmlFor={`weekday-${day}`} className="font-medium text-gray-800">
                         {day}
@@ -225,6 +226,17 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                 </div>
               </div>
             </div>
+            <button
+            type="button"
+            className="w-full bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
+            onClick={() => {
+              setFormData(defaultTemplate);
+              setSelectedTemplate(defaultTemplate); 
+              onSelectTemplateId(""); 
+            }}
+          >
+            Tilbakestill mal
+          </button>
             <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Lagre denne malen
             </button>
@@ -279,8 +291,9 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
         <button
           className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
           onClick={() => {
-            setSelectedTemplate(null);
+            setSelectedTemplate(defaultTemplate);
             setFormData(defaultTemplate);
+            onSelectTemplateId(""); 
             onSkip();
           }}
         >
