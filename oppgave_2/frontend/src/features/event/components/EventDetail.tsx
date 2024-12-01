@@ -7,9 +7,6 @@ export default function EventDetail(props: {event:Event}) {
 
     const eventDate = new Date(event.createdAt);
 
-
-
-
       return (
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
@@ -24,22 +21,22 @@ export default function EventDetail(props: {event:Event}) {
                   <strong>Dato:</strong> {formatDate(event.createdAt)}
                 </li>
                 <li>
-                  <strong>Tid:</strong> {formatTime(event.createdAt)|| "TBD"}
+                  <strong>Tid:</strong> {formatTime(event.createdAt)}
                 </li>
                 <li>
-                  <strong>Lokasjon:</strong> {event.location || "TBD"}
+                  <strong>Lokasjon:</strong> {event.location}
                 </li>
                 <li>
-                  <strong>Kategori:</strong> {event.category || "General"}
+                  <strong>Kategori:</strong> {event.category}
                 </li>
                 <li>
-                  <strong>Kapasitet:</strong> {event.capacity || "Unlimited"} deltagere
+                  <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"} deltagere
                 </li>
                 <li>
-                  <strong>Pris:</strong> {`${event.price} kr`|| "Free"}
+                  <strong>Pris:</strong> {`${event.price} kr`|| "Gratis"}
                 </li>
                 <li>
-                  <strong>Nåværende Kapasitet: </strong> {event.currentCapacity || "TBD"}
+                  <strong>Nåværende Kapasitet: </strong> {event.currentCapacity || "Ingen påmeldte"}
                 </li>
               </ul>
             </div>
@@ -53,7 +50,7 @@ export default function EventDetail(props: {event:Event}) {
               <div className="flex space-x-4">
                 {event.currentCapacity >= event.capacity ? (
                   event.waitinglist ? (
-                    <Link href={`/events/${event.id}/waitlist`}>
+                    <Link href={`/events/${event.id}/registration`}>
                       <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
                         Meld deg på venteliste
                       </button>

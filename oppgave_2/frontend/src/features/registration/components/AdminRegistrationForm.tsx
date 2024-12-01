@@ -14,8 +14,8 @@ type AdminRegistrationFormProps = {
     fetching: boolean;
   };
   addRegistration: (data: Omit<Registration, "id">) => Promise<void>;
-  updateRegistration: (id: number, data: Partial<Registration>) => Promise<void>;
-  deleteRegistration: (id: number) => Promise<void>;
+  updateRegistration: (id: string, data: Partial<Registration>) => Promise<void>;
+  deleteRegistration: (id: string) => Promise<void>;
 };
 
 
@@ -37,13 +37,15 @@ export default function AdminRegistrationForm({
         email: newParticipant.email,
         status: "pending",
         phoneNumber: '',
-        event_id: eventId, 
+        event_id: eventId,
+        createdAt: '',
+        participants: []
       });
       setNewParticipant({ name: "", email: "" });
     }
   };
 
-  const handleAction = async (id: number, action: "approve" | "reject" | "delete") => {
+  const handleAction = async (id: string, action: "approve" | "reject" | "delete") => {
     if (action === "delete") {
       await deleteRegistration(id);
     } else {

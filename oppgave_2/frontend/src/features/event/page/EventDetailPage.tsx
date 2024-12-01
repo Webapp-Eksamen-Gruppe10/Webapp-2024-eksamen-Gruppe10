@@ -5,7 +5,7 @@ import useEvent from "../hooks/useEvent";
 
 export default function EventDetailPage(props: {eventId: string}) {
     const {eventId} = props
-    const { eventData} = useEvent();
+    const {eventData} = useEvent();
 
     const event = eventData.find((event) => event.id === eventId);
 

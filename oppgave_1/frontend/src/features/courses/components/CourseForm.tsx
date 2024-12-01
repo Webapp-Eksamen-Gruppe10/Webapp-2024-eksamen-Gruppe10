@@ -53,13 +53,13 @@ export default function CourseForm(props: CourseFormProps) {
       setSuccess(true);
       setCurrent(2);
       if (isEditing)
-        update({ id: course.id, ...courseFields, lessons: lessons });
-      else add({ ...courseFields, lessons: lessons });
+        update({ id: course.id, ...courseFields, category: Category.parse(courseFields.category), lessons: lessons });
+      else add({ ...courseFields,category: Category.parse(courseFields.category) , lessons: lessons });
       console.log(JSON.stringify({ ...courseFields, lessons: lessons }));
       setTimeout(() => {
         if (isEditing) router.push(`/courses/${course.slug}`);
         else router.push("/courses");
-      }, 60000); // TODO: Endre dette til ~7000 eller lignende
+      }, 7000);
     } else {
       setFormError(true);
     }

@@ -48,7 +48,7 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
 
   const handleDelete = async (id: string) => {
     if (confirm("Er du sikker på at du vil slette dette arrangementet?")) {
-      await deleteEvent(id);
+      await remove(id);
     }
   };
 
@@ -90,7 +90,7 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
                 Rediger
               </button>
               <button className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
-              onClick={() => {remove(event.id)}}>
+              onClick={() => {handleDelete(event.id)}}>
                 Slett
               </button>
             </div>

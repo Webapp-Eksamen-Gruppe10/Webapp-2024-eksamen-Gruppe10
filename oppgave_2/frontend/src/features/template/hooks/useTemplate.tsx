@@ -28,7 +28,6 @@ export function useTemplate() {
     try {
       setTemplateStatus("loading");
       const result = await templatesApi.list();
-      console.log(JSON.stringify(result))
       const templates = Array.isArray(result.data) ? (result.data as Template[]) : [];
       setTemplateData(templates);
       setTemplateStatus("success");
@@ -66,6 +65,7 @@ export function useTemplate() {
       }
     };
 
+  {/* TODO: Legg til validering. Ikke tillat sletting av MAL hvis den allerede er brukt i en event. */}
   const deleteTemplate = async (id: number) => {
       try {
         setTemplateStatus("loading");

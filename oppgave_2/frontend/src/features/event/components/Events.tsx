@@ -71,7 +71,7 @@ export default function Events({ events }: EventProps) {
           onChange={(e) => settValgtType(e.target.value)}
           className="border border-gray-300 rounded px-4 py-2"
         >
-          <option value="">Velg hendelsestype</option>
+          <option value="">Velg kategori</option>
           <option value="Concert">Konsert</option>
           <option value="Workshop">Workshop</option>
           <option value="Conference">Konferanse</option>

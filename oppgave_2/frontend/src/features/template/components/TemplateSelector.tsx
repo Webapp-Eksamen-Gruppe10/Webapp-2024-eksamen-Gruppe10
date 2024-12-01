@@ -1,12 +1,16 @@
-import { Template } from "../lib/schema";
+import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
 
 interface TemplateSelectorProps {
-  templates?: Template[];
-  add: (data: Omit<Template, "id">) => Promise<void>,
+    onSelectTemplateId: (id:string) => void, 
+    templates?: Template[];
+    add: (data: Template) => Promise<void>,
+    deleteTemplate: (id: number) => Promise<void>,
+    finalSelectedTemplate: (template: Template) => void,
+    onSkip: () => void
 }
 
-const defaultTemplate = {
+export const defaultTemplate = {
   name: "",
   description: "",
   weekdays: [],
@@ -18,43 +22,13 @@ const defaultTemplate = {
   waitinglist: false,
 }
 
+export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate }: TemplateSelectorProps) {
+  const [formData, setFormData] = useState<Template>(defaultTemplate)
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
-export default function TemplateSelector({ templates = [], add }: TemplateSelectorProps) {
-  const [formData, setFormData] = useState(defaultTemplate)
 
-  const handleWeekdayChange = (day: string, isChecked: boolean) => {
-    setFormData((prev) => {
-      const updatedWeekdays = isChecked
-        ? [...prev.weekdays, day]
-        : prev.weekdays.filter((weekday) => weekday !== day);
-  
-      return {
-        ...prev,
-        weekdays: updatedWeekdays,
-      };
-    });
-  };
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { id, value, type, checked } = e.target;
-  
-    if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        [id]: checked,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [id]: value,
-      }));
-    }
-  };
-  
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const templateData = {
+  const getCurrentTemplateData = () => {
+    return {
       name: formData.name,
       description: formData.description,
       weekdays: formData.weekdays,
@@ -65,9 +39,45 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
       free: formData.free,
       waitinglist: formData.waitinglist,
     };
+  }
+
+
+  const handleWeekdayChange = (day: string, isChecked: boolean) => {
+    setFormData((prev) => {
+      const updatedWeekdays = isChecked
+        ? [...prev.weekdays, day]
+        : prev.weekdays.filter((weekday) => weekday !== day);
+
+      return {
+        ...prev,
+        weekdays: updatedWeekdays,
+      };
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+  
+    if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: e.target.ariaChecked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+    }
+  };
+  
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     try {
-      await add(templateData);
+      await add(getCurrentTemplateData());
+      await add(getCurrentTemplateData());
       alert("Lagring av template vellykket!");
       setFormData(defaultTemplate);
     } catch (error) {
@@ -77,7 +87,7 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 p-6 max-w-5xl mx-auto">
+    <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto pb-2 border border-gray-300 rounded-lg shadow-md p-6 ">
       {/* Create Template Section */}
       <div className="space-y-6">
         <form onSubmit={handleUpdate}>
@@ -134,16 +144,16 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
                   Begrenset ukedager
                 </label>
                 <div className="grid grid-cols-2 gap-4 border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                  {["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"].map((day) => (
                     <div key={day} className="flex items-center space-x-2">
                       <input
-                        id={day}
+                        id={`weekday-${day}`}
                         type="checkbox"
                         className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200"
                         checked={formData.weekdays.includes(day)}
                         onChange={(e) => handleWeekdayChange(day, e.target.checked)}
                       />
-                      <label htmlFor={day} className="font-medium text-gray-800">
+                      <label htmlFor={`weekday-${day}`} className="font-medium text-gray-800">
                         {day}
                       </label>
                     </div>
@@ -215,8 +225,8 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
                 </div>
               </div>
             </div>
-            <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Lag mal
+            <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
+              Lagre denne malen
             </button>
           </div>
         </form>
@@ -231,18 +241,59 @@ export default function TemplateSelector({ templates = [], add }: TemplateSelect
           ) : (
             <div className="space-y-2">
               {templates.map((template) => (
-                <button
-                  key={template.id}
-                  className="w-full border border-gray-300 rounded px-4 py-2 text-left hover:bg-gray-100"
-                >
-                  {template.name}
-                </button>
+                <div key={template.id} className="relative group">
+                  {/* Template Button */}
+                  <button
+                    className={`w-full border border-gray-300 rounded px-4 py-2 text-left ${
+                      selectedTemplate?.id === template.id ? "bg-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => {
+                      console.log("Valgt template:123", template);
+                      setSelectedTemplate(template);
+                      setFormData(template);
+                      if(template.id){
+                        onSelectTemplateId(template.id)
+                      }
+                     
+                    }}
+                  >
+                    {template.name}
+                  </button>
+
+                  {/* Delete Template Button */}
+                  <button
+                    className="absolute top-1/2 right-[-19%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
+                    onClick={() => {
+                        if(template.id){
+                            deleteTemplate(Number.parseInt(template.id))
+                        }}}
+                    >
+                    Slett?
+                  </button>
+                </div>
               ))}
             </div>
           )}
         </div>
-        <button className="w-full border border-gray-300 rounded px-4 py-2 hover:bg-gray-100">
-          Hopp over mal
+
+        <button
+          className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
+          onClick={() => {
+            setSelectedTemplate(null);
+            setFormData(defaultTemplate);
+            onSkip();
+          }}
+        >
+          Hopp over valg av mal
+        </button>
+
+        <button
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() => {
+            finalSelectedTemplate(getCurrentTemplateData());
+          }}
+        >
+          Fortsett med valgte alternativer 
         </button>
       </div>
     </div>
