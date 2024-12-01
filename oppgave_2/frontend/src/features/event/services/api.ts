@@ -1,6 +1,6 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
-import { Category, validateEventList } from '../lib/schema';
+import { Category, validateEventList, validateEventToDb } from '../lib/schema';
 import {Event } from "@/features/event/lib/schema"
 
 const list = async () => {
@@ -64,9 +64,10 @@ const details = async (id: string) => {
 
 const create = async (data: Record<string, any>) => {
     try {
+        const validatedData = validateEventToDb(data)
         const newEvent = await ofetch(endpoint.events.create, {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: JSON.stringify(validatedData.data),
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -77,30 +78,13 @@ const create = async (data: Record<string, any>) => {
             message: 'Event created successfully',
             data: newEvent,
         };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error('Error creating event:', error.message);
-
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: 'Endpoint not found',
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        } else {
-            console.error('Unknown error occurred while creating event:', error);
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: 'An unknown error occurred',
-            };
-        }
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        throw {
+            status: 500,
+            message: 'Internal Server Error',
+            error: 'An unknown error occurred',
+        };
     }
 };
 

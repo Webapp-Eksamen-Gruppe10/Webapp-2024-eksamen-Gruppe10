@@ -28,7 +28,6 @@ export function useTemplate() {
     try {
       setTemplateStatus("loading");
       const result = await templatesApi.list();
-      console.log(JSON.stringify(result))
       const templates = Array.isArray(result.data) ? (result.data as Template[]) : [];
       setTemplateData(templates);
       setTemplateStatus("success");

@@ -1,4 +1,3 @@
-import { dummyEvents } from "@/lib/data";
 import Events from "../components/Events";
 import useEvent from "../hooks/useEvent";
 

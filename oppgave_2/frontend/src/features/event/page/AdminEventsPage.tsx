@@ -1,5 +1,4 @@
 "use client"; 
-import { dummyEvents } from "@/lib/data";
 import AdminEvents from "../components/AdminEvents";
 import useEvent from "../hooks/useEvent";
 

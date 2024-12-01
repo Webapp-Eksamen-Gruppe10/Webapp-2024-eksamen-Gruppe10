@@ -6,7 +6,6 @@ const list = async () => {
 
     try {
         const templates = await ofetch(endpoint.templates.listByTemplates);
-        console.log(JSON.stringify(templates))
        
         return validateTemplateList(templates.data.map((template:Template) => ({
             ...template,
@@ -64,6 +63,7 @@ const details = async (id: string) => {
 
 const create = async (data: Record<string, any>) => {
     try {
+        
         const newTemplate = await ofetch(endpoint.templates.create, {
             method: 'POST',
             body: JSON.stringify(data),
@@ -77,29 +77,14 @@ const create = async (data: Record<string, any>) => {
             message: 'Template created successfully',
             data: newTemplate,
         };
+
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error('Error creating template:', error.message);
+        console.error('Error fetching templates:', error);
 
-            if (error.message.includes('400')) {
-                throw {
-                    status: 400,
-                    message: 'Bad Request: Invalid template data',
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
-        console.error('Unknown error occurred while creating template:', error);
         throw {
             status: 500,
             message: 'Internal Server Error',
-            error: 'An unknown error occurred',
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
         };
     }
 };
