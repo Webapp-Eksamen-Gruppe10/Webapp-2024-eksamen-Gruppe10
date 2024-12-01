@@ -3,6 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CreateRegistration, validateRegistrationToDb } from '@/features/registration/lib/schema';
 import { Event } from '@/features/event/lib/schema';
+import { emailRegex, formatPhoneNumberNorwegian, validatePhoneNumber} from '@/lib/helpers';
 
 type RegistrationFormProps = {
   onSubmit: (data: CreateRegistration) => Promise<void>;
@@ -47,15 +48,38 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = 'Navn er påkrevd';
-    if (!formData.email) newErrors.email = 'E-post er påkrevd';
-    if (!formData.phoneNumber) newErrors.phoneNumber = 'Telefonnummer er påkrevd';
+  
+    if (!formData.name) {
+      newErrors.name = 'Navn er påkrevd';
+    }
+
+    if (!formData.email) {
+      newErrors.email = 'E-post er påkrevd';
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Ugyldig e-postadresse';
+    }
+  
+    if (!formData.phoneNumber) {
+      newErrors.phoneNumber = 'Telefonnummer er påkrevd';
+    } else {
+      const cleanedPhoneNumber = formData.phoneNumber.replace(/\s+/g, '');
+  
+      if (!validatePhoneNumber(cleanedPhoneNumber)) {
+        newErrors.phoneNumber = 'Ugyldig telefonnummer';
+      } else {
+        const formattedPhoneNumber = formatPhoneNumberNorwegian(cleanedPhoneNumber);
+        setFormData((prev) => ({ ...prev, phoneNumber: formattedPhoneNumber }));
+      }
+    }
+  
     if (formData.participants.some((participant) => !participant)) {
       newErrors.participants = 'Alle deltakerne må ha navn';
     }
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,6 +123,9 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
           <input
             id="name"
             name="name"
+            pattern="[A-Za-zÆØÅæøå]+"
+            title="Kun bokstaver er tillatt"
+            required
             value={formData.name}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
@@ -114,6 +141,7 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
             id="email"
             name="email"
             type="email"
+            required
             value={formData.email}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
@@ -128,9 +156,11 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
           <input
             id="phoneNumber"
             name="phoneNumber"
+            required
+            placeholder="+47 123 45 678"
             value={formData.phoneNumber}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
+            onChange={handleChange}         
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300 appearance-none"
           />
           {errors.phoneNumber && (
             <p className="text-red-500 text-sm">{errors.phoneNumber}</p>
@@ -138,22 +168,31 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
         </div>
 
         {formData.participants.map((participant, index) => (
-          <div key={index} className="flex items-center mt-2">
-            <input
-              name="participants"
-              value={participant}
-              onChange={(e) => handleChange(e, index)}
-              placeholder={`Deltaker ${index + 1}`}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
-            />
-            <button
-              type="button"
-              onClick={() => removeParticipant(index)}
-              className="ml-2 bg-red-500 text-white px-3 py-2 rounded"
-            >
-              Fjern
-            </button>
+          <div key={index} className="mb-4">
+            <div key={index} className="flex items-center mt-2">
+              <input
+                name="participants"
+                type= "text"
+                pattern="[A-Za-zÆØÅæøå]+"
+                title="Kun bokstaver er tillatt"
+                value={participant}
+                onChange={(e) => handleChange(e, index)}
+                placeholder={`Deltaker ${index + 1}`}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
+              />
+              <button
+                type="button"
+                onClick={() => removeParticipant(index)}
+                className="ml-2 bg-red-500 text-white px-3 py-2 rounded"
+              >
+                Fjern
+              </button>
+            </div>
+            {errors.participants && (
+              <p className=" text-red-500 text-sm">{errors.participants}</p>
+            )}
           </div>
+          
         ))}
 
         <button
