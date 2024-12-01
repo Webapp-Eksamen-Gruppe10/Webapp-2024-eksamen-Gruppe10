@@ -49,34 +49,35 @@ export default function EventDetail(props: {event:Event}) {
                 Har du lyst å bli med? Klikk på knappen nedenfor for påmelding!
               </p>
               <div className="flex space-x-4">
-                {event.currentCapacity >= event.capacity ? (
-                  event.waitinglist ? (
-                    <Link href={`/events/${event.id}/registration`}>
-                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-                        Meld deg på venteliste
-                      </button>
-                    </Link>
-                  ) : (
-                    <button
-                        className="bg-gray-400 text-gray-700 px-6 py-3 rounded-lg cursor-not-allowed"
-                        disabled
-                    >
-                        Fullt
-                      </button>
-                    )
-                  ) : (
-                    <Link href={`/events/${event.id}/registration`}>
-                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-                        Meld deg på
-                      </button>
-                    </Link>
-                  )}  
-                  <Link href={`/admin/events/${event.id}/registrations`}>
-                    <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900">
-                      Admin
+              {event.capacity !== null && event.currentCapacity >= event.capacity ? (
+                event.waitinglist ? (
+                  <Link href={`/events/${event.id}/registration`}>
+                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                      Meld deg på venteliste
+                    </button>
+                  </Link>
+                ) : (
+                  <button
+                    className="bg-gray-400 text-gray-700 px-6 py-3 rounded-lg cursor-not-allowed"
+                    disabled
+                  >
+                    Fullt
+                  </button>
+                )
+              ) : (
+                <Link href={`/events/${event.id}/registration`}>
+                  <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                    Meld deg på
                   </button>
                 </Link>
-              </div>
+              )}
+              <Link href={`/admin/events/${event.id}/registrations`}>
+                <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900">
+                  Admin
+                </button>
+              </Link>
+            </div>
+
             </div>
           </div>
         </div>

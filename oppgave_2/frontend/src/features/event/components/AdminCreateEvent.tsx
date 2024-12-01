@@ -3,6 +3,7 @@ import { Template } from "@/features/template/lib/schema";
 import React, { useState } from "react";
 import { Category, EventToDb, Event } from "../lib/schema";
 import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
+import { safeParseInt } from "@/lib/helpers";
 
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
@@ -16,7 +17,7 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
     name:selectedTemplate?.name || "", 
     location: "",
     category: "",
-    capacity: 0,
+    capacity: null,
     price: 0,
     description: selectedTemplate?.description || "",
     private: selectedTemplate?.private || false,
@@ -55,8 +56,8 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
       createdAt: date.toISOString(),
       location: formData.location, 
       category: Category.parse(formData.category),
-      capacity: Number.parseInt(formData.capacity),
-      price: parseFloat(formData.price),
+      capacity: formData.capacity,
+      price:formData.price,
       description: formData.description,
       private: formData.private,
       waitinglist: formData.waitinglist,
