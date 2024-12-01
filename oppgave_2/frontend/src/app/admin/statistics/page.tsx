@@ -1,6 +1,9 @@
 "use client"; 
+import AdminStatisticsPage from "@/features/statistics/page/AdminStatisticsPage";
+
 export default function StatisticsPage() {
-    return <h1>Statistics</h1>
-  
+    return (
+        <AdminStatisticsPage/>
+    )
 }
   
