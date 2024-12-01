@@ -1,13 +1,8 @@
 "use client"; 
 import { Template } from "@/features/template/lib/schema";
 import React, { useState } from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {nb} from "date-fns/locale/nb"; 
 import { Category, EventToDb, Event } from "../lib/schema";
-
-
-registerLocale("nb", nb);
+import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
 
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
@@ -27,16 +22,6 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
     private: selectedTemplate?.private || false,
     waitinglist: selectedTemplate?.waitinglist || false,
   });
-
-  const allowedWeekdays = selectedTemplate.weekdays.map((day) =>
-    day.toLowerCase()
-  );
-
-  const isDayAllowed = (date: Date) => {
-    const days = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
-    const weekday = days[date.getDay()];
-    return allowedWeekdays.includes(weekday);
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value, type } = e.target;
@@ -112,40 +97,7 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
           <label htmlFor="dato" className="block text-sm font-medium text-gray-700">  
             Dato
             </label>
-              {selectedTemplateId.length > 0 ? (
-                <DatePicker
-                  id="dato"
-                  required
-                  selected={date}
-                  onChange={(newDate) => setDate(newDate)}
-                  locale="nb"
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={30}
-                  dateFormat="Pp"
-                  className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                  dayClassName={(date) =>
-                    isDayAllowed(date)
-                      ? "text-green-700 bg-green-100 hover:bg-green-200"
-                      : "text-red-700 bg-red-100 hover:bg-red-200"
-                  }
-                  filterDate={isDayAllowed}
-                />
-              ) : (
-                <DatePicker
-                  id="dato"
-                  required
-                  selected={date}
-                  onChange={(newDate) => setDate(newDate)}
-                  locale="nb"
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={30}
-                  dateFormat="Pp"
-                  className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                />
-              )}
-       
+              {showCorrectDatepicker(selectedTemplateId, date, setDate, selectedTemplate.weekdays)}
           </div>
 
           <div className="space-y-2">
