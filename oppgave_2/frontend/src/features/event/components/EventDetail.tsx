@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
 import { formatDate, formatTime } from "@/lib/helpers";
+import { showPriceCorrectly } from "@/features/event/lib/eventUtils"
 
 export default function EventDetail(props: {event:Event}) {
     const {event} = props
@@ -8,7 +9,7 @@ export default function EventDetail(props: {event:Event}) {
     const eventDate = new Date(event.createdAt);
 
       return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 mr-8 mt-16">
           <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
           <p className="text-lg mb-6">{event.description}</p>
     
@@ -33,7 +34,7 @@ export default function EventDetail(props: {event:Event}) {
                   <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"} deltagere
                 </li>
                 <li>
-                  <strong>Pris:</strong> {`${event.price} kr`|| "Gratis"}
+                  <strong>Pris:</strong> {showPriceCorrectly(event.price)}
                 </li>
                 <li>
                   <strong>Nåværende Kapasitet: </strong> {event.currentCapacity || "Ingen påmeldte"}

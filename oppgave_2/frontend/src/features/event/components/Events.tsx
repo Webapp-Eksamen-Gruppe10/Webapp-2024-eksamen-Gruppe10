@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
 import { formatDate } from "@/lib/helpers";
+import { showPriceCorrectly } from "@/features/event/lib/eventUtils"
+
 
 type EventProps = {
     events: Event[];
@@ -87,7 +89,7 @@ export default function Events({ events }: EventProps) {
                 <h3 className="text-xl font-semibold mb-2">{hendelse.title}</h3>
                 <p className="mb-2">Dato: {formatDate(hendelse.createdAt)}</p>
                 <p className="mb-2">Kategori: {hendelse.category}</p>
-                <p>Pris: {hendelse.price}</p>
+                <p>Pris: {showPriceCorrectly(hendelse.price)}</p>
               </div>
             </Link>
           ))
