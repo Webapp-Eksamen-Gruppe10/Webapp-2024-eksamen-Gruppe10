@@ -104,9 +104,9 @@ const create = async (eventId: string, data: Record<string, any>) => {
 };
 
 
-const update = async (id: string, data: Record<string, any>) => {
+const update = async (registrationId: string, eventId: string, data: Record<string, any>) => {
     try {
-        const updatedRegistration = await ofetch(endpoint.registrations.update.replace('{id}', id), {
+        const updatedRegistration = await ofetch(endpoint.registrations.update.replace('{id}', registrationId).replace('{eventId}', eventId), {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: {
@@ -121,12 +121,12 @@ const update = async (id: string, data: Record<string, any>) => {
         };
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error(`Error updating registration with ID ${id}:`, error.message);
+            console.error(`Error updating registration with ID ${registrationId}:`, error.message);
 
             if (error.message.includes('404')) {
                 throw {
                     status: 404,
-                    message: `Registration with ID ${id} not found`,
+                    message: `Registration with ID ${registrationId} not found`,
                 };
             }
 
@@ -137,7 +137,7 @@ const update = async (id: string, data: Record<string, any>) => {
             };
         }
 
-        console.error(`Unknown error occurred while updating registration with ID ${id}:`, error);
+        console.error(`Unknown error occurred while updating registration with ID ${registrationId}:`, error);
         throw {
             status: 500,
             message: 'Internal Server Error',
@@ -147,9 +147,9 @@ const update = async (id: string, data: Record<string, any>) => {
 };
 
 
-const remove = async (id: string) => {
+const remove = async (participantId: string, eventId: string) => {
     try {
-        const deletedRegistration = await ofetch(endpoint.registrations.delete.replace('{id}', id), {
+        const deletedRegistration = await ofetch(endpoint.registrations.delete.replace('{id}', participantId).replace('{eventId}', eventId), {
             method: 'DELETE',
         });
 
@@ -160,12 +160,12 @@ const remove = async (id: string) => {
         };
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error(`Error deleting registration with ID ${id}:`, error.message);
+            console.error(`Error deleting registration with ID ${participantId}:`, error.message);
 
             if (error.message.includes('404')) {
                 throw {
                     status: 404,
-                    message: `Registration with ID ${id} not found`,
+                    message: `Registration with ID ${participantId} not found`,
                 };
             }
 
@@ -176,7 +176,7 @@ const remove = async (id: string) => {
             };
         }
 
-        console.error(`Unknown error occurred while deleting registration with ID ${id}:`, error);
+        console.error(`Unknown error occurred while deleting registration with ID ${participantId}:`, error);
         throw {
             status: 500,
             message: 'Internal Server Error',

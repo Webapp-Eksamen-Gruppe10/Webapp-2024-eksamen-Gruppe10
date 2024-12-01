@@ -14,10 +14,17 @@ type AdminRegistrationFormProps = {
     fetching: boolean;
   };
   addRegistration: (data: Omit<Registration, "id">) => Promise<void>;
-  updateRegistration: (id: string, data: Partial<Registration>) => Promise<void>;
-  deleteRegistration: (id: string) => Promise<void>;
+  updateRegistration: (registrationId: string, eventId: string, data: Partial<Registration>) => Promise<void>;
+  deleteRegistration: (participantId: string, eventId: string) => Promise<void>;
 };
 
+enum registrationStatusEnum {
+  bekreftet = "bekreftet",
+  ventende = "ventende",
+  venteliste = "venteliste",
+  nektet = "nektet",
+  slett = "slett",
+}
 
 export default function AdminRegistrationForm({
   eventId, 
@@ -45,16 +52,25 @@ export default function AdminRegistrationForm({
     }
   };
 
-  const handleAction = async (id: string, action: "approve" | "reject" | "delete") => {
-    if (action === "delete") {
-      await deleteRegistration(id);
-    } else {
-      await updateRegistration(id, {
-        status: action === "approve" ? "approved" : "rejected",
-      });
+  const handleAction = async (action: registrationStatusEnum, participantData: Registration) => {
+    const updatedData = {
+      ...participantData,
+      status: action
+    }
+    
+    switch (action) {
+      case registrationStatusEnum.bekreftet:
+        updateRegistration(participantData.id, participantData.event_id, updatedData)
+        break;
+      case registrationStatusEnum.nektet:
+        updateRegistration(participantData.id, participantData.event_id, updatedData)
+        break;
+      case registrationStatusEnum.slett:
+        deleteRegistration(participantData.id, participantData.event_id)
+        break;
     }
   };
-
+  
   return (
     <main className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">
@@ -111,10 +127,10 @@ export default function AdminRegistrationForm({
                 <p className="text-sm text-gray-500">{participant.email}</p>
               </div>
               <span
-                className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                  participant.status === "approved"
+                className={`px-2 py-1 text-xs font-medium rounded-full flex items-center justify-center ${
+                  participant.status === registrationStatusEnum.bekreftet
                     ? "bg-green-100 text-green-800"
-                    : participant.status === "rejected"
+                    : participant.status === registrationStatusEnum.nektet
                     ? "bg-red-100 text-red-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
@@ -124,19 +140,19 @@ export default function AdminRegistrationForm({
             </div>
             <div className="flex space-x-2">
               <button
-                onClick={() => handleAction(participant.id, "approve")}
+                onClick={() => handleAction(registrationStatusEnum.bekreftet, participant)}
                 className="px-4 py-2 text-sm bg-green-500 text-white rounded shadow hover:bg-green-600 focus:ring-2 focus:ring-green-500"
               >
                 Godkjenn
               </button>
               <button
-                onClick={() => handleAction(participant.id, "reject")}
+                onClick={() => handleAction(registrationStatusEnum.nektet, participant)}
                 className="px-4 py-2 text-sm bg-red-500 text-white rounded shadow hover:bg-red-600 focus:ring-2 focus:ring-red-500"
               >
                 Avslå
               </button>
               <button
-                onClick={() => handleAction(participant.id, "delete")}
+                onClick={() => handleAction(registrationStatusEnum.slett, participant)}
                 className="px-4 py-2 text-sm bg-gray-500 text-white rounded shadow hover:bg-gray-600 focus:ring-2 focus:ring-gray-500"
               >
                 Slett
