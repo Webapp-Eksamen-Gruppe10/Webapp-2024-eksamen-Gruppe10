@@ -3,7 +3,7 @@ import { Template } from "@/features/template/lib/schema";
 import React, { useState } from "react";
 import { Category, EventToDb, Event } from "../lib/schema";
 import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
-import { safeParseInt } from "@/lib/helpers";
+
 
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
