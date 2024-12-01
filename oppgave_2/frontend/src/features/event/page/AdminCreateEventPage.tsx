@@ -1,14 +1,19 @@
 "use client";
-import { Template, TemplateToDb } from "@/features/template/lib/schema";
+import { Template } from "@/features/template/lib/schema";
 import AdminCreateEvent from "../components/AdminCreateEvent";
+import useEvent from "../hooks/useEvent";
 
 type AdminCreateEventProps = {
+    selectedTemplateId: string, 
     selectedTemplate: Template,
+
+    
 }
 
-export default function AdminCreateEventPage({selectedTemplate}: AdminCreateEventProps ) {
+export default function AdminCreateEventPage({selectedTemplateId, selectedTemplate}: AdminCreateEventProps ) {
+    const {add} = useEvent()
     return(
-        <AdminCreateEvent selectedTemplate={selectedTemplate}
+        <AdminCreateEvent selectedTemplateId={selectedTemplateId} selectedTemplate={selectedTemplate} add={add}
       />
     )
 }
