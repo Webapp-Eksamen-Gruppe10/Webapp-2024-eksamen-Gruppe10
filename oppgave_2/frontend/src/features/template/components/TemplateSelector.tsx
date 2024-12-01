@@ -2,11 +2,12 @@ import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
 
 interface TemplateSelectorProps {
-  templates?: Template[];
-  add: (data: Omit<Template, "id">) => Promise<void>,
-  deleteTemplate: (id: number) => Promise<void>,
-  finalSelectedTemplate: (template: any) => void,
-  onSkip: () => void
+    onSelectTemplateId: (id:string) => void, 
+    templates?: Template[];
+    add: (data: Template) => Promise<void>,
+    deleteTemplate: (id: number) => Promise<void>,
+    finalSelectedTemplate: (template: Template) => void,
+    onSkip: () => void
 }
 
 export const defaultTemplate = {
@@ -21,8 +22,8 @@ export const defaultTemplate = {
   waitinglist: false,
 }
 
-export default function TemplateSelector({ templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate }: TemplateSelectorProps) {
-  const [formData, setFormData] = useState<TemplateToDb>(defaultTemplate)
+export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate }: TemplateSelectorProps) {
+  const [formData, setFormData] = useState<Template>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
 
@@ -54,13 +55,13 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
     });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { id, value, type, checked } = e.target;
-
-    if (type === "checkbox") {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+  
+    if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
       setFormData((prev) => ({
         ...prev,
-        [id]: checked,
+        [id]: e.target.ariaChecked,
       }));
     } else {
       setFormData((prev) => ({
@@ -69,6 +70,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
       }));
     }
   };
+  
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +87,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 p-6 max-w-5xl mx-auto">
+    <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto pb-2 border border-gray-300 rounded-lg shadow-md p-6 ">
       {/* Create Template Section */}
       <div className="space-y-6">
         <form onSubmit={handleUpdate}>
@@ -223,7 +225,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
                 </div>
               </div>
             </div>
-            <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Lagre denne malen
             </button>
           </div>
@@ -246,9 +248,13 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
                       selectedTemplate?.id === template.id ? "bg-gray-300" : "hover:bg-gray-100"
                     }`}
                     onClick={() => {
-                      console.log("Valgt template:", template);
+                      console.log("Valgt template:123", template);
                       setSelectedTemplate(template);
                       setFormData(template);
+                      if(template.id){
+                        onSelectTemplateId(template.id)
+                      }
+                     
                     }}
                   >
                     {template.name}
@@ -257,8 +263,11 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
                   {/* Delete Template Button */}
                   <button
                     className="absolute top-1/2 right-[-19%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
-                    onClick={() => deleteTemplate(template.id)}
-                  >
+                    onClick={() => {
+                        if(template.id){
+                            deleteTemplate(Number.parseInt(template.id))
+                        }}}
+                    >
                     Slett?
                   </button>
                 </div>
@@ -284,7 +293,7 @@ export default function TemplateSelector({ templates = [], add, finalSelectedTem
             finalSelectedTemplate(getCurrentTemplateData());
           }}
         >
-          Fortsett med valgte alternativer -{'>'}
+          Fortsett med valgte alternativer 
         </button>
       </div>
     </div>
