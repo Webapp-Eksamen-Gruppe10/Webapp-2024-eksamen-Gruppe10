@@ -64,7 +64,9 @@ const details = async (id: string) => {
 
 const create = async (data: Record<string, any>) => {
     try {
+        console.log(JSON.stringify(data))
         const validatedData = validateEventToDb(data)
+        console.log(validatedData)
         const newEvent = await ofetch(endpoint.events.create, {
             method: 'POST',
             body: JSON.stringify(validatedData.data),
