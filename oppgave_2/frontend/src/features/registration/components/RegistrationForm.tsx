@@ -123,6 +123,8 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
           <input
             id="name"
             name="name"
+            pattern="[A-Za-zÆØÅæøå]+"
+            title="Kun bokstaver er tillatt"
             required
             value={formData.name}
             onChange={handleChange}
@@ -166,22 +168,31 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
         </div>
 
         {formData.participants.map((participant, index) => (
-          <div key={index} className="flex items-center mt-2">
-            <input
-              name="participants"
-              value={participant}
-              onChange={(e) => handleChange(e, index)}
-              placeholder={`Deltaker ${index + 1}`}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
-            />
-            <button
-              type="button"
-              onClick={() => removeParticipant(index)}
-              className="ml-2 bg-red-500 text-white px-3 py-2 rounded"
-            >
-              Fjern
-            </button>
+          <div key={index} className="mb-4">
+            <div key={index} className="flex items-center mt-2">
+              <input
+                name="participants"
+                type= "text"
+                pattern="[A-Za-zÆØÅæøå]+"
+                title="Kun bokstaver er tillatt"
+                value={participant}
+                onChange={(e) => handleChange(e, index)}
+                placeholder={`Deltaker ${index + 1}`}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300"
+              />
+              <button
+                type="button"
+                onClick={() => removeParticipant(index)}
+                className="ml-2 bg-red-500 text-white px-3 py-2 rounded"
+              >
+                Fjern
+              </button>
+            </div>
+            {errors.participants && (
+              <p className=" text-red-500 text-sm">{errors.participants}</p>
+            )}
           </div>
+          
         ))}
 
         <button
