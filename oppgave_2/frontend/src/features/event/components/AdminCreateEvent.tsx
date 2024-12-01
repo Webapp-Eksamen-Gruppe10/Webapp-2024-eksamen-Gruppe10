@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Category, EventToDb, Event } from "../lib/schema";
 import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
 
+
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
   selectedTemplate: Template,
@@ -16,8 +17,8 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
     name:selectedTemplate?.name || "", 
     location: "",
     category: "",
-    capacity: "",
-    price: "",
+    capacity: null,
+    price: 0,
     description: selectedTemplate?.description || "",
     private: selectedTemplate?.private || false,
     waitinglist: selectedTemplate?.waitinglist || false,
@@ -48,14 +49,15 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
       return;
     }
 
+
     const data: EventToDb = {
       template_id: selectedTemplateId || null,
       title: formData.name,
       createdAt: date.toISOString(),
       location: formData.location, 
       category: Category.parse(formData.category),
-      capacity: Number.parseInt(formData.capacity),
-      price: parseFloat(formData.price),
+      capacity: formData.capacity,
+      price:formData.price,
       description: formData.description,
       private: formData.private,
       waitinglist: formData.waitinglist,
@@ -63,17 +65,19 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
   
     
     try {
-      await add(data);
-      alert("Arrangementet ble opprettet!");
+         await add(data);
+        alert("Arrangementet ble opprettet!");
+      
     } catch (error) {
       console.error("Feil under opprettelse:", error);
       alert("Noe gikk galt under opprettelse av arrangementet.");
     }
   };
-  
+
   
 
   return (
+    
       <div className="max-w-lg border border-gray-300 rounded-lg shadow-md p-6 ">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">Opprett nytt arrangement</h2>
@@ -132,8 +136,10 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
               ))}
             </select>
           </div>
-
+          
+         
           <div className="grid grid-cols-2 gap-4">
+          {selectedTemplate?.lim_attend == true && (     
             <div className="space-y-2">
               <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
                 Kapasitet
@@ -144,9 +150,12 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
                 required
                 className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
                 onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-2">
+              />             
+              </div>)}
+          
+        
+            {selectedTemplate?.free !== true && (      
+            <div className="space-y-2">  
               <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                 Pris
               </label>
@@ -155,9 +164,10 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
                 type="number"
                 required
                 className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
+                value={formData.price} 
                 onChange={handleChange}
               />
-            </div>
+            </div>)}
           </div>
 
           <div className="space-y-2">

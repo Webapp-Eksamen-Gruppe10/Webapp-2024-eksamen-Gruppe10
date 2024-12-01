@@ -27,7 +27,8 @@ export const showCorrectDatepicker = (
     
     return ( 
     <>
-        {selectedTemplateId.length > 0 ? (
+       
+        {selectedTemplateId == null ? (
         <DatePicker
           id="dato"
           required

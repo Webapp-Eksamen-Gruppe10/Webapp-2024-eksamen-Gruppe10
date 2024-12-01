@@ -24,7 +24,7 @@ model Registration {
 model Event {
   id String @id @default(cuid())
   template_id String?
-  capacity Int
+  capacity Int?
   currentCapacity Int
   title String
   createdAt DateTime

@@ -88,27 +88,15 @@ const Navbar = () => {
                 href="/"
                 className="block px-3 py-2 text-white hover:bg-blue-500 rounded-md"
               >
-                Home
+                Hjem
               </Link>
               <Link
                 href="/events"
                 className="block px-3 py-2 text-white hover:bg-blue-500 rounded-md"
               >
-                Events
+                Arrangementer
               </Link>
-              <Link
-                href="/about"
-                className="block px-3 py-2 text-white hover:bg-blue-500 rounded-md"
-              >
-                About Us
-              </Link>
-              <Link
-                href="/contact"
-                className="block px-3 py-2 text-white hover:bg-blue-500 rounded-md"
-              >
-                Contact
-              </Link>
-
+      
               {/* Dropdown Meny for Mobil */}
               <div className="mt-2">
                 <button
@@ -123,13 +111,13 @@ const Navbar = () => {
                       href="/admin/events"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Events
+                      Arrangementer
                     </Link>
                     <Link
                       href="/admin/statistics"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Statistics
+                      Statistikk 
                     </Link>
                   </div>
                 )}

@@ -41,7 +41,6 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     };
   }
 
-
   const handleWeekdayChange = (day: string, isChecked: boolean) => {
     setFormData((prev) => {
       const updatedWeekdays = isChecked
@@ -55,13 +54,18 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     });
   };
 
+  // prøvde å debugge med ai som chatGPT, og søkte på stackoverflow men fant ikke ut av hvordan jeg kunne løse dette: 
+  /*
+  Property 'checked' does not exist on type 'EventTarget & (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)'.
+  Property 'checked' does not exist on type 'EventTarget & HTMLTextAreaElement'.ts(2339)
+  */  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
   
     if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
       setFormData((prev) => ({
         ...prev,
-        [id]: e.target.ariaChecked,
+        [id]: e.target.checked, 
       }));
     } else {
       setFormData((prev) => ({
@@ -140,24 +144,25 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
 
               {/* Weekdays */}
               <div>
-                <label htmlFor="weekdays" className="block font-medium mb-4">
+                <label className="block font-medium mb-4">
                   Begrenset ukedager
                 </label>
                 <div className="grid grid-cols-2 gap-4 border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                  {["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"].map((day) => (
-                    <div key={day} className="flex items-center space-x-2">
-                      <input
-                        id={`weekday-${day}`}
-                        type="checkbox"
-                        className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200"
-                        checked={formData.weekdays.includes(day)}
-                        onChange={(e) => handleWeekdayChange(day, e.target.checked)}
-                      />
-                      <label htmlFor={`weekday-${day}`} className="font-medium text-gray-800">
-                        {day}
-                      </label>
-                    </div>
-                  ))}
+                    {["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"].map((day) => (
+                      <div key={day} className="flex items-center space-x-2">
+                        <input
+                          id={`weekday-${day}`}
+                          type="checkbox"
+                          className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200"
+                          checked={formData.weekdays.includes(day)}
+                          onChange={(e) => handleWeekdayChange(day, e.target.checked)}
+                          disabled={!!selectedTemplate}
+                        />
+                        <label htmlFor={`weekday-${day}`} className="font-medium text-gray-800">
+                          {day}
+                        </label>
+                      </div>
+                    ))}
                 </div>
               </div>
 
@@ -225,6 +230,17 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                 </div>
               </div>
             </div>
+            <button
+            type="button"
+            className="w-full bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
+            onClick={() => {
+              setFormData(defaultTemplate);
+              setSelectedTemplate(defaultTemplate); 
+              onSelectTemplateId(""); 
+            }}
+          >
+            Tilbakestill mal
+          </button>
             <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Lagre denne malen
             </button>
@@ -248,7 +264,6 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                       selectedTemplate?.id === template.id ? "bg-gray-300" : "hover:bg-gray-100"
                     }`}
                     onClick={() => {
-                      console.log("Valgt template:123", template);
                       setSelectedTemplate(template);
                       setFormData(template);
                       if(template.id){
@@ -279,8 +294,9 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
         <button
           className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-50 hover:bg-gray-100"
           onClick={() => {
-            setSelectedTemplate(null);
+            setSelectedTemplate(defaultTemplate);
             setFormData(defaultTemplate);
+            onSelectTemplateId(""); 
             onSkip();
           }}
         >
