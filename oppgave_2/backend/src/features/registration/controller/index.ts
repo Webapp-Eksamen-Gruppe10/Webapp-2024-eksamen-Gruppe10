@@ -12,9 +12,17 @@ export const createRegistrationController = (
   
     app.use("/*", cors());
 
+    app.get("", async (c) => {
+        const result = await registrationServiceDb.getAllRegistrations();
+    
+        if (!result.success)
+          return errorResponse(c, result.error.code, result.error.message);
+        return c.json(result);
+      });
+
     app.get("/:eventId", async (c) => {
         const eventId = c.req.param("eventId");
-        const result = await registrationServiceDb.getAllRegistrations(eventId);
+        const result = await registrationServiceDb.getAllRegistrationByEventId(eventId);
     
         if (!result.success)
           return errorResponse(c, result.error.code, result.error.message);

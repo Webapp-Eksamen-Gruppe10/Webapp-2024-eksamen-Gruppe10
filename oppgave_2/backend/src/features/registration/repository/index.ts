@@ -80,6 +80,16 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
+    const listAll = async(): Promise<Result<Registration[]>> => {
+        try {
+            const registrations = await prismaDb.registration.findMany();
+
+            return ResultHandler.success(ToRegistrationArray(registrations))
+        } catch (error) {
+            return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR")
+        }
+    }
+
     const getById = async(id: string, eventId: string): Promise<Result<Registration>> => {
         try {
             const registration = await prismaDb.registration.findUniqueOrThrow({
@@ -136,7 +146,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
         }
     }
 
-    return { registrationExist, eventExist, event, eventCurrentCap, regData, create, list, getById, updateById, deleteById };
+    return { registrationExist, eventExist, event, eventCurrentCap, regData, create, list, getById, updateById, deleteById, listAll };
 }
 
 export const registrationRepository = createRegistrationRepository(prisma)
