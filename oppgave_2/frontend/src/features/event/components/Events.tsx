@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
 import { formatDate } from "@/lib/helpers";
-import { showPriceCorrectly } from "@/features/event/lib/eventUtils"
-
+import { showPriceCorrectly } from "@/features/event/lib/eventUtils";
 
 type EventProps = {
-    events: Event[];
+  events: Event[];
 };
 
 export default function Events({ events }: EventProps) {
-    
   const [valgtMåned, settValgtMåned] = useState("");
   const [valgtÅr, settValgtÅr] = useState("");
   const [valgtType, settValgtType] = useState("");
@@ -20,17 +18,12 @@ export default function Events({ events }: EventProps) {
     const hendelseMåned = hendelseDato.getMonth() + 1;
     const hendelseÅr = hendelseDato.getFullYear();
 
-    const samsvarerMåned = valgtMåned
-      ? hendelseMåned === parseInt(valgtMåned)
-      : true;
-    const samsvarerÅr = valgtÅr
-      ? hendelseÅr === parseInt(valgtÅr)
-      : true;
-    const samsvarerType = valgtType
-      ? hendelse.category === valgtType
-      : true;
+    const samsvarerMåned = valgtMåned ? hendelseMåned === parseInt(valgtMåned) : true;
+    const samsvarerÅr = valgtÅr ? hendelseÅr === parseInt(valgtÅr) : true;
+    const samsvarerType = valgtType ? hendelse.category === valgtType : true;
+    const erOffentlig = !hendelse.private; 
 
-    return samsvarerMåned && samsvarerÅr && samsvarerType;
+    return samsvarerMåned && samsvarerÅr && samsvarerType && erOffentlig;
   });
 
   return (
@@ -101,4 +94,4 @@ export default function Events({ events }: EventProps) {
       </div>
     </div>
   );
-};
+}
