@@ -14,7 +14,7 @@ import { CategoryEnum } from "../types";
 export const createEventRepository = async (prismaDb: Prisma) => {
   const exist = async (id: string) => {
     try {
-      prismaDb.event.findUniqueOrThrow({
+      await prismaDb.event.findUniqueOrThrow({
         where: {
           id: id,
         },

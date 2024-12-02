@@ -7,24 +7,27 @@ import { SafeParseReturnType } from "zod";
 import { useRouter } from "next/navigation";
 
 type AdminEventProps = {
-    events: Event[],
-    remove: (id: string) => Promise<void>,
-    update: (id: string, data: Partial<Event>) => Promise<void>,
-    templates: Template[]
-     
+  events: Event[];
+  remove: (id: string) => Promise<void>;
+  update: (id: string, data: Partial<Event>) => Promise<void>;
+  templates: Template[];
+};
 
-}
+export default function AdminEvents({
+  events,
+  remove,
+  update,
+  templates,
+}: AdminEventProps) {
+  const router = useRouter();
 
-
-export default function AdminEvents({events, remove, update, templates} : AdminEventProps) {
-  const router = useRouter();  
-  
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState<Event | null>(null);
-  const [editDataTemplate, setEditDataTemplate] = useState<Template | null>(null); 
- 
+  const [editDataTemplate, setEditDataTemplate] = useState<Template | null>(
+    null
+  );
 
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
@@ -32,19 +35,19 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
 
   const totalPages = Math.ceil(events.length / eventsPerPage);
 
-  const template_id = editData?.template_id
-
+  const template_id = editData?.template_id;
 
   useEffect(() => {
     if (editData?.template_id) {
-      const template = templates.find((template) => template.id === editData.template_id);
+      const template = templates.find(
+        (template) => template.id === editData.template_id
+      );
       if (template) {
         setEditDataTemplate(template);
       }
     }
   }, [editData, templates]);
-  
-  
+
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
@@ -86,58 +89,59 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
       </div>
 
       {/* Event Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {currentEvents.map((event) => (
-        <div
-          key={event.id}
-          className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg cursor-pointer"
-          onClick={() => {
-            router.push(`/events/${event.id}`); 
-            
-          }}
-        >
-          <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
-          <p className="text-sm text-gray-600 mb-1">
-            <strong>Dato:</strong> {formatDate(event.startsAt)}
-          </p>
-          <p className="text-sm text-gray-600 mb-1">
-            <strong>Kategori:</strong> {event.category} 
-          </p>
-          <p className="text-sm text-gray-600 mb-3">
-            <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"} deltagere
-          </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {currentEvents.map((event) => (
           <div
-            className="flex space-x-2"
-            onClick={(e) => e.stopPropagation()}
+            key={event.id}
+            className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg cursor-pointer"
+            onClick={() => {
+              router.push(`/events/${event.id}`);
+            }}
           >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit(event);
-              }}
-              className="px-3 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
+            <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+            <p className="text-sm text-gray-600 mb-1">
+              <strong>Dato:</strong> {formatDate(event.startsAt)}
+            </p>
+            <p className="text-sm text-gray-600 mb-1">
+              <strong>Kategori:</strong> {event.category}
+            </p>
+            <p className="text-sm text-gray-600 mb-3">
+              <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"}{" "}
+              deltagere
+            </p>
+            <div
+              className="flex space-x-2"
+              onClick={(e) => e.stopPropagation()}
             >
-              Rediger
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(event.id);
-              }}
-              className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
-            >
-              Slett
-            </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(event);
+                }}
+                className="px-3 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
+              >
+                Rediger
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(event.id);
+                }}
+                className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+              >
+                Slett
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
 
       {/* Pagination */}
       <div className="mt-8 flex justify-between items-center">
         <div className="text-sm text-gray-700">
-          Viser {indexOfFirstEvent + 1} til {Math.min(indexOfLastEvent, events.length)} av{" "}
-          {events.length} arrangementer
+          Viser {indexOfFirstEvent + 1} til{" "}
+          {Math.min(indexOfLastEvent, events.length)} av {events.length}{" "}
+          arrangementer
         </div>
         <div className="space-x-2">
           <button
@@ -164,19 +168,27 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
             <h2 className="text-xl font-semibold mb-4">Rediger Event</h2>
             <form onSubmit={handleUpdate}>
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Tittel
                 </label>
                 <input
                   type="text"
                   id="title"
                   value={editData.title}
-                  onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, title: e.target.value })
+                  }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="date"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Dato
                 </label>
                 <input
@@ -184,13 +196,21 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   id="date"
                   value={editData.startsAt.split("T")[0]}
                   onChange={(e) =>
-                    setEditData({ ...editData, startsAt: `${e.target.value}T${editData.startsAt.split("T")[1]}` })
+                    setEditData({
+                      ...editData,
+                      startsAt: `${e.target.value}T${
+                        editData.startsAt.split("T")[1]
+                      }`,
+                    })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="time"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Tid
                 </label>
                 <input
@@ -198,26 +218,39 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   id="time"
                   value={editData.startsAt.split("T")[1]?.slice(0, 5) || ""}
                   onChange={(e) =>
-                    setEditData({ ...editData, startsAt: `${editData.startsAt.split("T")[0]}T${e.target.value}:00` })
+                    setEditData({
+                      ...editData,
+                      startsAt: `${editData.startsAt.split("T")[0]}T${
+                        e.target.value
+                      }:00`,
+                    })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Lokasjon
                 </label>
                 <input
                   type="text"
                   id="location"
                   value={editData.location}
-                  onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, location: e.target.value })
+                  }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               {editData.capacity !== null && (
                 <div className="mb-4">
-                  <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="capacity"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Kapasitet
                   </label>
                   <input
@@ -225,48 +258,69 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                     id="capacity"
                     value={editData.capacity}
                     onChange={(e) =>
-                      setEditData({ ...editData, capacity: e.target.value ? Number(e.target.value) : null })
+                      setEditData({
+                        ...editData,
+                        capacity: e.target.value
+                          ? Number(e.target.value)
+                          : null,
+                      })
                     }
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
               )}
               {editDataTemplate?.fixed_price === false ? (
-              <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                  Pris
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  value={editData.price}
-                  onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
-            ) : (
-              <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                  Pris
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  value={editData.price}
-                  disabled  
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
-                />
-              </div>
-            )}
+                <div className="mb-4">
+                  <label
+                    htmlFor="price"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Pris
+                  </label>
+                  <input
+                    type="number"
+                    id="price"
+                    value={editData.price}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        price: Number(e.target.value),
+                      })
+                    }
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              ) : (
+                <div className="mb-4">
+                  <label
+                    htmlFor="price"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Pris
+                  </label>
+                  <input
+                    type="number"
+                    id="price"
+                    value={editData.price}
+                    disabled
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
+                  />
+                </div>
+              )}
 
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Beskrivelse
                 </label>
                 <textarea
                   id="description"
                   value={editData.description}
-                  onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, description: e.target.value })
+                  }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
