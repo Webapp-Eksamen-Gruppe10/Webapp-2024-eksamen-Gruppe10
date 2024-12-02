@@ -40,7 +40,13 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
     router.push(`/events?${params.toString()}`);
   }, [valgtMåned, valgtÅr, valgtType, router]);
 
- 
+  const resetFilters = () => {
+    settValgtMåned("");
+    settValgtÅr("");
+    settValgtType("");
+    router.push("/events");
+  };
+
 
   return (
     <div className="container mx-auto p-4 pb-20">
@@ -82,7 +88,7 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
           onChange={(e) => settValgtType(e.target.value)}
           className="border border-gray-300 rounded px-9 py-2"
         >
-            <option disabled value="">
+            <option value="">
                 Velg kategori
               </option>
               {Object.values(Category.Values).map((category) => (
@@ -91,7 +97,12 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
                 </option>
               ))}             
         </select>
-
+        <button
+          onClick={resetFilters}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >
+          Reset
+        </button>
       </div> 
       {eventStatus.loading ? (
         <p>Laster...</p>

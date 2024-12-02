@@ -5,7 +5,7 @@ interface TemplateSelectorProps {
     onSelectTemplateId: (id:string) => void, 
     templates?: Template[];
     add: (data: Template) => Promise<void>,
-    deleteTemplate: (id: number) => Promise<void>,
+    deleteTemplate: (id: string) => Promise<void>,
     finalSelectedTemplate: (template: Template) => void,
     onSkip: () => void
 }
@@ -54,11 +54,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     });
   };
 
-  // prøvde å debugge med ai som chatGPT, og søkte på stackoverflow men fant ikke ut av hvordan jeg kunne løse dette: 
-  /*
-  Property 'checked' does not exist on type 'EventTarget & (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)'.
-  Property 'checked' does not exist on type 'EventTarget & HTMLTextAreaElement'.ts(2339)
-  */  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value, type} = e.target;
     if (type === "checkbox") {
@@ -80,7 +76,6 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     e.preventDefault();
 
     try {
-      await add(getCurrentTemplateData());
       await add(getCurrentTemplateData());
       alert("Lagring av template vellykket!");
       setFormData(defaultTemplate);
@@ -280,7 +275,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                     className="absolute top-1/2 right-[-19%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
                     onClick={() => {
                         if(template.id){
-                            deleteTemplate(Number.parseInt(template.id))
+                            deleteTemplate(template.id)
                         }}}
                     >
                     Slett?
