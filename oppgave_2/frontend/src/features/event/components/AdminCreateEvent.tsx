@@ -57,11 +57,11 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
     const data: EventToDb = {
       template_id: selectedTemplateId || null,
       title: formData.name,
-      createdAt: date.toISOString(),
+      startsAt: date.toISOString(),
       location: formData.location, 
       category: Category.parse(formData.category),
       capacity: formData.capacity !== null ? Number(formData.capacity) : null,
-      price:formData.price,
+      price: Number(formData.price),
       description: formData.description,
       private: formData.private,
       waitinglist: formData.waitinglist,

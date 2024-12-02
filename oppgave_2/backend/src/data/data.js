@@ -54,7 +54,7 @@ export const events = [
   {
     id: "event1",
     title: "Lederskapstreningsprogram",
-    createdAt: "2024-01-15T09:00:00Z",
+    startsAt: "2024-01-15T09:00:00Z",
     capacity: null,
     currentCapacity: 0,
     location: "Oslo",
@@ -68,7 +68,7 @@ export const events = [
   {
     id: "event2",
     title: "Yoga- og Meditasjonsretreat",
-    createdAt: "2021-04-10T07:00:00Z",
+    startsAt: "2021-04-10T07:00:00Z",
     capacity: 14,
     currentCapacity: 14,
     location: "Bergen",
@@ -82,7 +82,7 @@ export const events = [
   {
     id: "event3",
     title: "Avansert Fotograferingsverksted",
-    createdAt: "2021-04-05T10:00:00Z",
+    startsAt: "2021-04-05T10:00:00Z",
     capacity: 20,
     currentCapacity: 5,
     location: "Trondheim",
@@ -96,7 +96,7 @@ export const events = [
   {
     id: "event4",
     title: "Eksklusiv Vinsmaking",
-    createdAt: "2021-04-20T19:00:00Z",
+    startsAt: "2021-04-20T19:00:00Z",
     capacity: 25,
     currentCapacity: 5,
     location: "Stavanger",
@@ -110,7 +110,7 @@ export const events = [
   {
     id: "event5",
     title: "Webinar om Personlig Utvikling",
-    createdAt: "2024-05-12T14:00:00Z",
+    startsAt: "2024-05-12T14:00:00Z",
     capacity: 100,
     currentCapacity: 5,
     location: "Oslo",
@@ -124,7 +124,7 @@ export const events = [
   {
     id: "event6",
     title: "Helge Fitness Bootcamp",
-    createdAt: "2024-06-01T08:00:00Z",
+    startsAt: "2024-06-01T08:00:00Z",
     capacity: 40,
     currentCapacity: 7,
     location: "Kristiansand",
@@ -138,7 +138,7 @@ export const events = [
   {
     id: "event7",
     title: "Kunst- og Kreativitetsverksted",
-    createdAt: "2024-07-08T11:00:00Z",
+    startsAt: "2024-07-08T11:00:00Z",
     capacity: 30,
     currentCapacity: 7,
     location: "Bergen",
@@ -152,7 +152,7 @@ export const events = [
   {
     id: "event8",
     title: "Eksklusiv Nettverksmiddag",
-    createdAt: "2024-08-15T18:00:00Z",
+    startsAt: "2024-08-15T18:00:00Z",
     capacity: 50,
     currentCapacity: 7,
     location: "Trondheim",
