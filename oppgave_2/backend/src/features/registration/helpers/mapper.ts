@@ -30,7 +30,7 @@ import { z } from "zod"
             ...registration,
             id: crypto.randomUUID(),
             participants: JSON.stringify(registration.participants),
-            startsAt: new Date(),
+            createdAt: new Date(),
             event_id: event_id,
             status: status
         }

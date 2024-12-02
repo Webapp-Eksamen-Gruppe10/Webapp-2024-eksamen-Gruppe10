@@ -78,7 +78,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
 
       {/* Create New Event */}
       <div className="mb-4">
-        <Link href="/admin/events/new" className="inline-block">
+        <Link href="/admin/events/new">
           <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
             Opprett nytt arrangement
           </button>
@@ -252,7 +252,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="number"
                   id="price"
-                  value={editData.price}  
+                  value={editData.price}
                   disabled  
                   className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
                 />
