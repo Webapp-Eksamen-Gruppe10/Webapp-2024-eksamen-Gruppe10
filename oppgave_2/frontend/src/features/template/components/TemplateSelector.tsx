@@ -60,12 +60,14 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
   Property 'checked' does not exist on type 'EventTarget & HTMLTextAreaElement'.ts(2339)
   */  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { id, value } = e.target;
-  
-    if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
+    const { id, value, type} = e.target;
+    console.log("TESTER 321")
+    if (type === "checkbox") {
+      console.log("TESTER 123")
+      const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({
         ...prev,
-        [id]: e.target.checked, 
+        [id]: checked,
       }));
     } else {
       setFormData((prev) => ({
@@ -235,7 +237,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
             className="w-full bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
             onClick={() => {
               setFormData(defaultTemplate);
-              setSelectedTemplate(defaultTemplate); 
+              setSelectedTemplate(null); 
               onSelectTemplateId(""); 
             }}
           >
