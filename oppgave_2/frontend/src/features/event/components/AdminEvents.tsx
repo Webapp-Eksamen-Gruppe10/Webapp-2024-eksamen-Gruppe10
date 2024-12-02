@@ -11,8 +11,6 @@ type AdminEventProps = {
     remove: (id: string) => Promise<void>,
     update: (id: string, data: Partial<Event>) => Promise<void>,
     templates: Template[]
-     
-
 }
 
 
@@ -231,34 +229,35 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   />
                 </div>
               )}
-              {editDataTemplate?.fixed_price === false ? (
-              <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                  Pris
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  value={editData.price}
-                  onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
-            ) : (
-              <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                  Pris
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  value={editData.price}
-                  disabled  
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
-                />
-              </div>
-            )}
-
+                {editDataTemplate?.fixed_price ? (
+                  !editDataTemplate?.free && (
+                    <div className="mb-4">
+                      <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                        Pris
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        value={editData.price}
+                        disabled
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
+                      />
+                    </div>
+                  )
+                ) : (
+                  <div className="mb-4">
+                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                      Pris
+                    </label>
+                    <input
+                      type="number"
+                      id="price"
+                      value={editData.price}
+                      onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                )}
               <div className="mb-4">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                   Beskrivelse
