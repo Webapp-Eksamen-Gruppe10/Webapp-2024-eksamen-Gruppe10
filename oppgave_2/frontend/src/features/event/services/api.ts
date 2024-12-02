@@ -23,6 +23,26 @@ const list = async () => {
     }
 };
 
+const listFiltered = async (urlParams: URLSearchParams) => {
+    try {
+
+        const events = await ofetch(`${endpoint.events.list}?${urlParams}`);
+        
+        return validateEventList(events.data.map((event:Event) => ({
+            ...event,
+            category: Category.parse(event.category)
+        })));
+        
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        throw {
+            status: 500,
+            message: 'Internal Server Error',
+            error: 'An unknown error occurred',
+        };
+    }
+};
+
 
 const details = async (id: string) => {
     try {
@@ -181,6 +201,7 @@ const remove = async (id: string) => {
 
 export const eventsApi = {
     list,
+    listFiltered, 
     details,
     create,
     update,

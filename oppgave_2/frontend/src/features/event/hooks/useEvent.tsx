@@ -37,6 +37,37 @@ export function useEvent() {
     }
   }, []);
 
+
+  
+  const fetchFilterEvents = async (valgtMåned:string, valgtÅr:string, valgtType: string) => {
+    
+    setEventStatus("loading");
+  
+    try {
+      const params = new URLSearchParams();
+
+      if (valgtMåned) params.set("month", valgtMåned);
+      if (valgtÅr) params.set("year", valgtÅr);
+      if (valgtType) params.set("type", valgtType);
+
+      const response = await eventsApi.listFiltered(params);
+      console.log(JSON.stringify(response.data))
+
+      if (!response.success) {
+        throw new Error("Kunne ikke hente data.");
+      }
+      
+      const offentligeHendelser = response.data.filter((hendelse: Event) => !hendelse.private);
+      
+      setEventData(offentligeHendelser);
+      console.log(JSON.stringify(response.data))
+
+    } catch (err: any) {
+      setEventError(err.message || "Noe gikk galt.");
+    } finally {
+      setEventStatus("success");
+    }
+  };
  
   const addEvent = async (data: Partial<Event>) => {
     try {
@@ -96,6 +127,7 @@ export function useEvent() {
     get: fetchEvents,
     update: updateEvent,
     remove: deleteEvent,
+    filter: fetchFilterEvents, 
     eventData,
     eventError,
     eventStatus: {

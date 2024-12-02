@@ -1,30 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Event } from "@/features/event/lib/schema";
 import { formatDate } from "@/lib/helpers";
 import { showPriceCorrectly } from "@/features/event/lib/eventUtils";
+import { useRouter} from "next/navigation";
+
 
 type EventProps = {
   events: Event[];
+  filter: (valgtMåned: string, valgtÅr: string, valgtType: string) => Promise<void>, 
+  eventStatus: {
+    idle: boolean;
+    loading: boolean;
+    success: boolean;
+    error: boolean;
+    fetching: boolean;
+}
+
 };
 
-export default function Events({ events }: EventProps) {
+export default function Events({ events, eventStatus, filter }: EventProps) {
+  const router = useRouter();
+
+
   const [valgtMåned, settValgtMåned] = useState("");
   const [valgtÅr, settValgtÅr] = useState("");
   const [valgtType, settValgtType] = useState("");
 
-  const filtrerteHendelser = events.filter((hendelse) => {
-    const hendelseDato = new Date(hendelse.createdAt);
-    const hendelseMåned = hendelseDato.getMonth() + 1;
-    const hendelseÅr = hendelseDato.getFullYear();
+ 
+  useEffect(() => {
+    filter(valgtMåned, valgtÅr, valgtType)
+    const params = new URLSearchParams();
+    
 
-    const samsvarerMåned = valgtMåned ? hendelseMåned === parseInt(valgtMåned) : true;
-    const samsvarerÅr = valgtÅr ? hendelseÅr === parseInt(valgtÅr) : true;
-    const samsvarerType = valgtType ? hendelse.category === valgtType : true;
-    const erOffentlig = !hendelse.private; 
+    if (valgtMåned) params.set("month", valgtMåned);
+    if (valgtÅr) params.set("year", valgtÅr);
+    if (valgtType) params.set("type", valgtType);
 
-    return samsvarerMåned && samsvarerÅr && samsvarerType && erOffentlig;
-  });
+    router.push(`/events?${params.toString()}`);
+  }, [valgtMåned, valgtÅr, valgtType, router]);
+
+ 
 
   return (
     <div className="container mx-auto p-4 pb-20">
@@ -33,7 +49,7 @@ export default function Events({ events }: EventProps) {
         <select
           value={valgtMåned}
           onChange={(e) => settValgtMåned(e.target.value)}
-          className="border border-gray-300 rounded px-4 py-2"
+          className="border border-gray-300 rounded px-9 py-2"
         >
           <option value="">Velg måned</option>
           <option value="1">Januar</option>
@@ -53,7 +69,7 @@ export default function Events({ events }: EventProps) {
         <select
           value={valgtÅr}
           onChange={(e) => settValgtÅr(e.target.value)}
-          className="border border-gray-300 rounded px-4 py-2"
+          className="border border-gray-300 rounded px-9 py-2"
         >
           <option value="">Velg år</option>
           <option value="2023">2023</option>
@@ -64,7 +80,7 @@ export default function Events({ events }: EventProps) {
         <select
           value={valgtType}
           onChange={(e) => settValgtType(e.target.value)}
-          className="border border-gray-300 rounded px-4 py-2"
+          className="border border-gray-300 rounded px-9 py-2"
         >
           <option value="">Velg kategori</option>
           <option value="Concert">Konsert</option>
@@ -72,26 +88,31 @@ export default function Events({ events }: EventProps) {
           <option value="Conference">Konferanse</option>
           <option value="Festival">Festival</option>
         </select>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtrerteHendelser.length > 0 ? (
-          filtrerteHendelser.map((hendelse) => (
-            <Link key={hendelse.id} href={`/events/${hendelse.id}`} className="block">
-              <div className="border border-gray-300 rounded p-4 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold mb-2">{hendelse.title}</h3>
-                <p className="mb-2">Dato: {formatDate(hendelse.createdAt)}</p>
-                <p className="mb-2">Kategori: {hendelse.category}</p>
-                <p>Pris: {showPriceCorrectly(hendelse.price)}</p>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <p className="text-gray-500 col-span-full">
-            Ingen hendelser funnet for de valgte filtrene.
-          </p>
-        )}
-      </div>
+      </div> 
+      {eventStatus.loading ? (
+        <p>Laster...</p>
+      ) : eventStatus.error ? (
+        <p className="text-red-500">{eventStatus.error}</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.length > 0 ? (
+            events.map((hendelse) => (
+              <Link key={hendelse.id} href={`/events/${hendelse.id}`} className="block">
+                <div className="border border-gray-300 rounded p-4 hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-semibold mb-2">{hendelse.title}</h3>
+                  <p className="mb-2">Dato: {formatDate(hendelse.createdAt)}</p>
+                  <p className="mb-2">Kategori: {hendelse.category}</p>
+                  <p>Pris: {showPriceCorrectly(hendelse.price)}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full">
+              Ingen hendelser funnet for de valgte filtrene.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
