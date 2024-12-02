@@ -174,7 +174,7 @@ export const registrations = [
     email: "alice.brown@example.com",
     phoneNumber: "1234567890",
     status: "bekreftet",
-    createdAt: "2024-01-15T10:30:00Z",
+    startsAt: "2024-01-15T10:30:00Z",
     participants: [
       "Astrid",
       "Bjørn",
@@ -193,7 +193,7 @@ export const registrations = [
     email: "bob.johnson@example.com",
     phoneNumber: "9876543210",
     status: "ventende",
-    createdAt: "2024-01-15T11:45:00Z",
+    startsAt: "2024-01-15T11:45:00Z",
     participants: [
       "Ingrid",
       "Jonas",
@@ -212,7 +212,7 @@ export const registrations = [
     email: "cathy.lee@example.com",
     phoneNumber: "2345678901",
     status: "bekreftet",
-    createdAt: "2024-02-10T08:20:00Z",
+    startsAt: "2024-02-10T08:20:00Z",
     participants: [
       "Sara",
       "Thomas",
@@ -231,7 +231,7 @@ export const registrations = [
     email: "daniel.green@example.com",
     phoneNumber: "8765432190",
     status: "ventende",
-    createdAt: "2024-02-10T09:10:00Z",
+    startsAt: "2024-02-10T09:10:00Z",
     participants: ["Aurora", "Felix", "Hannah", "Isak"],
   },
   {
@@ -241,7 +241,7 @@ export const registrations = [
     email: "ella.white@example.com",
     phoneNumber: "3456789012",
     status: "bekreftet",
-    createdAt: "2024-03-05T11:30:00Z",
+    startsAt: "2024-03-05T11:30:00Z",
     participants: ["Filip", "Ida", "Ludvig", "Thea"],
   },
   {
@@ -251,7 +251,7 @@ export const registrations = [
     email: "frank.harris@example.com",
     phoneNumber: "7654321098",
     status: "bekreftet",
-    createdAt: "2024-04-20T20:00:00Z",
+    startsAt: "2024-04-20T20:00:00Z",
     participants: ["Elias", "Ella", "Jonathan", "Stella"],
   },
   {
@@ -261,7 +261,7 @@ export const registrations = [
     email: "grace.kim@example.com",
     phoneNumber: "4567890123",
     status: "ventende",
-    createdAt: "2024-05-12T15:45:00Z",
+    startsAt: "2024-05-12T15:45:00Z",
     participants: ["Adam", "Leah", "Oskar", "Pia"],
   },
   {
@@ -271,7 +271,7 @@ export const registrations = [
     email: "henry.moore@example.com",
     phoneNumber: "6543210987",
     status: "bekreftet",
-    createdAt: "2024-06-01T09:00:00Z",
+    startsAt: "2024-06-01T09:00:00Z",
     participants: ["Amalie", "Magnus", "Nora", "Sander", "Tiril", "Vetle"],
   },
   {
@@ -281,7 +281,7 @@ export const registrations = [
     email: "ivy.scott@example.com",
     phoneNumber: "5678901234",
     status: "bekreftet",
-    createdAt: "2024-07-08T12:15:00Z",
+    startsAt: "2024-07-08T12:15:00Z",
     participants: ["David", "Emma", "Fredrik", "Julie", "Kristoffer", "Lisa"],
   },
   {
@@ -291,7 +291,7 @@ export const registrations = [
     email: "jack.taylor@example.com",
     phoneNumber: "5432109876",
     status: "ventende",
-    createdAt: "2024-08-15T19:30:00Z",
+    startsAt: "2024-08-15T19:30:00Z",
     participants: ["Henrik", "Ingrid", "Jonas", "Karianne", "Lars", "Mia"],
   },
 ];
