@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Event } from "@/features/event/lib/schema";
+import { Category, Event } from "@/features/event/lib/schema";
 import { formatDate } from "@/lib/helpers";
 import { showPriceCorrectly } from "@/features/event/lib/eventUtils";
 import { useRouter} from "next/navigation";
@@ -35,7 +35,7 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
 
     if (valgtMåned) params.set("month", valgtMåned);
     if (valgtÅr) params.set("year", valgtÅr);
-    if (valgtType) params.set("type", valgtType);
+    if (valgtType) params.set("category", valgtType);
 
     router.push(`/events?${params.toString()}`);
   }, [valgtMåned, valgtÅr, valgtType, router]);
@@ -82,12 +82,16 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
           onChange={(e) => settValgtType(e.target.value)}
           className="border border-gray-300 rounded px-9 py-2"
         >
-          <option value="">Velg kategori</option>
-          <option value="Concert">Konsert</option>
-          <option value="Workshop">Workshop</option>
-          <option value="Conference">Konferanse</option>
-          <option value="Festival">Festival</option>
+            <option disabled value="">
+                Velg kategori
+              </option>
+              {Object.values(Category.Values).map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}             
         </select>
+
       </div> 
       {eventStatus.loading ? (
         <p>Laster...</p>

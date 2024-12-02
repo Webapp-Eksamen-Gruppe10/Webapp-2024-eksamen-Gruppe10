@@ -48,19 +48,19 @@ export function useEvent() {
 
       if (valgtMåned) params.set("month", valgtMåned);
       if (valgtÅr) params.set("year", valgtÅr);
-      if (valgtType) params.set("type", valgtType);
+      if (valgtType) params.set("category", valgtType);
 
       const response = await eventsApi.listFiltered(params);
-      console.log(JSON.stringify(response.data))
+      console.log(JSON.stringify(valgtMåned))
 
       if (!response.success) {
         throw new Error("Kunne ikke hente data.");
       }
-      
+
       const offentligeHendelser = response.data.filter((hendelse: Event) => !hendelse.private);
       
       setEventData(offentligeHendelser);
-      console.log(JSON.stringify(response.data))
+     
 
     } catch (err: any) {
       setEventError(err.message || "Noe gikk galt.");
