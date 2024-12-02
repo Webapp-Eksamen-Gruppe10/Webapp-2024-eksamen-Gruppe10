@@ -41,16 +41,20 @@ export function useEvent() {
   const addEvent = async (data: Partial<Event>) => {
     try {
         setEventStatus("loading");
-      await eventsApi.create(data);
-      await fetchEvents();
-      setEventStatus("success");
+        const newEvent = await eventsApi.create(data);
+        console.log("New event created:", newEvent);
+
+        await fetchEvents();
+        setEventStatus("success");
+        return newEvent; 
     } catch (error) {
-      setEventStatus("error");
-      setEventError("Failed to create event");
+        setEventStatus("error");
+        setEventError("Failed to create event");
+        throw error;
     } finally {
-      resetToIdle();
+        resetToIdle();
     }
-  }
+  };
 
 
 
