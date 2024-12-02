@@ -41,7 +41,7 @@ export const toDb = (event: EventWithoutId): DbEvent => {
 export const UpdateEventToDb = (event: DbEventWithoutIdAndTemplateId) => {
   return {
     title: event.title,
-    createdAt: event.startsAt,
+    startsAt: event.startsAt,
     location: event.location,
     category: event.category,
     capacity: event.capacity,

@@ -231,7 +231,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   />
                 </div>
               )}
-              {editDataTemplate?.fixed_price === false ? (
+             {(editDataTemplate?.fixed_price === false && !editDataTemplate?.free) && (
               <div className="mb-4">
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                   Pris
@@ -244,7 +244,9 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-            ) : (
+            )}
+
+            {(editDataTemplate?.fixed_price === true && !editDataTemplate?.free) && (
               <div className="mb-4">
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                   Pris
@@ -253,11 +255,12 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                   type="number"
                   id="price"
                   value={editData.price}
-                  disabled  
+                  disabled
                   className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
                 />
               </div>
             )}
+
 
               <div className="mb-4">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
