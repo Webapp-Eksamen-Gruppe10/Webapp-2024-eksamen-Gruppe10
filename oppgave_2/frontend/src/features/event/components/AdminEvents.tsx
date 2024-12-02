@@ -5,37 +5,30 @@ import { formatDate } from "@/lib/helpers";
 import { Template } from "@/features/template/lib/schema";
 import { SafeParseReturnType } from "zod";
 import { useRouter } from "next/navigation";
+import { showCorrectDatepicker } from "@/features/event/lib/eventUtils";
 
 type AdminEventProps = {
-  events: Event[];
-  remove: (id: string) => Promise<void>;
-  update: (id: string, data: Partial<Event>) => Promise<void>;
-  templates: Template[];
-};
+  events: Event[],
+  remove: (id: string) => Promise<void>,
+  update: (id: string, data: Partial<Event>) => Promise<void>,
+  templates: Template[]
+}
 
-export default function AdminEvents({
-  events,
-  remove,
-  update,
-  templates,
-}: AdminEventProps) {
+export default function AdminEvents({ events, remove, update, templates }: AdminEventProps) {
   const router = useRouter();
 
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState<Event | null>(null);
-  const [editDataTemplate, setEditDataTemplate] = useState<Template | null>(
-    null
-  );
+  const [editDataTemplate, setEditDataTemplate] = useState<Template | null>(null);
+  const [editDate, setEditDate] = useState<Date | null>(null);
 
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
   const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
 
   const totalPages = Math.ceil(events.length / eventsPerPage);
-
-  const template_id = editData?.template_id;
 
   useEffect(() => {
     if (editData?.template_id) {
@@ -44,6 +37,7 @@ export default function AdminEvents({
       );
       if (template) {
         setEditDataTemplate(template);
+        setEditDate(new Date(editData.startsAt));
       }
     }
   }, [editData, templates]);
@@ -63,8 +57,8 @@ export default function AdminEvents({
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editData) {
-      await update(editData.id, editData);
+    if (editData && editDate) {
+      await update(editData.id, { ...editData, startsAt: editDate.toISOString() });
       setShowEditModal(false);
     }
   };
@@ -106,8 +100,7 @@ export default function AdminEvents({
               <strong>Kategori:</strong> {event.category}
             </p>
             <p className="text-sm text-gray-600 mb-3">
-              <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"}{" "}
-              deltagere
+              <strong>Kapasitet:</strong> {event.capacity || "Ubegrenset"} deltagere
             </p>
             <div
               className="flex space-x-2"
@@ -185,48 +178,11 @@ export default function AdminEvents({
                 />
               </div>
               <div className="mb-4">
-                <label
-                  htmlFor="date"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="dato" className="block text-sm font-medium text-gray-700">
                   Dato
                 </label>
-                <input
-                  type="date"
-                  id="date"
-                  value={editData.startsAt.split("T")[0]}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      startsAt: `${e.target.value}T${
-                        editData.startsAt.split("T")[1]
-                      }`,
-                    })
-                  }
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="time"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Tid
-                </label>
-                <input
-                  type="time"
-                  id="time"
-                  value={editData.startsAt.split("T")[1]?.slice(0, 5) || ""}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      startsAt: `${editData.startsAt.split("T")[0]}T${
-                        e.target.value
-                      }:00`,
-                    })
-                  }
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                />
+                {editDataTemplate &&
+                  showCorrectDatepicker(editData.template_id, editDate, setEditDate, editDataTemplate.weekdays)}
               </div>
               <div className="mb-4">
                 <label
@@ -269,45 +225,35 @@ export default function AdminEvents({
                   />
                 </div>
               )}
-              {editDataTemplate?.fixed_price === false ? (
+              {editDataTemplate?.fixed_price ? (
+                !editDataTemplate?.free && (
+                  <div className="mb-4">
+                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                      Pris
+                    </label>
+                      <input
+                      type="number"
+                      id="price"
+                      value={editData.price}
+                      disabled
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
+                    />
+                  </div>
+                )
+              ) : (
                 <div className="mb-4">
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium text-gray-700"
-                  >
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                     Pris
                   </label>
                   <input
                     type="number"
                     id="price"
                     value={editData.price}
-                    onChange={(e) =>
-                      setEditData({
-                        ...editData,
-                        price: Number(e.target.value),
-                      })
-                    }
+                    onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-              ) : (
-                <div className="mb-4">
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Pris
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    value={editData.price}
-                    disabled
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
-                  />
-                </div>
               )}
-
               <div className="mb-4">
                 <label
                   htmlFor="description"
@@ -317,18 +263,16 @@ export default function AdminEvents({
                 </label>
                 <textarea
                   id="description"
-                  value={editData.description}
-                  onChange={(e) =>
-                    setEditData({ ...editData, description: e.target.value })
-                  }
+                  value={editData.description || ""}
+                  onChange={(e) => setEditData({ ...editData, description: e.target.value })}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div className="flex justify-end space-x-2">
+              <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+                  className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-100 mr-2"
                 >
                   Avbryt
                 </button>
@@ -336,7 +280,7 @@ export default function AdminEvents({
                   type="submit"
                   className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
                 >
-                  Lagre
+                  Oppdater
                 </button>
               </div>
             </form>
