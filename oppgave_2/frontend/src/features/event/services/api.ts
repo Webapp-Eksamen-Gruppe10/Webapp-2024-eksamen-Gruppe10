@@ -54,30 +54,13 @@ const details = async (id: string) => {
             message: 'OK',
             data: event,
         };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error(`Error fetching details for event ID ${id}:`, error.message);
-
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: `Event with ID ${id} not found`,
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        } else {
-            console.error(`Unknown error occurred while fetching details for ID ${id}:`, error);
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: 'An unknown error occurred',
-            };
-        }
+    } catch (error) {
+        console.error(`Unknown error occurred while fetching details for ID ${id}:`, error);
+        throw {
+            status: 500,
+            message: 'Internal Server Error',
+            error: 'An unknown error occurred',
+        };
     }
 };
 
@@ -133,24 +116,7 @@ const update = async (id: string, data: Record<string, any>) => {
             message: 'Event updated successfully',
             data: updatedEvent,
         };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error(`Error updating event with ID ${id}:`, error.message);
-
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: `Event with ID ${id} not found`,
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
+    } catch (error){
         console.error(`Unknown error occurred while updating event with ID ${id}:`, error);
         throw {
             status: 500,
@@ -172,24 +138,7 @@ const remove = async (id: string) => {
             message: 'Event deleted successfully',
             data: deletedEvent,
         };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error(`Error deleting event with ID ${id}:`, error.message);
-
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: `Event with ID ${id} not found`,
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
+    } catch (error){
         console.error(`Unknown error occurred while deleting event with ID ${id}:`, error);
         throw {
             status: 500,
