@@ -14,6 +14,7 @@ import {
 } from "../helpers/schema";
 import { Result } from "@/types";
 import { eventRepository, EventRepository } from "../repository";
+import { validateEventWithTemplate } from "../helpers/utility";
 
 export const createEventService = (eventRepositoryDb: EventRepository) => {
   const getAllEvents = async (
@@ -52,11 +53,27 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
   };
 
   const createEvent = async (data: EventWithoutId): Promise<Result<Event>> => {
-    if (!validateEventWithoutIdCurrentCap(data).success)
+    if (!validateEventWithoutIdCurrentCap(data).success) {
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
+    }
+
+    const validationError = await validateEventWithTemplate(
+      data,
+      data.template_id
+    );
+    if (validationError) {
+      return ResultHandler.failure(validationError, "FORBIDDEN");
+    }
 
     return (await eventRepositoryDb).create(data);
   };
+
+  // const createEvent = async (data: EventWithoutId): Promise<Result<Event>> => {
+  //   if (!validateEventWithoutIdCurrentCap(data).success)
+  //     return ResultHandler.failure("Data does not match", "BAD_REQUEST");
+
+  //   return (await eventRepositoryDb).create(data);
+  // };
 
   const updateEvent = async (
     data: DbEventWithoutIdAndTemplateId,
