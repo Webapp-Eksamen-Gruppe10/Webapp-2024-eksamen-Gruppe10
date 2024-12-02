@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { formatDate } from "@/lib/helpers";
 import { useEvent } from "@/features/event/hooks/useEvent";
+import { useRouter } from "next/navigation";
 
 type AdminEventProps = {
     events: Event[],
@@ -11,14 +12,15 @@ type AdminEventProps = {
 
 }
 
+
 export default function AdminEvents({events, remove, update} : AdminEventProps) {
-    
+  const router = useRouter();  
+  
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState<Event | null>(null);
 
-  // Pagination logic
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
   const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
@@ -66,37 +68,52 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
       </div>
 
       {/* Event Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentEvents.map((event) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {currentEvents.map((event) => (
+        <div
+          key={event.id}
+          className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg cursor-pointer"
+          onClick={() => {
+            router.push(`/events/${event.id}`); 
+            
+          }}
+        >
+          <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+          <p className="text-sm text-gray-600 mb-1">
+            <strong>Dato:</strong> {formatDate(event.createdAt)}
+          </p>
+          <p className="text-sm text-gray-600 mb-1">
+            <strong>Kategori:</strong> {event.category || "N/A"}
+          </p>
+          <p className="text-sm text-gray-600 mb-3">
+            <strong>Kapasitet:</strong> {event.capacity || "N/A"}
+          </p>
           <div
-            key={event.id}
-            className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg"
+            className="flex space-x-2"
+            onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
-            <p className="text-sm text-gray-600 mb-1">
-              <strong>Dato:</strong> {formatDate(event.createdAt)}
-            </p>
-            <p className="text-sm text-gray-600 mb-1">
-              <strong>Kategori:</strong> {event.category || "N/A"}
-            </p>
-            <p className="text-sm text-gray-600 mb-3">
-              <strong>Kapasitet:</strong> {event.capacity || "N/A"}
-            </p>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => handleEdit(event)}
-                className="px-3 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
-              >
-                Rediger
-              </button>
-              <button className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
-              onClick={() => {handleDelete(event.id)}}>
-                Slett
-              </button>
-            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit(event);
+              }}
+              className="px-3 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
+            >
+              Rediger
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(event.id);
+              }}
+              className="px-3 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+            >
+              Slett
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+    </div>
 
       {/* Pagination */}
       <div className="mt-8 flex justify-between items-center">
