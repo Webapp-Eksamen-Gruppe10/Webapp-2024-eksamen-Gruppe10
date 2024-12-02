@@ -78,7 +78,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
 
       {/* Create New Event */}
       <div className="mb-4">
-        <Link href="/admin/events/new" className="inline-block">
+        <Link href="/admin/events/new">
           <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
             Opprett nytt arrangement
           </button>
@@ -98,7 +98,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
         >
           <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
           <p className="text-sm text-gray-600 mb-1">
-            <strong>Dato:</strong> {formatDate(event.startsAt)}
+            <strong>Dato:</strong> {formatDate(event.createdAt)}
           </p>
           <p className="text-sm text-gray-600 mb-1">
             <strong>Kategori:</strong> {event.category} 
@@ -182,9 +182,9 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="date"
                   id="date"
-                  value={editData.startsAt.split("T")[0]}
+                  value={editData.createdAt.split("T")[0]}
                   onChange={(e) =>
-                    setEditData({ ...editData, startsAt: `${e.target.value}T${editData.startsAt.split("T")[1]}` })
+                    setEditData({ ...editData, createdAt: `${e.target.value}T${editData.createdAt.split("T")[1]}` })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
@@ -196,9 +196,9 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="time"
                   id="time"
-                  value={editData.startsAt.split("T")[1]?.slice(0, 5) || ""}
+                  value={editData.createdAt.split("T")[1]?.slice(0, 5) || ""}
                   onChange={(e) =>
-                    setEditData({ ...editData, startsAt: `${editData.startsAt.split("T")[0]}T${e.target.value}:00` })
+                    setEditData({ ...editData, createdAt: `${editData.createdAt.split("T")[0]}T${e.target.value}:00` })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
@@ -252,7 +252,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="number"
                   id="price"
-                  value={editData.price}  
+                  value={editData.price}
                   disabled  
                   className="mt-1 block w-full p-2 border border-gray-300 rounded bg-gray-100"
                 />

@@ -52,7 +52,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
           const monthNumber = parseInt(month.padStart(2, "0")); // Ensure "MM" format
           whereClause = {
             category: { contains: category },
-            startsAt: {
+            createdAt: {
               gte: new Date(`${year}-${monthNumber}-01`), // Start of the month
               lt: new Date(`${year}-${(monthNumber % 12) + 1}-01`), // Start of the next month
             },
@@ -64,7 +64,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
           // Filter by category and year
           whereClause = {
             category: { contains: category },
-            startsAt: {
+            createdAt: {
               gte: new Date(`${year}-01-01`),
               lt: new Date(`${parseInt(year) + 1}-01-01`),
             },
@@ -80,7 +80,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
           });
 
           const filteredEvents = events.filter((event) => {
-            const eventDate = new Date(event.startsAt);
+            const eventDate = new Date(event.createdAt);
             const eventMonth = eventDate.getMonth() + 1;
             return eventMonth === monthNumber;
           });
@@ -92,7 +92,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
           // Filter by year and month
           const monthNumber = parseInt(month.padStart(2, "0"));
           whereClause = {
-            startsAt: {
+            createdAt: {
               gte: new Date(`${year}-${monthNumber}-01`),
               lt: new Date(`${year}-${(monthNumber % 12) + 1}-01`),
             },
@@ -109,7 +109,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         case !!year: {
           // Filter by year only
           whereClause = {
-            startsAt: {
+            createdAt: {
               gte: new Date(`${year}-01-01`),
               lt: new Date(`${parseInt(year) + 1}-01-01`),
             },
@@ -122,7 +122,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
           const monthNumber = parseInt(month.padStart(2, "0"));
           const events = await prismaDb.event.findMany();
           const filteredEvents = events.filter((event) => {
-            const eventDate = new Date(event.startsAt);
+            const eventDate = new Date(event.createdAt);
             const eventMonth = eventDate.getMonth() + 1;
             return eventMonth === monthNumber;
           });

@@ -6,7 +6,7 @@ import { showPriceCorrectly } from "@/features/event/lib/eventUtils"
 export default function EventDetail(props: {event:Event}) {
     const {event} = props
 
-    const eventDate = new Date(event.startsAt);
+    const eventDate = new Date(event.createdAt);
 
       return (
         <div className="container mx-auto px-4 py-8 mr-8 mt-16">
@@ -19,10 +19,10 @@ export default function EventDetail(props: {event:Event}) {
               <h2 className="text-2xl font-semibold mb-4">Arrangement Detaljer</h2>
               <ul className="space-y-4">
                 <li>
-                  <strong>Dato:</strong> {formatDate(event.startsAt)}
+                  <strong>Dato:</strong> {formatDate(event.createdAt)}
                 </li>
                 <li>
-                  <strong>Tid:</strong> {formatTime(event.startsAt)}
+                  <strong>Tid:</strong> {formatTime(event.createdAt)}
                 </li>
                 <li>
                   <strong>Lokasjon:</strong> {event.location}
