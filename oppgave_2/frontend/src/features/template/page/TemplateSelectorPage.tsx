@@ -6,14 +6,15 @@ import { Template } from "../lib/schema";
 type  TemplateSelectorPageProps = {
     onSelectTemplateId: (id: string) => void, 
     onSelectTemplate: (template: Template) => void,
-    onSkip: () => void
+    onSkip: () => void,
+    allowedToDeleteUpdate: boolean
     
 }
 
-export default function TemplateSelectorPage({onSelectTemplateId, onSelectTemplate, onSkip}: TemplateSelectorPageProps) {
-  const {templateData, add, remove} = useTemplate()
+export default function TemplateSelectorPage({onSelectTemplateId, onSelectTemplate, onSkip, allowedToDeleteUpdate}: TemplateSelectorPageProps) {
+  const {templateData, add, remove, update} = useTemplate()
  
   return (
-    <TemplateSelector onSelectTemplateId = {onSelectTemplateId} templates={templateData} add={add} finalSelectedTemplate={onSelectTemplate} onSkip={onSkip} deleteTemplate={remove}/>
+    <TemplateSelector allowedToDeleteOrUpdate={allowedToDeleteUpdate} updateTemplate={update} onSelectTemplateId = {onSelectTemplateId} templates={templateData} add={add} finalSelectedTemplate={onSelectTemplate} onSkip={onSkip} deleteTemplate={remove}/>
   );
 }
