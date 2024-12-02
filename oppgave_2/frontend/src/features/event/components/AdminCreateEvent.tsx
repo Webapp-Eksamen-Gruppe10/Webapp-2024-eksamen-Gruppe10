@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import { Category, EventToDb, Event } from "../lib/schema";
 import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
 import { useRouter } from "next/navigation";
-
-type AddEventResult = 
-  | { success: true; data: any }
-  | { success: false; error: { code: number; message: string } };
+import { AddEventResult } from "@/types";
 
 
 type AdminCreateEventFormProps = {

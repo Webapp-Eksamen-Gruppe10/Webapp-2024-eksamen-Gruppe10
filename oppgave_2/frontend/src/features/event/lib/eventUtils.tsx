@@ -24,11 +24,12 @@ export const showCorrectDatepicker = (
         const weekday = days[date.getDay()];
         return allowedWeekdays.includes(weekday);
     };
-    console.log("SELECT template: ", selectedTemplateId)
+
+
     return ( 
     <>
      
-        {selectedTemplateId == null ? (
+        {selectedTemplateId? (
         <DatePicker
           id="dato"
           required

@@ -61,9 +61,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
   */  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value, type} = e.target;
-    console.log("TESTER 321")
     if (type === "checkbox") {
-      console.log("TESTER 123")
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({
         ...prev,
