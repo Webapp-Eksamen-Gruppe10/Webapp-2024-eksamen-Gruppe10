@@ -98,7 +98,7 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
         >
           <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
           <p className="text-sm text-gray-600 mb-1">
-            <strong>Dato:</strong> {formatDate(event.createdAt)}
+            <strong>Dato:</strong> {formatDate(event.startsAt)}
           </p>
           <p className="text-sm text-gray-600 mb-1">
             <strong>Kategori:</strong> {event.category} 
@@ -182,9 +182,9 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="date"
                   id="date"
-                  value={editData.createdAt.split("T")[0]}
+                  value={editData.startsAt.split("T")[0]}
                   onChange={(e) =>
-                    setEditData({ ...editData, createdAt: `${e.target.value}T${editData.createdAt.split("T")[1]}` })
+                    setEditData({ ...editData, startsAt: `${e.target.value}T${editData.startsAt.split("T")[1]}` })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
@@ -196,9 +196,9 @@ export default function AdminEvents({events, remove, update, templates} : AdminE
                 <input
                   type="time"
                   id="time"
-                  value={editData.createdAt.split("T")[1]?.slice(0, 5) || ""}
+                  value={editData.startsAt.split("T")[1]?.slice(0, 5) || ""}
                   onChange={(e) =>
-                    setEditData({ ...editData, createdAt: `${editData.createdAt.split("T")[0]}T${e.target.value}:00` })
+                    setEditData({ ...editData, startsAt: `${editData.startsAt.split("T")[0]}T${e.target.value}:00` })
                   }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
