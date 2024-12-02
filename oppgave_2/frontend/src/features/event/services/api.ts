@@ -64,9 +64,10 @@ const details = async (id: string) => {
 
 const create = async (data: Record<string, any>) => {
     try {
-        console.log(JSON.stringify(data))
-        const validatedData = validateEventToDb(data)
-        console.log(JSON.stringify(validatedData))
+        console.log(JSON.stringify(data));
+        const validatedData = validateEventToDb(data);
+        console.log(JSON.stringify(validatedData));
+
         const newEvent = await ofetch(endpoint.events.create, {
             method: 'POST',
             body: JSON.stringify(validatedData.data),
@@ -75,20 +76,24 @@ const create = async (data: Record<string, any>) => {
             },
         });
 
+       
         return {
-            status: 200,
-            message: 'Event created successfully',
+            success: true,
             data: newEvent,
         };
     } catch (error) {
         console.error('Error fetching events:', error);
-        throw {
-            status: 500,
-            message: 'Internal Server Error',
-            error: 'An unknown error occurred',
+
+        return {
+            success: false,
+            error: {
+                code: 500,
+                message: 'Failed to create event',
+            },
         };
     }
 };
+
 
 
 
