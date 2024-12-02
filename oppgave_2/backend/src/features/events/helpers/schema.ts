@@ -66,7 +66,7 @@ const dbEventSchemaWithoutIdCurrentCap = dbEventSchema.omit({
 const dbEventSchemaWithoutIdAndTemplate_id = dbEventSchema.omit({
   id: true,
   template_id: true,
-  currentCapacity: true,
+  // currentCapacity: true,
 });
 
 export function validateEvent(data: unknown) {
