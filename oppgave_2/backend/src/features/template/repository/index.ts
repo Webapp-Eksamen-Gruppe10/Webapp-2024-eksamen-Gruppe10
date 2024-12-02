@@ -10,7 +10,7 @@ export const createTemplateRepository = (prismaDb: Prisma) => {
 
     const exist = async(id: string) => {
         try {
-            prismaDb.template.findUniqueOrThrow({
+            await prismaDb.template.findUniqueOrThrow({
                 where: {
                     id: id
                 }

@@ -1,3 +1,4 @@
+import { Result } from "@/types";
 import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
 
@@ -5,6 +6,7 @@ interface TemplateSelectorProps {
     onSelectTemplateId: (id:string) => void, 
     templates?: Template[];
     add: (data: Template) => Promise<void>,
+    updateTemplate: (id: string, data: Template) => Promise<Result<Template>>,
     deleteTemplate: (id: string) => Promise<void>,
     finalSelectedTemplate: (template: Template) => void,
     onSkip: () => void
@@ -22,10 +24,11 @@ export const defaultTemplate = {
   waitinglist: false,
 }
 
-export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate }: TemplateSelectorProps) {
+export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate, updateTemplate }: TemplateSelectorProps) {
   const [formData, setFormData] = useState<Template>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
+  const isEditing = !!selectedTemplate
 
   const getCurrentTemplateData = () => {
     return {
@@ -76,9 +79,19 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     e.preventDefault();
 
     try {
-      await add(getCurrentTemplateData());
-      alert("Lagring av template vellykket!");
+      if(isEditing){
+        const result = await updateTemplate(selectedTemplate.id?? "", getCurrentTemplateData());
+        if(!result.success){
+          alert("Oppdatering av template ikke vellykket!");
+        }else{
+          alert("Oppdatering av template vellykket!");
+        }
+      }else{
+        await add(getCurrentTemplateData());
+        alert("Lagring av template vellykket!");
+      }
       setFormData(defaultTemplate);
+      setSelectedTemplate(null);
     } catch (error) {
       console.error("Feil ved opprettelse av Template:", error);
       alert("Det var en feil ved opprettelse av template.");
@@ -92,7 +105,11 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
         <form onSubmit={handleUpdate}>
           <h2 className="text-2xl font-semibold">Arrangement mal</h2>
           <div>
-            <h3 className="font-medium mb-4">Lag ny mal</h3>
+            {isEditing ? (
+              <h3 className="font-medium mb-4">Oppdater mal</h3>
+            ) : (
+              <h3 className="font-medium mb-4">Lag ny mal</h3>
+            )}
             <div className="space-y-4">
               {/* Template Name */}
               <div>
@@ -236,9 +253,13 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
           >
             Tilbakestill mal
           </button>
+            {isEditing? (
+              <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
+              Oppdater denne malen
+            </button>) : (
             <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Lagre denne malen
-            </button>
+            </button>)}
           </div>
         </form>
       </div>

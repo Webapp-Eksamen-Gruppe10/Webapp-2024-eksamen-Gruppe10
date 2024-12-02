@@ -49,7 +49,7 @@ export const createRegistrationRepository = (prismaDb: Prisma) => {
     }
 
     const event = async(eventId: string) => {
-        const eventData = prismaDb.event.findUnique({
+        const eventData = await prismaDb.event.findUnique({
             where: {
                 id: eventId
             }

@@ -69,12 +69,13 @@ export function useTemplate() {
       }
     };
 
-  const updateTemplate = async (id: number, data: Partial<Template>) => {
+  const updateTemplate = async (id: string, data: Omit<Template, "id">) => {
       try {
         setTemplateStatus("loading");
-        await templatesApi.update(id.toString(), data);
+        const updated = await templatesApi.update(id, data);
         await fetchTemplates();
         setTemplateStatus("success");
+        return updated
       } catch (error) {
         setTemplateStatus("error");
         setTemplateError(`Failed to update template with ID: ${id}`);

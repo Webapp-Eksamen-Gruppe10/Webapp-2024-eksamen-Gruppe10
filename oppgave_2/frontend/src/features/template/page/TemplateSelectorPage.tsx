@@ -11,9 +11,9 @@ type  TemplateSelectorPageProps = {
 }
 
 export default function TemplateSelectorPage({onSelectTemplateId, onSelectTemplate, onSkip}: TemplateSelectorPageProps) {
-  const {templateData, add, remove} = useTemplate()
+  const {templateData, add, remove, update} = useTemplate()
  
   return (
-    <TemplateSelector onSelectTemplateId = {onSelectTemplateId} templates={templateData} add={add} finalSelectedTemplate={onSelectTemplate} onSkip={onSkip} deleteTemplate={remove}/>
+    <TemplateSelector updateTemplate={update} onSelectTemplateId = {onSelectTemplateId} templates={templateData} add={add} finalSelectedTemplate={onSelectTemplate} onSkip={onSkip} deleteTemplate={remove}/>
   );
 }

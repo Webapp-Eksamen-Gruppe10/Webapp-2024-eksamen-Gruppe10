@@ -43,7 +43,7 @@ export const createTemplateService = (
         "FORBIDDEN"
       );
 
-    if (!validateTemplate(data).success)
+    if (!validateTemplateWithoutId(data).success)
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
 
     return templateRepositoryDb.updateById(data, id);
