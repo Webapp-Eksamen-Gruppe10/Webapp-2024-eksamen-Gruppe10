@@ -1,7 +1,7 @@
 "use-client";
 import EventDetail from "../components/EventDetail";
 import useEvent from "../hooks/useEvent";
-import { showPriceCorrectly } from "@/features/event/lib/eventUtils"
+
 
 
 export default function EventDetailPage(props: {eventId: string}) {

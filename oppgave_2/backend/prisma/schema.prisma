@@ -27,7 +27,7 @@ model Event {
   capacity Int?
   currentCapacity Int
   title String
-  createdAt DateTime
+  startsAt DateTime
   location String
   category String
   price Float
