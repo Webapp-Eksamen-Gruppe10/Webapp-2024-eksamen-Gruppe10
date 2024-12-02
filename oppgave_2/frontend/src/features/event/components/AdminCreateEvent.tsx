@@ -3,15 +3,21 @@ import { Template } from "@/features/template/lib/schema";
 import React, { useState } from "react";
 import { Category, EventToDb, Event } from "../lib/schema";
 import { showCorrectDatepicker } from "@/features/event/lib/eventUtils"
+import { useRouter } from "next/navigation";
+
+type AddEventResult = 
+  | { success: true; data: any }
+  | { success: false; error: { code: number; message: string } };
 
 
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
   selectedTemplate: Template,
-  add: (data: Partial<Event>) => Promise<void>, 
+  add: (data: Partial<Event>) => Promise<AddEventResult>, 
 };
 
 export default function AdminCreateEventForm({ selectedTemplateId, selectedTemplate, add }: AdminCreateEventFormProps) {
+  const router = useRouter();
   const [date, setDate] = useState<Date|null>(new Date());
   const [formData, setFormData] = useState({
     name:selectedTemplate?.name || "", 
@@ -50,13 +56,14 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
     }
 
 
+
     const data: EventToDb = {
       template_id: selectedTemplateId || null,
       title: formData.name,
       createdAt: date.toISOString(),
       location: formData.location, 
       category: Category.parse(formData.category),
-      capacity: formData.capacity,
+      capacity: formData.capacity !== null ? Number(formData.capacity) : null,
       price:formData.price,
       description: formData.description,
       private: formData.private,
@@ -65,8 +72,11 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
   
     
     try {
-         await add(data);
-        alert("Arrangementet ble opprettet!");
+         const result = await add(data);
+         if (result.success){
+          router.push(`/events/${result.data.data.id}`);
+          alert("Arrangementet ble opprettet!");
+         }
       
     } catch (error) {
       console.error("Feil under opprettelse:", error);
