@@ -11,7 +11,7 @@ export const fromDb = (dbEvent: DbEvent): Event => {
   const event: Event = {
     ...dbEvent,
     category: Category.parse(dbEvent.category),
-    createdAt: (dbEvent.createdAt = new Date(dbEvent.createdAt)),
+    startsAt: (dbEvent.startsAt = new Date(dbEvent.startsAt)),
   };
   return event;
 };
@@ -41,7 +41,7 @@ export const toDb = (event: EventWithoutId): DbEvent => {
 export const UpdateEventToDb = (event: DbEventWithoutIdAndTemplateId) => {
   return {
     title: event.title,
-    createdAt: event.createdAt,
+    createdAt: event.startsAt,
     location: event.location,
     category: event.category,
     capacity: event.capacity,

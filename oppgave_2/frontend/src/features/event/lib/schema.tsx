@@ -17,7 +17,7 @@ const eventSchema = z.object({
   id: z.string(),
   template_id: z.string().nullable(),
   title: z.string(),
-  createdAt: z.string().datetime(),
+  startsAt: z.string().datetime(),
   location: z.string(),
   category: Category,
   capacity: z.number().nullable(),
@@ -33,7 +33,7 @@ const eventSchema = z.object({
 const eventSchemaToDb = z.object({
   template_id: z.string().nullable(),
   title: z.string(),
-  createdAt: z.string().datetime(),
+  startsAt: z.string().datetime(),
   location: z.string(),
   category: Category,
   capacity: z.number().nullable(),
