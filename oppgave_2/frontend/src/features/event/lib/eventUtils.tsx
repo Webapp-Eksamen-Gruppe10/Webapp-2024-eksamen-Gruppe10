@@ -1,6 +1,9 @@
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { nb } from "date-fns/locale/nb";
+import { Template } from "@/features/template/lib/schema";
+import { useEffect } from "react";
+import { Event } from "./schema";
 
 registerLocale("nb", nb);
 
@@ -16,9 +19,30 @@ export const showCorrectDatepicker = (
   selectedTemplateId: string | null,
   date: Date | null,
   setDate: React.Dispatch<React.SetStateAction<Date | null>>,
+  template: Template,
+  eventData: Event[], 
   weekdays?: string[],
-  templates?: { id: string; weekdays: string[] }[]
+  templates?: { id: string; weekdays: string[] }[], 
+
+
 ) => {
+
+  if(template.notSameDay){
+
+    useEffect(() => {
+      eventData.map((event) => {
+      if (event.template_id) {
+        const events = eventData.find(
+          (event) => template.id === event.template_id
+        );
+        if (events) {
+          console.log("EVENTS MED SAMME MAL:", events)
+        }
+      }
+    }, [template]);
+  })
+}
+
 
   const allowedWeekdays = weekdays
     ? weekdays.map((day) => day.toLowerCase())
