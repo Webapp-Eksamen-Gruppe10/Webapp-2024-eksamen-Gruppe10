@@ -12,7 +12,7 @@ model Registration {
   event_id String
   name String
   email String
-  createdAt DateTime
+  startsAt DateTime
   participants String
   phoneNumber String
   status String

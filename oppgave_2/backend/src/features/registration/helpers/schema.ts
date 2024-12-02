@@ -17,7 +17,7 @@ const registrationSchema = z.object({
   event_id: z.string(),
   name: z.string(),
   email: z.string(),
-  createdAt: z.coerce.date(),
+  startsAt: z.coerce.date(),
   participants: z.string().array(),
   phoneNumber: z.string(),
   status: status,
@@ -28,7 +28,7 @@ const dBregistrationSchema = z.object({
     event_id: z.string(),
     name: z.string(),
     email: z.string(),
-    createdAt: z.coerce.date(),
+    startsAt: z.coerce.date(),
     participants: z.string(),
     phoneNumber: z.string(),
     status: z.string(),
@@ -37,7 +37,7 @@ const dBregistrationSchema = z.object({
 const createRegistrationSchema = registrationSchema.omit({
   id: true,
   event_id: true,
-  createdAt: true,
+  startsAt: true,
   status: true
 });
 
