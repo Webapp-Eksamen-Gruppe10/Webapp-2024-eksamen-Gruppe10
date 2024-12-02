@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { formatDate } from "@/lib/helpers";
 import { useEvent } from "@/features/event/hooks/useEvent";
+import { useRouter } from "next/navigation";
 
 type AdminEventProps = {
     events: Event[],
@@ -11,8 +12,10 @@ type AdminEventProps = {
 
 }
 
+
 export default function AdminEvents({events, remove, update} : AdminEventProps) {
-    
+  const router = useRouter();  
+  
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
   const [showEditModal, setShowEditModal] = useState(false);
@@ -70,7 +73,10 @@ export default function AdminEvents({events, remove, update} : AdminEventProps) 
         <div
           key={event.id}
           className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg cursor-pointer"
-          onClick={() => window.location.href = `/events/${event.id}`}
+          onClick={() => {
+            router.push(`/events/${event.id}`); 
+            
+          }}
         >
           <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
           <p className="text-sm text-gray-600 mb-1">
