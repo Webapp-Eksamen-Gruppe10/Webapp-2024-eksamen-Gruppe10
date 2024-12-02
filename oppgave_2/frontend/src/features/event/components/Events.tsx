@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Event } from "@/features/event/lib/schema";
+import { Category, Event } from "@/features/event/lib/schema";
 import { formatDate } from "@/lib/helpers";
 import { showPriceCorrectly } from "@/features/event/lib/eventUtils";
 import { useRouter} from "next/navigation";
@@ -35,16 +35,22 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
 
     if (valgtMåned) params.set("month", valgtMåned);
     if (valgtÅr) params.set("year", valgtÅr);
-    if (valgtType) params.set("type", valgtType);
+    if (valgtType) params.set("category", valgtType);
 
     router.push(`/events?${params.toString()}`);
   }, [valgtMåned, valgtÅr, valgtType, router]);
 
- 
+  const resetFilters = () => {
+    settValgtMåned("");
+    settValgtÅr("");
+    settValgtType("");
+    router.push("/events");
+  };
+
 
   return (
     <div className="container mx-auto p-4 pb-20">
-      <h1 className="text-3xl font-bold mb-6">Hendelser</h1>
+      <h1 className="text-3xl font-bold mb-6">Arrangementer</h1>
       <div className="flex items-center gap-4 mb-6">
         <select
           value={valgtMåned}
@@ -82,12 +88,21 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
           onChange={(e) => settValgtType(e.target.value)}
           className="border border-gray-300 rounded px-9 py-2"
         >
-          <option value="">Velg kategori</option>
-          <option value="Concert">Konsert</option>
-          <option value="Workshop">Workshop</option>
-          <option value="Conference">Konferanse</option>
-          <option value="Festival">Festival</option>
+            <option value="">
+                Velg kategori
+              </option>
+              {Object.values(Category.Values).map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}             
         </select>
+        <button
+          onClick={resetFilters}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >
+          Reset
+        </button>
       </div> 
       {eventStatus.loading ? (
         <p>Laster...</p>

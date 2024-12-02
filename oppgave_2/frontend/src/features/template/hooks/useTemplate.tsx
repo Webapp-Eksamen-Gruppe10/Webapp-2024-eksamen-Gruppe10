@@ -84,13 +84,14 @@ export function useTemplate() {
     };
 
   {/* TODO: Legg til validering. Ikke tillat sletting av MAL hvis den allerede er brukt i en event. */}
-  const deleteTemplate = async (id: number) => {
+  const deleteTemplate = async (id: string) => {
       try {
         setTemplateStatus("loading");
-        await templatesApi.remove(id.toString());
+        await templatesApi.remove(id);
         await fetchTemplates();
         setTemplateStatus("success");
       } catch (error) {
+        console.log(error)
         setTemplateStatus("error");
         setTemplateError(`Failed to delete template with ID: ${id}`);
       } finally {

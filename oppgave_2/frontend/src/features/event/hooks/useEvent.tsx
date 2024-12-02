@@ -8,6 +8,7 @@ type Status = "idle" | "loading" | "error" | "success" | "fetching";
 export function useEvent() {
   const [eventStatus, setEventStatus] = useState<Status>("idle");
   const [eventData, setEventData] = useState<Event[]>([]);
+  const [eventFilteredData, setEventFilteredData] = useState<Event[]>([]);
   const [eventError, setEventError] = useState<string | null>(null);
 
   const isFetching = eventStatus === "fetching";
@@ -48,19 +49,19 @@ export function useEvent() {
 
       if (valgtMåned) params.set("month", valgtMåned);
       if (valgtÅr) params.set("year", valgtÅr);
-      if (valgtType) params.set("type", valgtType);
+      if (valgtType) params.set("category", valgtType);
 
       const response = await eventsApi.listFiltered(params);
-      console.log(JSON.stringify(response.data))
+
 
       if (!response.success) {
         throw new Error("Kunne ikke hente data.");
       }
-      
+
       const offentligeHendelser = response.data.filter((hendelse: Event) => !hendelse.private);
       
-      setEventData(offentligeHendelser);
-      console.log(JSON.stringify(response.data))
+      setEventFilteredData(offentligeHendelser);
+     
 
     } catch (err: any) {
       setEventError(err.message || "Noe gikk galt.");
@@ -73,7 +74,6 @@ export function useEvent() {
     try {
         setEventStatus("loading");
         const newEvent = await eventsApi.create(data);
-        console.log("New event created:", newEvent);
 
         await fetchEvents();
         setEventStatus("success");
@@ -129,6 +129,7 @@ export function useEvent() {
     remove: deleteEvent,
     filter: fetchFilterEvents, 
     eventData,
+    eventFilteredData, 
     eventError,
     eventStatus: {
       idle: isIdle,
