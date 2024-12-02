@@ -19,14 +19,14 @@ export const showCorrectDatepicker = (
   selectedTemplateId: string | null,
   date: Date | null,
   setDate: React.Dispatch<React.SetStateAction<Date | null>>,
+  weekdays: string[],
   template: Template,
   eventData: Event[], 
-  weekdays?: string[],
-  templates?: { id: string; weekdays: string[] }[], 
-
 
 ) => {
 
+
+  
   if(template.notSameDay){
 
     useEffect(() => {
@@ -42,15 +42,7 @@ export const showCorrectDatepicker = (
     }, [template]);
   })
 }
-
-
-  const allowedWeekdays = weekdays
-    ? weekdays.map((day) => day.toLowerCase())
-    : selectedTemplateId && templates
-    ? templates
-        .find((template) => template.id === selectedTemplateId)
-        ?.weekdays.map((day) => day.toLowerCase()) || []
-    : [];
+  const allowedWeekdays = weekdays.map((day) => day.toLowerCase());
 
   const isDayAllowed = (date: Date) => {
     const days = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
