@@ -2,6 +2,7 @@ import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
 import { Category, validateEventList, validateEventToDb } from '../lib/schema';
 import {Event } from "@/features/event/lib/schema"
+import { AddEventResult } from '@/types';
 
 const list = async () => {
     try {
@@ -82,7 +83,7 @@ const details = async (id: string) => {
 
 
 
-const create = async (data: Record<string, any>) => {
+const create = async (data: Record<string, any>): Promise<AddEventResult> =>  {
     try {
         console.log(JSON.stringify(data));
         const validatedData = validateEventToDb(data);
