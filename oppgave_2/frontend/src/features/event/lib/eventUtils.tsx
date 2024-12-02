@@ -8,6 +8,10 @@ export const showPriceCorrectly = (price: number) => {
   return price === 0 ? "Gratis" : price;
 };
 
+
+// Denne funksjonen fungerte når den kun var brukt i AdminCreateEvent.tsx
+// Brukte chatGPT til å gjøre nødvendige endringer for at den også kunne brukes i AdminEvents.tsx
+// src: https://chatgpt.com/share/674e0e5a-ca10-8013-bd70-4e7134e0c647
 export const showCorrectDatepicker = (
   selectedTemplateId: string | null,
   date: Date | null,
@@ -15,7 +19,7 @@ export const showCorrectDatepicker = (
   weekdays?: string[],
   templates?: { id: string; weekdays: string[] }[]
 ) => {
-  
+
   const allowedWeekdays = weekdays
     ? weekdays.map((day) => day.toLowerCase())
     : selectedTemplateId && templates
