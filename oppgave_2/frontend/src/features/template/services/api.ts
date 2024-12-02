@@ -1,6 +1,7 @@
 import { ofetch } from 'ofetch';
 import { endpoint } from "@/config/url";
 import { Template, validateTemplate, validateTemplateList } from '../lib/schema';
+import { Result } from '@/types';
 
 const list = async () => {
 
@@ -72,7 +73,7 @@ const create = async (data: Record<string, any>) => {
 };
 
 
-const update = async (id: string, data: Record<string, any>) => {
+const update = async (id: string, data: Omit<Template, "id">): Promise<Result<Template>> => {
     try {
         const updatedTemplate = await ofetch(endpoint.templates.update.replace('{id}', id), {
             method: 'PATCH',
@@ -81,43 +82,9 @@ const update = async (id: string, data: Record<string, any>) => {
                 'Content-Type': 'application/json',
             },
         });
-
-        return {
-            status: 200,
-            message: 'Template updated successfully',
-            data: updatedTemplate,
-        };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error(`Error updating template with ID ${id}:`, error.message);
-
-            if (error.message.includes('400')) {
-                throw {
-                    status: 400,
-                    message: 'Bad Request: Invalid template data',
-                };
-            }
-
-            if (error.message.includes('404')) {
-                throw {
-                    status: 404,
-                    message: `Template with ID ${id} not found`,
-                };
-            }
-
-            throw {
-                status: 500,
-                message: 'Internal Server Error',
-                error: error.message,
-            };
-        }
-
-        console.error(`Unknown error occurred while updating template with ID ${id}:`, error);
-        throw {
-            status: 500,
-            message: 'Internal Server Error',
-            error: 'An unknown error occurred',
-        };
+        return updatedTemplate
+    } catch (error: any) {
+       return error
     }
 };
 

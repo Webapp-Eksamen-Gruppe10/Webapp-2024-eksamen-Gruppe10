@@ -4,6 +4,8 @@ import AdminCreateEventPage from "@/features/event/page/AdminCreateEventPage";
 import TemplateSelectorPage from "@/features/template/page/TemplateSelectorPage";
 import { Template } from "@/features/template/lib/schema";
 import { defaultTemplate } from "@/features/template/components/TemplateSelector";
+import useEvent from "@/features/event/hooks/useEvent";
+import { Event } from "@/features/event/lib/schema";
 
 export default function NewEventPage() {
 
@@ -11,7 +13,21 @@ export default function NewEventPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<Template>(defaultTemplate); 
   const [templateId, setTemplateId] = useState<string>(""); 
   const steps = ["Velg mal", "Opprett arrangement"];
+  const [isUpdateDeleteAllowed, setIsUpdateDeleteAllowed] = useState<boolean>(false)
+  const { eventData } = useEvent()
 
+  const allowedToDeleteUpdate = (id: string) => {
+    const events: Event[] = []
+    eventData.map((event) => { if(event.template_id === id){
+      events.push(event)
+    }})
+    if(events.length > 0){
+      setIsUpdateDeleteAllowed(false)
+    }
+    else{
+      setIsUpdateDeleteAllowed(true)
+    }
+  }
 
   const handlePreviousStep = () => {
     setCurrentStep(currentStep - 1);
@@ -28,6 +44,7 @@ export default function NewEventPage() {
 
   const handleTemplateIdSelect = (id: string) => {
     setTemplateId(id);
+    allowedToDeleteUpdate(id)
   };
 
   return (
@@ -56,6 +73,7 @@ export default function NewEventPage() {
       <div>
         {currentStep === 1 && (
           <TemplateSelectorPage
+            allowedToDeleteUpdate={isUpdateDeleteAllowed}
             onSelectTemplateId={handleTemplateIdSelect}
             onSelectTemplate={handleTemplateSelect}
             onSkip={handleSkipTemplate}

@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { templatesApi } from "@/features/template/services/api";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
 import { Template, validateTemplate } from "@/features/template/lib/schema"
+import { Result } from "@/types";
 
 type Status = "idle" | "loading" | "error" | "success" | "fetching";
 
@@ -69,15 +70,17 @@ export function useTemplate() {
       }
     };
 
-  const updateTemplate = async (id: number, data: Partial<Template>) => {
+  const updateTemplate = async (id: string, data: Omit<Template, "id">): Promise<Result<Template>> => {
       try {
         setTemplateStatus("loading");
-        await templatesApi.update(id.toString(), data);
+        const updated = await templatesApi.update(id, data);
         await fetchTemplates();
         setTemplateStatus("success");
-      } catch (error) {
+        return updated
+      } catch (error: any) {
         setTemplateStatus("error");
         setTemplateError(`Failed to update template with ID: ${id}`);
+        return error
       } finally {
         resetToIdle();
       }

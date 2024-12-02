@@ -1,3 +1,4 @@
+import { Result } from "@/types";
 import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
 
@@ -5,9 +6,11 @@ interface TemplateSelectorProps {
     onSelectTemplateId: (id:string) => void, 
     templates?: Template[];
     add: (data: Template) => Promise<void>,
+    updateTemplate: (id: string, data: Template) => Promise<Result<Template>>,
     deleteTemplate: (id: string) => Promise<void>,
     finalSelectedTemplate: (template: Template) => void,
-    onSkip: () => void
+    onSkip: () => void,
+    allowedToDeleteOrUpdate: boolean
 }
 
 export const defaultTemplate = {
@@ -22,10 +25,11 @@ export const defaultTemplate = {
   waitinglist: false,
 }
 
-export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate }: TemplateSelectorProps) {
+export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate, updateTemplate, allowedToDeleteOrUpdate }: TemplateSelectorProps) {
   const [formData, setFormData] = useState<Template>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
+  const isEditing = !!selectedTemplate
 
   const getCurrentTemplateData = () => {
     return {
@@ -76,9 +80,19 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
     e.preventDefault();
 
     try {
-      await add(getCurrentTemplateData());
-      alert("Lagring av template vellykket!");
+      if(isEditing){
+        const result = await updateTemplate(selectedTemplate.id?? "", getCurrentTemplateData());
+        if(!result.success){
+          alert("Oppdatering av template ikke vellykket!");
+        }else{
+          alert("Oppdatering av template vellykket!");
+        }
+      }else{
+        await add(getCurrentTemplateData());
+        alert("Lagring av template vellykket!");
+      }
       setFormData(defaultTemplate);
+      setSelectedTemplate(null);
     } catch (error) {
       console.error("Feil ved opprettelse av Template:", error);
       alert("Det var en feil ved opprettelse av template.");
@@ -92,7 +106,11 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
         <form onSubmit={handleUpdate}>
           <h2 className="text-2xl font-semibold">Arrangement mal</h2>
           <div>
-            <h3 className="font-medium mb-4">Lag ny mal</h3>
+            {isEditing ? (
+              <h3 className="font-medium mb-4">Oppdater mal</h3>
+            ) : (
+              <h3 className="font-medium mb-4">Lag ny mal</h3>
+            )}
             <div className="space-y-4">
               {/* Template Name */}
               <div>
@@ -227,7 +245,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
             </div>
             <button
             type="button"
-            className="w-full bg-gray-500 text-white px-4 py-2 mt-4 rounded hover:bg-gray-600"
+            className="w-full bg-orange-600 text-white px-4 py-2 mt-4 rounded hover:bg-orange-700"
             onClick={() => {
               setFormData(defaultTemplate);
               setSelectedTemplate(null); 
@@ -236,9 +254,22 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
           >
             Tilbakestill mal
           </button>
+            {isEditing && allowedToDeleteOrUpdate? (
+              <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
+              Oppdater denne malen
+            </button>) : isEditing && !allowedToDeleteOrUpdate? (
+            <div >
+              <button disabled className=" w-full bg-gray-500 text-white px-4 py-2 mt-5 mb-4 rounded">
+                Oppdater denne malen
+              </button>
+              <p className="">
+                Arrangementer bruker denne malen. Kan ikke endres
+              </p>
+            </div>
+            ): (
             <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Lagre denne malen
-            </button>
+            </button>)}
           </div>
         </form>
       </div>
@@ -259,12 +290,17 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                       selectedTemplate?.id === template.id ? "bg-gray-300" : "hover:bg-gray-100"
                     }`}
                     onClick={() => {
-                      setSelectedTemplate(template);
-                      setFormData(template);
-                      if(template.id){
-                        onSelectTemplateId(template.id)
+                      if(template.id !== selectedTemplate?.id){
+                        setSelectedTemplate(template);
+                        setFormData(template);
+                        if(template.id){
+                          onSelectTemplateId(template.id)
+                        }
+                      }else {
+                        setFormData(defaultTemplate);
+                        setSelectedTemplate(null); 
+                        onSelectTemplateId(""); 
                       }
-                     
                     }}
                   >
                     {template.name}
@@ -278,7 +314,7 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                             deleteTemplate(template.id)
                         }}}
                     >
-                    Slett?
+                    Slett
                   </button>
                 </div>
               ))}
@@ -297,15 +333,24 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
         >
           Hopp over valg av mal
         </button>
-
-        <button
+          {selectedTemplate?.id? (
+            <button
           className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={() => {
             finalSelectedTemplate(getCurrentTemplateData());
           }}
         >
           Fortsett med valgte alternativer 
-        </button>
+        </button>) : ( 
+        <button
+          disabled
+          className="w-full bg-gray-500 text-white px-4 py-2 rounded"
+          onClick={() => {
+            finalSelectedTemplate(getCurrentTemplateData());
+          }}
+        >
+          Fortsett med valgte alternativer 
+        </button>)}
       </div>
     </div>
   );
