@@ -50,7 +50,7 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
 
   return (
     <div className="container mx-auto p-4 pb-20">
-      <h1 className="text-3xl font-bold mb-6">Hendelser</h1>
+      <h1 className="text-3xl font-bold mb-6">Arrangementer</h1>
       <div className="flex items-center gap-4 mb-6">
         <select
           value={valgtMåned}
