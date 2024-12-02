@@ -129,8 +129,7 @@ const remove = async (id: string) => {
         });
         return deletedTemplate;
     } catch (error) {
-        console.error(`Error deleting template with ID ${id}:`, error);
-        throw error;
+        console.log(error)
     }
 };
 
