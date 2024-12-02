@@ -32,7 +32,9 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
 
   useEffect(() => {
     if (editData?.template_id) {
-      const template = templates.find((template) => template.id === editData.template_id);
+      const template = templates.find(
+        (template) => template.id === editData.template_id
+      );
       if (template) {
         setEditDataTemplate(template);
         setEditDate(new Date(editData.startsAt));
@@ -130,8 +132,9 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
       {/* Pagination */}
       <div className="mt-8 flex justify-between items-center">
         <div className="text-sm text-gray-700">
-          Viser {indexOfFirstEvent + 1} til {Math.min(indexOfLastEvent, events.length)} av{" "}
-          {events.length} arrangementer
+          Viser {indexOfFirstEvent + 1} til{" "}
+          {Math.min(indexOfLastEvent, events.length)} av {events.length}{" "}
+          arrangementer
         </div>
         <div className="space-x-2">
           <button
@@ -158,14 +161,19 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
             <h2 className="text-xl font-semibold mb-4">Rediger Event</h2>
             <form onSubmit={handleUpdate}>
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Tittel
                 </label>
                 <input
                   type="text"
                   id="title"
                   value={editData.title}
-                  onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, title: e.target.value })
+                  }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
@@ -177,20 +185,28 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
                   showCorrectDatepicker(editData.template_id, editDate, setEditDate, editDataTemplate.weekdays)}
               </div>
               <div className="mb-4">
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Lokasjon
                 </label>
                 <input
                   type="text"
                   id="location"
                   value={editData.location}
-                  onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, location: e.target.value })
+                  }
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               {editData.capacity !== null && (
                 <div className="mb-4">
-                  <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="capacity"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Kapasitet
                   </label>
                   <input
@@ -198,7 +214,12 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
                     id="capacity"
                     value={editData.capacity}
                     onChange={(e) =>
-                      setEditData({ ...editData, capacity: e.target.value ? Number(e.target.value) : null })
+                      setEditData({
+                        ...editData,
+                        capacity: e.target.value
+                          ? Number(e.target.value)
+                          : null,
+                      })
                     }
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                   />
@@ -234,7 +255,10 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
                 </div>
               )}
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Beskrivelse
                 </label>
                 <textarea
