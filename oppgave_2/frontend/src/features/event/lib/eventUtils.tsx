@@ -2,8 +2,10 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { nb } from "date-fns/locale/nb";
 import { Template } from "@/features/template/lib/schema";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Event } from "./schema";
+import useEvent from "../hooks/useEvent";
+import { toDate } from "date-fns/fp";
 
 registerLocale("nb", nb);
 
@@ -20,35 +22,55 @@ export const showCorrectDatepicker = (
   date: Date | null,
   setDate: React.Dispatch<React.SetStateAction<Date | null>>,
   weekdays: string[],
-  template: Template,
-  eventData: Event[], 
-
+  template: Template
 ) => {
 
+  const [startsAtDates, setStartsAtDates] = useState<string[]>([]);
+  const {eventData} = useEvent(); 
 
+  useEffect(() => {
+    if (template.notSameDay) {
+      console.log("EVENTS MED SAMME MAL123");
   
-  if(template.notSameDay){
-
-    useEffect(() => {
-      eventData.map((event) => {
-      if (event.template_id) {
-        const events = eventData.find(
-          (event) => template.id === event.template_id
-        );
-        if (events) {
-          console.log("EVENTS MED SAMME MAL:", events)
-        }
+      // Finn alle events som matcher selectedTemplateId
+      const events = eventData.filter(
+        (event) => event.template_id === selectedTemplateId
+      );
+  
+      console.log("EVENTS", events);
+  
+      if (events.length > 0) {
+        const newDates = events.map((event) => event.startsAt);
+        setStartsAtDates(newDates);
+        console.log(newDates);
       }
-    }, [template]);
-  })
-}
+      
+    }
+  }, [template, eventData, selectedTemplateId]);
+  
+  
   const allowedWeekdays = weekdays.map((day) => day.toLowerCase());
 
   const isDayAllowed = (date: Date) => {
     const days = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
     const weekday = days[date.getDay()];
-    return allowedWeekdays.includes(weekday);
+    const isoDate = date.toISOString().split('T')[0];  // Konverterer til YYYY-MM-DD
+
+    // Filtrerer ut bare datoene fra startsAtDates
+    const startsAtDatesWithoutTime = startsAtDates.map((startDate) => startDate.split('T')[0]);
+
+    if (startsAtDatesWithoutTime.includes(isoDate)) {
+      console.log("HEI123")
+      return false; // Blokkert dato
+    }
+
+    if (!selectedTemplateId) {
+      return true; 
+    }
+    console.log(startsAtDatesWithoutTime)
+    return allowedWeekdays.includes(weekday) 
   };
+  
 
   return (
     <DatePicker
@@ -66,7 +88,9 @@ export const showCorrectDatepicker = (
         isDayAllowed(date)
           ? "text-green-700 bg-green-100 hover:bg-green-200"
           : "text-red-700 bg-red-100 hover:bg-red-200"
+       
       }
+
       filterDate={isDayAllowed}
     />
   );

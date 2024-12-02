@@ -108,7 +108,7 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
           <label htmlFor="dato" className="block text-sm font-medium text-gray-700">  
             Dato
             </label>
-              {showCorrectDatepicker(selectedTemplateId, date, setDate, selectedTemplate, selectedTemplate.weekdays)}
+              {showCorrectDatepicker(selectedTemplateId, date, setDate,selectedTemplate.weekdays, selectedTemplate)}
           </div>
 
           <div className="space-y-2">
