@@ -54,38 +54,35 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
 
   const createEvent = async (data: EventWithoutId): Promise<Result<Event>> => {
     if (!validateEventWithoutIdCurrentCap(data).success) {
-      return ResultHandler.failure("Data does not match", "BAD_REQUEST");
+        return ResultHandler.failure("Data does not match", "BAD_REQUEST");
     }
 
-    if(data.template_id){
+    if (data.template_id) {
+        const template = await prisma?.template.findUnique({
+            where: {
+                id: data?.template_id,
+            },
+        });
 
-      let startsAtDates: Date[]
+        if (template?.notSameDay) {
+            const events = await prisma?.event.findMany({
+                where: {
+                    template_id: template.id,
+                },
+            });
 
-      const template = await prisma?.template.findUnique({
-        where: {
-          id: data?.template_id
-      }})
+            if (events) {
+                const startsAtDates = events.map((event) => new Date(event.startsAt).getTime());
+                const newEventStartAt = new Date(data.startsAt).getTime();
 
-      if(template?.notSameDay){
-        const events =  await prisma?.event.findMany({
-          where: {
-            template_id: template.id
-      }})
-
-      if(events) {
-        const newDates = events.map((event) => 
-          event.startsAt
-        ); 
-        startsAtDates = newDates
-        if(startsAtDates.includes(data.startsAt)){
-          return ResultHandler.failure("An event allready exist on this day", "BAD_REQUEST")
+                if (startsAtDates.includes(newEventStartAt)) {
+                    return ResultHandler.failure("An event already exists on this day", "FORBIDDEN");
+                }
+            }
         }
-      }   
-
-      }
+    }
 
 
-      }
     
  
 
