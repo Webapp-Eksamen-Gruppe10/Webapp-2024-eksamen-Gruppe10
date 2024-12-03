@@ -11,9 +11,9 @@ type AdminCreateEventProps = {
 }
 
 export default function AdminCreateEventPage({selectedTemplateId, selectedTemplate}: AdminCreateEventProps ) {
-    const {add} = useEvent()
+    const {add, eventData} = useEvent()
     return(
-        <AdminCreateEvent selectedTemplateId={selectedTemplateId} selectedTemplate={selectedTemplate} add={add}
+        <AdminCreateEvent events={eventData} selectedTemplateId={selectedTemplateId} selectedTemplate={selectedTemplate} add={add}
       />
     )
 }

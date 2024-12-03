@@ -182,7 +182,7 @@ export default function AdminEvents({ events, remove, update, templates }: Admin
                   Dato
                 </label>
                 {editDataTemplate &&
-                  showCorrectDatepicker(editData.template_id, editDate, setEditDate, editDataTemplate.weekdays, editDataTemplate)}
+                  showCorrectDatepicker(editData.template_id, editDate, setEditDate, editDataTemplate.weekdays, editDataTemplate, events)}
               </div>
               <div className="mb-4">
                 <label
