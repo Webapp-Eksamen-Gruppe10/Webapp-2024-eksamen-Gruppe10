@@ -25,6 +25,13 @@ export const createEventRepository = async (prismaDb: Prisma) => {
     }
   };
 
+  const getByIdData = async (id: string) => {
+    const event = await prismaDb.event.findUniqueOrThrow({
+      where: { id: id },
+    });
+    return event;
+  };
+
   const getById = async (id: string) => {
     try {
       const event = await prismaDb.event.findUniqueOrThrow({
@@ -200,6 +207,7 @@ export const createEventRepository = async (prismaDb: Prisma) => {
     create,
     updateById,
     deleteById,
+    getByIdData,
   };
 };
 
