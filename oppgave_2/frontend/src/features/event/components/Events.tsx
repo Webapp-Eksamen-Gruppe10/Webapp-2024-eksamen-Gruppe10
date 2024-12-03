@@ -115,7 +115,7 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
               <Link key={hendelse.id} href={`/events/${hendelse.id}`} className="block">
                 <div className="border border-gray-300 rounded p-4 hover:shadow-md transition-shadow">
                   <h3 className="text-xl font-semibold mb-2">{hendelse.title}</h3>
-                  <p className="mb-2">Dato: {formatDate(hendelse.createdAt)}</p>
+                  <p className="mb-2">Dato: {formatDate(hendelse.startsAt)}</p>
                   <p className="mb-2">Kategori: {hendelse.category}</p>
                   <p>Pris: {showPriceCorrectly(hendelse.price)}</p>
                 </div>
