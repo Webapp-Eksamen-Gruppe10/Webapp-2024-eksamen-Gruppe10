@@ -126,7 +126,7 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
           <input
             id="name"
             name="name"
-            pattern="^\p{L}+(?:-\p{L}+)?(?: \p{L}+(?:-\p{L}+)?)?$"
+            pattern="^\p{L}+(?:-\p{L}+)?(?:\s+\p{L}+(?:-\p{L}+)?)*$"
             title="Kun bokstaver er tillatt"
             required
             value={formData.name}
@@ -176,7 +176,7 @@ export default function RegistreringsSkjema({ onSubmit, event }: RegistrationFor
               <input
                 name="participants"
                 type= "text"
-                pattern="[A-Za-zÆØÅæøå]+"
+                pattern="^\p{L}+(?:-\p{L}+)?(?:\s+\p{L}+(?:-\p{L}+)?)*$"
                 title="Kun bokstaver er tillatt"
                 value={participant}
                 onChange={(e) => handleChange(e, index)}
