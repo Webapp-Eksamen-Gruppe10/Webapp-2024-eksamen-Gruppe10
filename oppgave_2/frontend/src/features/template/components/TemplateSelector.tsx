@@ -1,6 +1,7 @@
 import { Result } from "@/types";
 import { Template, TemplateToDb } from "../lib/schema";
 import React, { useState } from "react";
+import { Event } from "@/features/event/lib/schema";
 
 interface TemplateSelectorProps {
     onSelectTemplateId: (id:string) => void, 
@@ -10,7 +11,7 @@ interface TemplateSelectorProps {
     deleteTemplate: (id: string) => Promise<void>,
     finalSelectedTemplate: (template: Template) => void,
     onSkip: () => void,
-    allowedToDeleteOrUpdate: boolean
+    events: Event[]
 }
 
 export const defaultTemplate = {
@@ -25,11 +26,16 @@ export const defaultTemplate = {
   waitinglist: false,
 }
 
-export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate, updateTemplate, allowedToDeleteOrUpdate }: TemplateSelectorProps) {
+export default function TemplateSelector({ onSelectTemplateId, templates = [], add, finalSelectedTemplate, onSkip, deleteTemplate, updateTemplate, events }: TemplateSelectorProps) {
   const [formData, setFormData] = useState<Template>(defaultTemplate)
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   const isEditing = !!selectedTemplate
+
+  const allowedToDeleteUpdate = (templateId: string) => {
+    const filtered = events.filter((event) => event.template_id === templateId)
+    return filtered.length === 0
+  }
 
   const getCurrentTemplateData = () => {
     return {
@@ -254,10 +260,10 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
           >
             Tilbakestill mal
           </button>
-            {isEditing && allowedToDeleteOrUpdate? (
+            {isEditing && allowedToDeleteUpdate(selectedTemplate.id?? "")? (
               <button className=" w-full bg-blue-600 text-white px-4 py-2 mt-5 mb-4 rounded hover:bg-blue-700">
               Oppdater denne malen
-            </button>) : isEditing && !allowedToDeleteOrUpdate? (
+            </button>) : isEditing && !allowedToDeleteUpdate(selectedTemplate.id?? "")? (
             <div >
               <button disabled className=" w-full bg-gray-500 text-white px-4 py-2 mt-5 mb-4 rounded">
                 Oppdater denne malen
@@ -307,8 +313,9 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                   </button>
 
                   {/* Delete Template Button */}
-                  <button
-                    className="absolute top-1/2 right-[-19%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
+                  { allowedToDeleteUpdate(template.id?? "")? (
+                    <button
+                    className="absolute top-1/2 right-[0%] -translate-y-1/2 bg-red-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-red-600"
                     onClick={() => {
                         if(template.id){
                             deleteTemplate(template.id)
@@ -316,6 +323,14 @@ export default function TemplateSelector({ onSelectTemplateId, templates = [], a
                     >
                     Slett
                   </button>
+                  ) : (
+                    <button
+                    className="absolute top-1/2 right-[0%] -translate-y-1/2 bg-gray-500 text-white px-7 py-2 h-10 rounded hidden group-hover:block hover:bg-gray-600"
+                    disabled
+                    >
+                    Slett
+                  </button>
+                  )}
                 </div>
               ))}
             </div>

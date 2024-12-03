@@ -13,24 +13,12 @@ export default function NewEventPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<Template>(defaultTemplate); 
   const [templateId, setTemplateId] = useState<string>(""); 
   const steps = ["Velg mal", "Opprett arrangement"];
-  const [isUpdateDeleteAllowed, setIsUpdateDeleteAllowed] = useState<boolean>(false)
-  const { eventData } = useEvent()
-
-  const allowedToDeleteUpdate = (id: string) => {
-    const events: Event[] = []
-    eventData.map((event) => { if(event.template_id === id){
-      events.push(event)
-    }})
-    if(events.length > 0){
-      setIsUpdateDeleteAllowed(false)
-    }
-    else{
-      setIsUpdateDeleteAllowed(true)
-    }
-  }
+  const { eventData, add } = useEvent()
 
   const handlePreviousStep = () => {
     setCurrentStep(currentStep - 1);
+    setSelectedTemplate(defaultTemplate)
+    setTemplateId("")
   };
 
   const handleSkipTemplate = () => {
@@ -44,7 +32,6 @@ export default function NewEventPage() {
 
   const handleTemplateIdSelect = (id: string) => {
     setTemplateId(id);
-    allowedToDeleteUpdate(id)
   };
 
   return (
@@ -73,7 +60,7 @@ export default function NewEventPage() {
       <div>
         {currentStep === 1 && (
           <TemplateSelectorPage
-            allowedToDeleteUpdate={isUpdateDeleteAllowed}
+            eventData={eventData}
             onSelectTemplateId={handleTemplateIdSelect}
             onSelectTemplate={handleTemplateSelect}
             onSkip={handleSkipTemplate}
@@ -82,6 +69,8 @@ export default function NewEventPage() {
 
         {currentStep === 2 && (
           <AdminCreateEventPage
+            events={eventData}
+            addEvent={add}
             selectedTemplateId={templateId}
             selectedTemplate={selectedTemplate}
           />
