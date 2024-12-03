@@ -177,7 +177,7 @@ app.delete(endpointsV1.specificCourse, async (c) => {
   }
 }); 
 
-
+// Her ble chatGPT brukt for å kunne oppdattere kurs og lesson samtidig i en prisma.transaction
 // PATCH - Oppdater deler av kurset (inkluderer lessons)
 app.patch(endpointsV1.courses, async (c) => {
     try {
