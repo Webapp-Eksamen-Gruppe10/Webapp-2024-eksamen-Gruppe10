@@ -2,19 +2,19 @@ import { ResultHandler } from "../../../lib/result";
 import {
   CategoryEnum,
   DbEvent,
+  DbEventWithoutId,
   DbEventWithoutIdAndTemplateId,
   Event,
   EventWithoutId,
 } from "../types";
 
 import {
-  validateEvent,
   validateEventWithoutIdCurrentCap,
   validateEventWithoutIdAndTemplate_id,
+  validateDbEventWithoutIdCurrentCap,
 } from "../helpers/schema";
 import { Result } from "@/types";
 import { eventRepository, EventRepository } from "../repository";
-import { validateEventWithTemplate } from "../helpers/utility";
 
 export const createEventService = (eventRepositoryDb: EventRepository) => {
   const getAllEvents = async (
@@ -28,22 +28,6 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
     });
   };
 
-  // const getAllEvents = async (
-  //   filters: Record<string, string>
-  // ): Promise<Result<Event[]>> => {
-  //   const { category, year, month } = filters;
-
-  //   return (await eventRepositoryDb).list({
-  //     category,
-  //     year,
-  //     month,
-  //   });
-  // };
-
-  // const getAllEvents = async (): Promise<Result<Event[]>> => {
-  //   return (await eventRepositoryDb).list();
-  // };
-
   const getOneEvent = async (id: string): Promise<Result<Event>> => {
     const eventExist = (await eventRepositoryDb).exist(id);
     if (!eventExist)
@@ -53,47 +37,52 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
   };
 
   const createEvent = async (data: EventWithoutId): Promise<Result<Event>> => {
-    if (!validateEventWithoutIdCurrentCap(data).success) {
-        return ResultHandler.failure("Data does not match", "BAD_REQUEST");
+    if (!validateDbEventWithoutIdCurrentCap(data).success) {
+      return ResultHandler.failure("Data does not match", "BAD_REQUEST");
     }
 
     if (data.template_id) {
-        const template = await prisma?.template.findUnique({
-            where: {
-                id: data?.template_id,
-            },
+      const template = await prisma?.template.findUnique({
+        where: {
+          id: data?.template_id,
+        },
+      });
+      if (template?.notSameDay) {
+        const events = await prisma?.event.findMany({
+          where: {
+            template_id: template.id,
+          },
         });
 
-        if (template?.notSameDay) {
-            const events = await prisma?.event.findMany({
-                where: {
-                    template_id: template.id,
-                },
-            });
+        if (events) {
+          const startsAtDates = events.map((event) =>
+            new Date(event.startsAt).getTime()
+          );
+          const newEventStartAt = new Date(data.startsAt).getTime();
 
-            if (events) {
-                const startsAtDates = events.map((event) => new Date(event.startsAt).getTime());
-                const newEventStartAt = new Date(data.startsAt).getTime();
-
-                if (startsAtDates.includes(newEventStartAt)) {
-                    return ResultHandler.failure("An event already exists on this day", "FORBIDDEN");
-                }
-            }
+          if (startsAtDates.includes(newEventStartAt)) {
+            return ResultHandler.failure(
+              "An event already exists on this day",
+              "FORBIDDEN"
+            );
+          }
         }
+      }
+
+      if (template?.lim_attend && data.capacity !== null) {
+        return ResultHandler.failure(
+          "Capacity can't be null when limited attendence",
+          "FORBIDDEN"
+        );
+      }
+
+      if (template?.free && data.price !== null) {
+        return ResultHandler.failure(
+          "Price can't be set when event is free",
+          "FORBIDDEN"
+        );
+      }
     }
-
-
-    
- 
-
-
-    // const validationError = await validateEventWithTemplate(
-    //   data,
-    //   data.template_id
-    // );
-    // if (validationError) {
-    //   return ResultHandler.failure(validationError, "FORBIDDEN");
-    // }
 
     return (await eventRepositoryDb).create(data);
   };
@@ -106,14 +95,42 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
   // };
 
   const updateEvent = async (
-    data: DbEventWithoutIdAndTemplateId,
+    data: DbEventWithoutId,
     id: string
   ): Promise<Result<Event>> => {
     const eventExist = (await eventRepositoryDb).exist(id);
     if (!eventExist)
       return ResultHandler.failure("Event not found", "NOT_FOUND");
+    const event = await (await eventRepositoryDb).getByIdData(id);
+    if (event.template_id) {
+      const template = await prisma?.template.findUnique({
+        where: {
+          id: event.template_id,
+        },
+      });
 
-    if (!validateEventWithoutIdAndTemplate_id(data).success)
+      // fast pris
+      // hvis fastpris er true, så kan man ikke endre pris:
+      // if (data.price !== null) {
+      console.log(template?.free && data.price !== 0);
+      if (template?.free && data.price !== 0) {
+        return ResultHandler.failure(
+          "Price can't be set when event is free",
+          "FORBIDDEN"
+        );
+      }
+
+      // hvis capasity er null, så skal man ikke sende med capacity i patchen (ikke kunne endre capacity), samme som i fast pris.
+
+      if (template?.lim_attend && data.capacity === null) {
+        return ResultHandler.failure(
+          "Capacity can't be unlimited when limited attendence",
+          "FORBIDDEN"
+        );
+      }
+    }
+
+    if (!validateDbEventWithoutIdCurrentCap(data).success)
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
     return (await eventRepositoryDb).updateById(data, id);
   };

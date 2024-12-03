@@ -19,11 +19,12 @@ export {
   eventSchemaWithoutIdCurrentCap,
   dbEventSchemaWithoutIdCurrentCap,
   dbEventSchemaWithoutIdAndTemplate_id,
+  dbEventSchemaWithoutId,
 };
 
 const eventSchema = z.object({
   id: z.string(),
-  template_id: z.string().nullable(),
+  template_id: z.string().nullable().optional(),
   title: z.string(),
   startsAt: z.coerce.date(),
   location: z.string(),
@@ -38,7 +39,7 @@ const eventSchema = z.object({
 
 const dbEventSchema = z.object({
   id: z.string(),
-  template_id: z.string().nullable(),
+  template_id: z.string().nullable().optional(),
   title: z.string(),
   startsAt: z.coerce.date(),
   location: z.string(),
@@ -66,7 +67,10 @@ const dbEventSchemaWithoutIdCurrentCap = dbEventSchema.omit({
 const dbEventSchemaWithoutIdAndTemplate_id = dbEventSchema.omit({
   id: true,
   template_id: true,
-  // currentCapacity: true,
+});
+
+const dbEventSchemaWithoutId = dbEventSchema.omit({
+  id: true,
 });
 
 export function validateEvent(data: unknown) {
@@ -91,4 +95,8 @@ export function validateEventWithoutIdCurrentCap(data: unknown) {
 
 export function validateDbEventWithoutIdCurrentCap(data: unknown) {
   return dbEventSchemaWithoutIdCurrentCap.safeParse(data);
+}
+
+export function validateDbEventWithoutId(data: unknown) {
+  return dbEventSchemaWithoutId.safeParse(data);
 }
