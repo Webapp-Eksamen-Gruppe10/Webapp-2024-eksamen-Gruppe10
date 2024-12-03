@@ -69,14 +69,14 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
         }
       }
 
-      if (template?.lim_attend && data.capacity !== null) {
+      if (template?.lim_attend && data.capacity === null) {
         return ResultHandler.failure(
           "Capacity can't be null when limited attendence",
           "FORBIDDEN"
         );
       }
 
-      if (template?.free && data.price !== null) {
+      if (template?.free && data.price === 0) {
         return ResultHandler.failure(
           "Price can't be set when event is free",
           "FORBIDDEN"

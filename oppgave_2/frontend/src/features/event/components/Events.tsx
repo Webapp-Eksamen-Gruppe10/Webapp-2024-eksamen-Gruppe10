@@ -7,6 +7,7 @@ import { useRouter} from "next/navigation";
 
 
 type EventProps = {
+  years: string[],
   events: Event[];
   filter: (valgtMåned: string, valgtÅr: string, valgtType: string) => Promise<void>, 
   eventStatus: {
@@ -19,7 +20,7 @@ type EventProps = {
 
 };
 
-export default function Events({ events, eventStatus, filter }: EventProps) {
+export default function Events({ events, eventStatus, filter, years }: EventProps) {
   const router = useRouter();
 
 
@@ -77,10 +78,14 @@ export default function Events({ events, eventStatus, filter }: EventProps) {
           onChange={(e) => settValgtÅr(e.target.value)}
           className="border border-gray-300 rounded px-9 py-2"
         >
-          <option value="">Velg år</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
+          <option value="">
+              Velg år
+            </option>
+          {years.map((year) => (
+            <option value={year}>
+              {year}
+            </option>
+          ))}
         </select>
 
         <select

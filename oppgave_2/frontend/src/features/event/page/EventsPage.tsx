@@ -2,10 +2,15 @@ import Events from "../components/Events";
 import useEvent from "../hooks/useEvent";
 
 export default function EventsPage() {
-    const { eventFilteredData, eventStatus, get, filter } = useEvent();
+    const { eventData, eventFilteredData, eventStatus, get, filter } = useEvent();
 
+    const filteredYears = eventData.map((event) => {
+        return new Date(event.startsAt).getFullYear().toString();
+    });
+    
+    const uniqueYears = [...new Set(filteredYears)];
 
     return (
-        <Events events={eventFilteredData} eventStatus={eventStatus} filter={filter}/>
+        <Events years={uniqueYears} events={eventFilteredData} eventStatus={eventStatus} filter={filter}/>
     )
 }
