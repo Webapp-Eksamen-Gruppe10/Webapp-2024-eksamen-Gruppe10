@@ -1,8 +1,8 @@
 "use client";
 
-import { categories, courses } from "@/data/data";
+
 import { useState } from "react";
-import { Course } from "../lib/schema";
+import { Category, Course } from "../lib/schema";
 
 type CoursesProps = {
   courses: Course[];
@@ -42,11 +42,11 @@ export default function Courses(props: CoursesProps) {
             className="min-w-[200px] rounded bg-slate-200"
           >
             <option value="">Alle</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
+            {Object.values(Category.Values).map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
           </select>
         </label>
       </header>
