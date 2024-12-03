@@ -38,8 +38,8 @@ export function useEvent() {
     }
   }, []);
 
-
   
+
   const fetchFilterEvents = async (valgtMåned:string, valgtÅr:string, valgtType: string) => {
     
     setEventStatus("loading");
