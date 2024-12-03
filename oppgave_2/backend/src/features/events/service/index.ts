@@ -58,19 +58,29 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
     }
 
     if(data.template_id){
+
+      let startsAtDates: Date[]
+
       const template = await prisma?.template.findUnique({
         where: {
           id: data?.template_id
-      }}
+      }})
 
       if(template?.notSameDay){
         const events =  await prisma?.event.findMany({
           where: {
             template_id: template.id
       }})
-      
-    
-      
+
+      if(events) {
+        const newDates = events.map((event) => 
+          event.startsAt
+        ); 
+        startsAtDates = newDates
+        if(startsAtDates.includes(data.startsAt)){
+          return ResultHandler.failure("An event allready exist on this day", "BAD_REQUEST")
+        }
+      }   
 
       }
 
