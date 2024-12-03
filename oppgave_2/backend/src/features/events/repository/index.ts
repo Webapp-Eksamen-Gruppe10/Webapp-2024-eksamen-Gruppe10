@@ -1,4 +1,3 @@
-// src/features/events/repository/index.ts
 import { ResultHandler } from "../../../lib/result";
 import prisma, { Prisma } from "../../../lib/client/db";
 import { Result } from "@/types";
@@ -55,20 +54,18 @@ export const createEventRepository = async (prismaDb: Prisma) => {
 
       switch (true) {
         case !!category && !!year && !!month: {
-          // Filter by category, year, and month
-          const monthNumber = parseInt(month.padStart(2, "0")); // Ensure "MM" format
+          const monthNumber = parseInt(month.padStart(2, "0"));
           whereClause = {
             category: { contains: category },
             startsAt: {
-              gte: new Date(`${year}-${monthNumber}-01`), // Start of the month
-              lt: new Date(`${year}-${(monthNumber % 12) + 1}-01`), // Start of the next month
+              gte: new Date(`${year}-${monthNumber}-01`),
+              lt: new Date(`${year}-${(monthNumber % 12) + 1}-01`),
             },
           };
           break;
         }
 
         case !!category && !!year: {
-          // Filter by category and year
           whereClause = {
             category: { contains: category },
             startsAt: {
@@ -80,7 +77,6 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         }
 
         case !!category && !!month: {
-          // Filter by category and month (across all years)
           const monthNumber = parseInt(month.padStart(2, "0"));
           const events = await prismaDb.event.findMany({
             where: { category: { contains: category } },
@@ -96,7 +92,6 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         }
 
         case !!year && !!month: {
-          // Filter by year and month
           const monthNumber = parseInt(month.padStart(2, "0"));
           whereClause = {
             startsAt: {
@@ -108,13 +103,11 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         }
 
         case !!category: {
-          // Filter by category only
           whereClause = { category: { contains: category } };
           break;
         }
 
         case !!year: {
-          // Filter by year only
           whereClause = {
             startsAt: {
               gte: new Date(`${year}-01-01`),
@@ -125,7 +118,6 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         }
 
         case !!month: {
-          // Filter by month only (across all years)
           const monthNumber = parseInt(month.padStart(2, "0"));
           const events = await prismaDb.event.findMany();
           const filteredEvents = events.filter((event) => {
@@ -138,12 +130,10 @@ export const createEventRepository = async (prismaDb: Prisma) => {
         }
 
         default:
-          // No filters applied
           const events = await prismaDb.event.findMany();
           return ResultHandler.success(events);
       }
 
-      // Query the database if a whereClause was constructed
       if (Object.keys(whereClause).length > 0) {
         const events = await prismaDb.event.findMany({ where: whereClause });
         return ResultHandler.success(events);
@@ -153,15 +143,6 @@ export const createEventRepository = async (prismaDb: Prisma) => {
       return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR");
     }
   };
-
-  // const list = async (): Promise<Result<Event[]>> => {
-  //   try {
-  //     const events = await prismaDb.event.findMany();
-  //     return ResultHandler.success(toEventArray(events));
-  //   } catch (error) {
-  //     return ResultHandler.failure(error, "INTERNAL_SERVER_ERROR");
-  //   }
-  // };
 
   const create = async (data: EventWithoutId): Promise<Result<Event>> => {
     try {

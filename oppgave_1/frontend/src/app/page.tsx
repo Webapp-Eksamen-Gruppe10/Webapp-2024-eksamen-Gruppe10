@@ -1,5 +1,5 @@
 import React from "react";
-import SignUp from "../components/SignUp"; // Adjust path if needed
+import SignUp from "../components/SignUp";
 
 export default function Home() {
   return (

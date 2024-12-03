@@ -1,5 +1,4 @@
 import { Event } from "./../types/index";
-// src/features/events/controller/index.ts
 
 import { Hono } from "hono";
 
