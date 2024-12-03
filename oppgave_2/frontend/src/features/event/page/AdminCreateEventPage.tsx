@@ -13,7 +13,6 @@ type AdminCreateEventProps = {
 
 export default function AdminCreateEventPage({selectedTemplateId, selectedTemplate, events, addEvent}: AdminCreateEventProps ) {
     return(
-        <AdminCreateEvent selectedTemplateId={selectedTemplateId} selectedTemplate={selectedTemplate} add={addEvent}
-      />
+        <AdminCreateEvent  selectedTemplateId={selectedTemplateId} selectedTemplate={selectedTemplate} add={addEvent} events={events}      />
     )
 }
