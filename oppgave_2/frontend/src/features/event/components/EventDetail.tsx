@@ -36,9 +36,26 @@ export default function EventDetail(props: {event:Event}) {
                 <li>
                   <strong>Pris:</strong> {showPriceCorrectly(event.price)}
                 </li>
-                <li>
-                  <strong>Nåværende Kapasitet: </strong> {event.currentCapacity || "Ingen påmeldte"}
-                </li>
+                <li className="space-y-2">
+                  <div>
+                    <strong>Antall påmeldte:</strong>
+                    <span className="ml-2">
+                      {event.capacity !== null && event.currentCapacity !== null
+                        ? Math.min(event.currentCapacity, event.capacity)
+                        : "Ingen påmeldte"}
+                    </span>
+                  </div>
+                  <div>
+                  <strong>Antall personer i venteliste:</strong>
+                  <span className="ml-2">
+                    {event.capacity !== null && event.currentCapacity !== null
+                      ? Math.max(0, event.currentCapacity - event.capacity)
+                      : "Ikke tilgjengelig"}
+                  </span>
+                </div>
+              </li>
+
+                
               </ul>
             </div>
     
