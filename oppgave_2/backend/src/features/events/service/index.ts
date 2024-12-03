@@ -87,13 +87,6 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
     return (await eventRepositoryDb).create(data);
   };
 
-  // const createEvent = async (data: EventWithoutId): Promise<Result<Event>> => {
-  //   if (!validateEventWithoutIdCurrentCap(data).success)
-  //     return ResultHandler.failure("Data does not match", "BAD_REQUEST");
-
-  //   return (await eventRepositoryDb).create(data);
-  // };
-
   const updateEvent = async (
     data: DbEventWithoutId,
     id: string
@@ -109,18 +102,12 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
         },
       });
 
-      // fast pris
-      // hvis fastpris er true, så kan man ikke endre pris:
-      // if (data.price !== null) {
-      console.log(template?.free && data.price !== 0);
       if (template?.free && data.price !== 0) {
         return ResultHandler.failure(
           "Price can't be set when event is free",
           "FORBIDDEN"
         );
       }
-
-      // hvis capasity er null, så skal man ikke sende med capacity i patchen (ikke kunne endre capacity), samme som i fast pris.
 
       if (template?.lim_attend && data.capacity === null) {
         return ResultHandler.failure(

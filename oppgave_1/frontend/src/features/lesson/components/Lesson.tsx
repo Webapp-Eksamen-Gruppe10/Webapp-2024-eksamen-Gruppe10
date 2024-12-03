@@ -1,4 +1,3 @@
-// src/features/lesson/components/Lesson.tsx
 "use client";
 
 import useCourses from "@/features/courses/hooks/useCourses";

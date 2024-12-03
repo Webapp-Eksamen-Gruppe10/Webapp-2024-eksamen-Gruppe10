@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import React from "react";
-import { useSignUp } from "../hooks/useSignUp";  // Named import, no default
+import { useSignUp } from "../hooks/useSignUp";
 
 export function SignUp() {
-  const { fields, success, formError, handleSubmit, handleChange } = useSignUp();
+  const { fields, success, formError, handleSubmit, handleChange } =
+    useSignUp();
 
   return (
     <section className="mx-auto max-w-xl" data-testid="sign_up">
