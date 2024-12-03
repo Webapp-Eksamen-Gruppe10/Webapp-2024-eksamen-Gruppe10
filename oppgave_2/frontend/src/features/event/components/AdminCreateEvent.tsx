@@ -10,10 +10,11 @@ import { AddEventResult } from "@/types";
 type AdminCreateEventFormProps = {
   selectedTemplateId: string, 
   selectedTemplate: Template,
-  add: (data: Partial<Event>) => Promise<AddEventResult>, 
+  add: (data: Partial<Event>) => Promise<AddEventResult>,
+  events: Event[]
 };
 
-export default function AdminCreateEventForm({ selectedTemplateId, selectedTemplate, add }: AdminCreateEventFormProps) {
+export default function AdminCreateEventForm({ selectedTemplateId, selectedTemplate, add, events }: AdminCreateEventFormProps) {
   const router = useRouter();
   const [date, setDate] = useState<Date|null>(new Date());
   const [formData, setFormData] = useState({
@@ -108,7 +109,7 @@ export default function AdminCreateEventForm({ selectedTemplateId, selectedTempl
           <label htmlFor="dato" className="block text-sm font-medium text-gray-700">  
             Dato
             </label>
-              {showCorrectDatepicker(selectedTemplateId, date, setDate,selectedTemplate.weekdays, selectedTemplate)}
+              {showCorrectDatepicker(selectedTemplateId, date, setDate,selectedTemplate.weekdays, selectedTemplate, events)}
           </div>
 
           <div className="space-y-2">

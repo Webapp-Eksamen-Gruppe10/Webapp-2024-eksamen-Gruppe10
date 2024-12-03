@@ -2,10 +2,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { nb } from "date-fns/locale/nb";
 import { Template } from "@/features/template/lib/schema";
-import { useEffect, useState } from "react";
 import { Event } from "./schema";
-import useEvent from "../hooks/useEvent";
-import { toDate } from "date-fns/fp";
 
 registerLocale("nb", nb);
 
@@ -18,14 +15,13 @@ export const showPriceCorrectly = (price: number) => {
 
 const isStartDateAllowed = (date: Date, startsAtDates: string[]): boolean => {
   const isoDate = date.toISOString().split("T")[0]; 
-  const startsAtDatesWithoutTime = startsAtDates.map((startDate) => startDate.split("T")[0]);
+  const startsAtDatesWithoutTime = startsAtDates?.map((startDate) => startDate.split("T")[0]);
 
   const prevDate = new Date(date);
   prevDate.setDate(prevDate.getDate() + 1); 
   const prevIsoDate = prevDate.toISOString().split("T")[0];
 
-  if (startsAtDatesWithoutTime.includes(prevIsoDate)) {
-    console.log(`Blocked because previous date is in startsAtDates: ${prevIsoDate}`);
+  if (startsAtDatesWithoutTime?.includes(prevIsoDate)) {
     return false;
   }
 
@@ -58,24 +54,18 @@ export const showCorrectDatepicker = (
   date: Date | null,
   setDate: React.Dispatch<React.SetStateAction<Date | null>>,
   weekdays: string[],
-  template: Template
+  template: Template,
+  eventData: Event[]
 ) => {
-  const [startsAtDates, setStartsAtDates] = useState<string[]>([]);
-  const { eventData } = useEvent();
-
-  useEffect(() => {
+  let startsAtDates: string[]
     if (template.notSameDay) {
-      console.log("Laster events med samme mal...");
-
       const events = eventData.filter((event) => event.template_id === selectedTemplateId);
 
       if (events.length > 0) {
         const newDates = events.map((event) => event.startsAt);
-        setStartsAtDates(newDates);
-        console.log("Blokkerte datoer:", newDates);
+        startsAtDates = newDates
       }
     }
-  }, [template, eventData, selectedTemplateId]);
 
   const allowedWeekdays = weekdays.map((day) => day.toLowerCase());
 
