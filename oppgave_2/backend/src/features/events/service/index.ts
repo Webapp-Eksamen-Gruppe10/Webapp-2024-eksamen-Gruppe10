@@ -76,7 +76,7 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
         );
       }
 
-      if (template?.free && data.price === 0) {
+      if (template?.free && data.price !== 0) {
         return ResultHandler.failure(
           "Price can't be set when event is free",
           "FORBIDDEN"
@@ -125,6 +125,13 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
       if (template?.lim_attend && data.capacity === null) {
         return ResultHandler.failure(
           "Capacity can't be unlimited when limited attendence",
+          "FORBIDDEN"
+        );
+      }
+
+      if (template?.fixed_price && data.price !== event.price) {
+        return ResultHandler.failure(
+          "Fixed price can't be edited",
           "FORBIDDEN"
         );
       }
