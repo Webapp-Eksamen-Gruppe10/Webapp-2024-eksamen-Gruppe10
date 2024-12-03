@@ -24,7 +24,7 @@ export default function EventSection({ events }: EventSectionProps) {
               >
                 <div className="p-4">
                   <h3 className="text-lg font-bold">{event.title}</h3>
-                  <p className="text-sm text-gray-500">{formatDate(event.createdAt)}</p>
+                  <p className="text-sm text-gray-500">{formatDate(event.startsAt)}</p>
                   <p className="mt-2 text-gray-600">{event.description}</p>
                 </div>
                 <div className="border-t p-4 text-center">
