@@ -13,6 +13,7 @@ export type DbEventWithoutId = z.infer<typeof dbEventSchemaWithoutIdCurrentCap>;
 export type DbEventWithoutIdAndTemplateId = z.infer<
   typeof dbEventSchemaWithoutIdAndTemplate_id
 >;
+
 export type DbEvent = z.infer<typeof dbEventSchema>;
 export type Event = z.infer<typeof eventSchema>;
 

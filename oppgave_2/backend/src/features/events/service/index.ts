@@ -57,13 +57,36 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
     }
 
-    const validationError = await validateEventWithTemplate(
-      data,
-      data.template_id
-    );
-    if (validationError) {
-      return ResultHandler.failure(validationError, "FORBIDDEN");
-    }
+    if(data.template_id){
+      const template = await prisma?.template.findUnique({
+        where: {
+          id: data?.template_id
+      }}
+
+      if(template?.notSameDay){
+        const events =  await prisma?.event.findMany({
+          where: {
+            template_id: template.id
+      }})
+      
+    
+      
+
+      }
+
+
+      }
+    
+ 
+
+
+    // const validationError = await validateEventWithTemplate(
+    //   data,
+    //   data.template_id
+    // );
+    // if (validationError) {
+    //   return ResultHandler.failure(validationError, "FORBIDDEN");
+    // }
 
     return (await eventRepositoryDb).create(data);
   };
@@ -85,7 +108,6 @@ export const createEventService = (eventRepositoryDb: EventRepository) => {
 
     if (!validateEventWithoutIdAndTemplate_id(data).success)
       return ResultHandler.failure("Data does not match", "BAD_REQUEST");
-
     return (await eventRepositoryDb).updateById(data, id);
   };
 
