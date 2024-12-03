@@ -1,12 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import {
-  courses,
-  comments,
-} from "../src/data/data.js";
+import { courses, comments } from "../src/data/data.js";
 
 const prisma = new PrismaClient();
 
-// Create Courses and Lessons
 const createCourses = async () => {
   await Promise.all(
     courses.map(async (course) => {
@@ -33,14 +29,13 @@ const createCourses = async () => {
   );
 };
 
-// Create Comments
 const createComments = async () => {
   await Promise.all(
     comments.map(async (comment) => {
       await prisma.comment.create({
         data: {
           id: comment.id,
-          createdBy: JSON.stringify(comment.createdBy), 
+          createdBy: JSON.stringify(comment.createdBy),
           comment: comment.comment,
           lesson: {
             connect: { slug: comment.lesson.slug },
@@ -53,12 +48,10 @@ const createComments = async () => {
 
 const main = async () => {
   try {
-    // Clear existing data
     await prisma.comment.deleteMany();
     await prisma.lesson.deleteMany();
     await prisma.course.deleteMany();
 
-    // Seed data
     await createCourses();
     await createComments();
 
