@@ -17,7 +17,7 @@ const getCourse = async (slug: string) => {
 const list = async () => {
     try {
         const courses = await ofetch(`${url}`);
-        return validateCourseList(courses.data.map((data) => ({
+        return validateCourseList(courses.data.map((data: { category: unknown; }) => ({
             ...data,
             category: Category.parse(data.category)
         })))

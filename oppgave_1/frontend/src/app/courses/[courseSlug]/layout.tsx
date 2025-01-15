@@ -2,11 +2,9 @@
 import CourseLayout from "@/features/courses/Layout/CourseLayout";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
-type layoutProps = {
-  useLayout?: boolean;
-}
-export default function layout(props: PropsWithChildren<layoutProps>){
-    const { children, useLayout} = props;
+
+export default function layout(props: PropsWithChildren<{}>){
+    const { children} = props;
     const pathname = usePathname();
 
   if (pathname?.endsWith("/update")) {

@@ -118,9 +118,11 @@ export default function CourseForm(props: CourseFormProps) {
     }
   };
 
+ 
   const handleLessonFieldChange = (event: React.FormEvent, index?: number) => {
     const { name, value } = event.target as HTMLInputElement;
-    let text;
+    let text: any[]; 
+   
     if (lessons[currentLesson]?.text?.length === 0) {
       text = [{ id: `${Math.floor(Math.random() * 1000 + 1)}`, text: "" }];
     }
@@ -132,7 +134,7 @@ export default function CourseForm(props: CourseFormProps) {
         return _text;
       });
     }
-
+ 
     const updatedLessons = lessons.map((lesson, i) => {
       if (i === currentLesson) {
         return { ...lesson, [name]: value, text: text?.length > 0 ? text : [] };

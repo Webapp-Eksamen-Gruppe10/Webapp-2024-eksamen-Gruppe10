@@ -1,0 +1,15 @@
+{
+    "projects": [
+      {
+        "src": "frontend/",
+        "use": "@vercel/static-build",
+        "buildCommand": "npm run build",
+        "outputDirectory": "build"
+      },
+      {
+        "src": "backend/",
+        "use": "@vercel/node"
+      }
+    ]
+  }
+  
